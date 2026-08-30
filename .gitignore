@@ -1,0 +1,37 @@
+# JavaScript
+node_modules/
+.pnpm-store/
+.turbo/
+dist/
+coverage/
+
+# Environment and credentials
+.env
+.env.*
+!.env.example
+*.ovpn
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa
+id_rsa.*
+id_ed25519
+id_ed25519.*
+
+# Android / Gradle
+.gradle/
+**/android/local.properties
+**/android/.idea/
+**/android/build/
+**/android/app/build/
+*.apk
+*.aab
+
+# Editors and macOS
+.idea/
+.vscode/
+*.iml
+.DS_Store

@@ -1,0 +1,38 @@
+{
+  "name": "mobile",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "cap:sync": "cap sync android",
+    "cap:open": "cap open android",
+    "android:build": "./android/gradlew -p android assembleDebug"
+  },
+  "dependencies": {
+    "@capacitor/android": "8.5.0",
+    "@capacitor/core": "8.5.0",
+    "@pc-control/capacitor-pc-control": "workspace:*",
+    "@pc-control/core": "workspace:*",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "8.5.0",
+    "@pc-control/eslint-config": "workspace:*",
+    "@pc-control/tsconfig": "workspace:*",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "6.1.1",
+    "eslint": "10.9.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.2.2"
+  }
+}

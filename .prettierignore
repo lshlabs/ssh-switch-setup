@@ -1,0 +1,7 @@
+node_modules
+.turbo
+dist
+pnpm-lock.yaml
+apps/mobile/android
+pc-control_codex_setup_prompt.md
+AGENTS.md

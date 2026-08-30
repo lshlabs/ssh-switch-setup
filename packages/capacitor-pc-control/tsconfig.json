@@ -1,0 +1,7 @@
+{
+  "extends": "@pc-control/tsconfig/library.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": ["src"]
+}

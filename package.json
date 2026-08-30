@@ -1,0 +1,27 @@
+{
+  "name": "pc-control",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.12.1",
+  "engines": {
+    "node": "^22.13.0 || >=24.0.0",
+    "pnpm": ">=10.0.0"
+  },
+  "scripts": {
+    "dev": "turbo run dev --filter=mobile",
+    "build": "turbo run build",
+    "lint": "turbo run lint",
+    "typecheck": "turbo run typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo run clean",
+    "android:sync": "pnpm build && pnpm --filter mobile run cap:sync",
+    "android:open": "pnpm --filter mobile run cap:open",
+    "android:build": "pnpm android:sync && pnpm --filter mobile run android:build"
+  },
+  "devDependencies": {
+    "prettier": "3.9.6",
+    "turbo": "2.10.12"
+  }
+}
