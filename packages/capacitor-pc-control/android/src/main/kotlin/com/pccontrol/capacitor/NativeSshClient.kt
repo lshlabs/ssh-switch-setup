@@ -19,7 +19,7 @@ import java.nio.charset.StandardCharsets
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.TimeUnit
 
-internal class NativeSshClient(
+class NativeSshClient(
     private val identityManager: SshIdentityManager,
     private val trustStore: SshHostTrustStore,
 ) {
@@ -235,13 +235,13 @@ internal class NativeSshClient(
             "router" -> ROUTER_COMMANDS
             else -> emptySet()
         }
-        if (command !in allowed) {
-            throw NativeSshException(
-                SshErrorCode.COMMAND_FAILED,
-                "현재 단계에서 허용되지 않은 SSH 명령입니다.",
-                details = mapOf("target" to target, "command" to command),
-            )
-        }
+        if (command in allowed) return
+        if (target == "router" && WOL_COMMAND_PATTERN.matches(command)) return
+        throw NativeSshException(
+            SshErrorCode.COMMAND_FAILED,
+            "현재 단계에서 허용되지 않은 SSH 명령입니다.",
+            details = mapOf("target" to target, "command" to command),
+        )
     }
 
     private fun mapConnectionError(error: JSchException, host: String, port: Int): NativeSshException {
@@ -383,7 +383,19 @@ internal class NativeSshClient(
             "ecdsa-sha2-nistp256,rsa-sha2-512,rsa-sha2-256"
         const val KEY_EXCHANGE_ALGORITHMS =
             "ecdh-sha2-nistp256,diffie-hellman-group14-sha256"
-        val WINDOWS_COMMANDS = setOf("hostname", "whoami")
-        val ROUTER_COMMANDS = setOf("uname -n", "printf \"%s\\n\" \"\$USER\"", "uname -a")
+        val WINDOWS_COMMANDS = setOf(
+            "hostname",
+            "whoami",
+            "shutdown /s /t 0",
+            "shutdown /r /t 0",
+        )
+        val ROUTER_COMMANDS = setOf(
+            "uname -n",
+            "printf \"%s\\n\" \"\$USER\"",
+            "uname -a",
+        )
+        private val WOL_COMMAND_PATTERN = Regex(
+            """^/usr/sbin/ether-wake -i [a-zA-Z0-9]+ ([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$""",
+        )
     }
 }

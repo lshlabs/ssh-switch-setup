@@ -27,6 +27,8 @@ id_ed25519.*
 **/android/.idea/
 **/android/build/
 **/android/app/build/
+**/android/keystore.properties
+keystore.properties
 *.apk
 *.aab
 
@@ -35,3 +37,16 @@ id_ed25519.*
 .vscode/
 *.iml
 .DS_Store
+.opencode
+opencode.jsonc
+test/
+docs/
+.playwright-cli/
+scripts/*
+!scripts/setup-windows-ssh.ps1
+output/
+AGENTS.md
+AGENTS.md.backup
+home-mockup.png
+home-refactoring-guide.md
+AGENTS.md

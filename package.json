@@ -13,15 +13,18 @@
     "build": "turbo run build",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "test": "vitest run",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "clean": "turbo run clean",
     "android:sync": "pnpm build && pnpm --filter mobile run cap:sync",
     "android:open": "pnpm --filter mobile run cap:open",
-    "android:build": "pnpm android:sync && pnpm --filter mobile run android:build"
+    "android:build": "pnpm android:sync && pnpm --filter mobile run android:build",
+    "android:test": "pnpm --filter mobile run android:test"
   },
   "devDependencies": {
     "prettier": "3.9.6",
-    "turbo": "2.10.12"
+    "turbo": "2.10.12",
+    "vitest": "3.2.4"
   }
 }

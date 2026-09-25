@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- Exclude host-key trust store that would survive without AndroidKeyStore identity on restore -->
+    <exclude domain="sharedpref" path="pc_control_trusted_ssh_hosts_v1.xml" />
+    <exclude domain="sharedpref" path="pc_control_trusted_ssh_hosts_v1.xml.bak" />
+</full-backup-content>

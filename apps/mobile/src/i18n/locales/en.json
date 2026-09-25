@@ -1,0 +1,1622 @@
+{
+  "common": {
+    "cancel": "Cancel",
+    "reset": "Reset",
+    "save": "Save",
+    "saved": "Saved.",
+    "confirm": "Confirm",
+    "close": "Close",
+    "view": "View",
+    "check": "Check",
+    "recheck": "Recheck",
+    "checking": "Checking…",
+    "beforeCheck": "Not checked",
+    "ok": "OK",
+    "needsAttention": "Needs attention",
+    "configured": "Configured",
+    "needsSetup": "Required",
+    "registrationRequired": "Registration required",
+    "online": "Online",
+    "offline": "Offline",
+    "error": "Error",
+    "unknown": "Unknown",
+    "connected": "Connected",
+    "connecting": "Connecting…",
+    "disconnecting": "Disconnecting…",
+    "disconnected": "Disconnected",
+    "installed": "Installed",
+    "installRequired": "Install required",
+    "optional": "Optional",
+    "selected": "Selected",
+    "notSelected": "Not selected",
+    "stored": "Stored",
+    "copied": "Copy",
+    "notAvailable": "Disabled",
+    "system": "System",
+    "light": "Light",
+    "dark": "Dark",
+    "languageSystem": "System default",
+    "korean": "한국어",
+    "english": "English",
+    "simple": "Simple",
+    "technical": "Technical",
+    "completed": "Complete",
+    "failed": "Failed",
+    "needsCheck": "Needs attention",
+    "verificationPending": "Verification pending",
+    "seconds": "s",
+    "never": "None",
+    "loading": "Loading…",
+    "settings": "Settings",
+    "diagnostics": "Diagnostics",
+    "profile": "Profile",
+    "ssh": "SSH",
+    "vpn": "VPN",
+    "selectionRequired": "Selection required",
+    "permissionRequired": "Permission required",
+    "checkUnavailable": "Cannot check"
+  },
+  "navigation": {
+    "backToHome": "Back to home",
+    "backToSettings": "Back to settings",
+    "backToDiagnostics": "Back to diagnostics list",
+    "back": "Back",
+    "settingsItems": "Settings items"
+  },
+  "settings": {
+    "title": "Settings",
+    "pages": {
+      "pc": "PC Connection",
+      "power": "Power On",
+      "remote": "Remote Connection",
+      "display": "App Settings",
+      "identity": "Connection Key"
+    },
+    "overview": {
+      "pcDescription": "Address · Account",
+      "powerDescription": "MAC · Router",
+      "remoteDescription": "OpenVPN profile",
+      "displayDescription": "Theme · Language · Display",
+      "diagnosticsDescription": "Check connection status and issues",
+      "infoSet": "Information entered",
+      "infoNeeded": "Information needed",
+      "profileSelected": "Profile selected",
+      "profileNeeded": "Needs attention",
+      "setupWizard": "Setup wizard",
+      "resetConnection": "Reset connection settings"
+    },
+    "pc": {
+      "section": "PC connection information",
+      "name": "Display name",
+      "host": "PC address or hostname",
+      "hostPlaceholder": "Example: 192.168.1.100",
+      "username": {
+        "simple": "Windows username",
+        "technical": "SSH Username"
+      },
+      "usernamePlaceholder": "Example: windows-user",
+      "advanced": "Advanced settings",
+      "port": "PC SSH port",
+      "connectionSecurity": {
+        "simple": "Connection security",
+        "technical": "SSH Security"
+      },
+      "connectionSecurityDescription": {
+        "simple": "App connection-key registration status",
+        "technical": "App identity registration state"
+      }
+    },
+    "power": {
+      "section": "Power-on information",
+      "advanced": "Advanced settings",
+      "method": "Power-on method",
+      "router": {
+        "simple": "Wake the PC remotely",
+        "technical": "Router SSH · WOL"
+      },
+      "routerDescription": {
+        "simple": "Wake the PC even when this device is on a different network.",
+        "technical": "Router SSH · WOL"
+      },
+      "local": {
+        "simple": "Same network only",
+        "technical": "Local WOL"
+      },
+      "localDescription": {
+        "simple": "Wake the PC only when this device is on the same network.",
+        "technical": "Same-LAN Wake-on-LAN"
+      },
+      "unsupported": {
+        "simple": "Power On unavailable",
+        "technical": "Power On disabled"
+      },
+      "unsupportedDescription": {
+        "simple": "Shutdown and reboot only",
+        "technical": "Power On disabled"
+      },
+      "info": "Power-on information",
+      "mac": {
+        "simple": "PC MAC address",
+        "technical": "MAC Address"
+      },
+      "macPlaceholder": "Example: AA:BB:CC:DD:EE:FF",
+      "routerInfo": "Router connection information",
+      "routerHost": "Router address",
+      "routerUsername": {
+        "simple": "Router SSH username",
+        "technical": "Router SSH Username"
+      },
+      "routerUsernamePlaceholder": "Router account",
+      "routerPort": "Router SSH port",
+      "interface": {
+        "simple": "LAN interface name",
+        "technical": "LAN Interface"
+      },
+      "interfacePlaceholder": "Example: lan0"
+    },
+    "remote": {
+      "section": "Remote connection information",
+      "app": "OpenVPN app",
+      "appDescription": "Checks whether the app required for remote access is installed.",
+      "profile": "Profile",
+      "profileDescription": "OpenVPN profile used for remote access",
+      "refresh": "Refresh",
+      "openApp": "Open OpenVPN for Android",
+      "refreshProfilesDescription": "Load the OpenVPN profile list again.",
+      "permission": "Check OpenVPN connection permission",
+      "permissionDescription": "Check the OpenVPN app's connection permission again.",
+      "autoDisconnect": "Disconnect VPN after an action",
+      "autoDisconnectDescription": "Only disconnects a VPN started by this app.",
+      "profileNotFound": "Profile not found",
+      "profileRequired": "OpenVPN for Android required",
+      "profileEmpty": "No OpenVPN profiles are available."
+    },
+    "display": {
+      "theme": "Theme",
+      "themeDescription": "App brightness and color theme",
+      "language": "Language",
+      "languageDescription": "Language used by the app",
+      "copyMode": "Explanation style",
+      "copyModeDescription": "Vocabulary and detail used in the app",
+      "refresh": "Automatic status refresh",
+      "refreshDescription": "Periodically check PC status on the main screen",
+      "refreshOff": "Off",
+      "refreshSeconds": "{value}s"
+    },
+    "identity": {
+      "overviewDescription": "This phone's SSH public key and fingerprint",
+      "pageTitle": {
+        "simple": "Connection key",
+        "technical": "SSH Identity"
+      },
+      "description": {
+        "simple": "The connection key used to register this phone with the PC and router.",
+        "technical": "App-only SSH identity stored in Android Keystore."
+      },
+      "keyTitle": {
+        "simple": "Connection key",
+        "technical": "SSH Identity"
+      },
+      "readySummary": {
+        "simple": "Ready to use.",
+        "technical": "The SSH identity is available."
+      },
+      "missingSummary": {
+        "simple": "No connection key is available yet.",
+        "technical": "No SSH identity has been generated."
+      },
+      "failedSummary": {
+        "simple": "The connection key could not be prepared.",
+        "technical": "SSH identity generation failed."
+      },
+      "preparingSummary": {
+        "simple": "Preparing the connection key.",
+        "technical": "Generating the SSH identity."
+      },
+      "copyTitle": {
+        "simple": "Copy public key",
+        "technical": "Copy SSH Public Key"
+      },
+      "copyDescription": {
+        "simple": "Copy the key to register on a PC or router.",
+        "technical": "Copy the SSH Public Key for authorized_keys."
+      },
+      "securityTitle": {
+        "simple": "Security information",
+        "technical": "SSH Key Details"
+      },
+      "securityDescription": {
+        "simple": "View the public-key fingerprint and details.",
+        "technical": "View the SSH Public Key fingerprint and raw key."
+      },
+      "securityPageDescription": {
+        "simple": "This is the public information for the connection key. You can verify it when registering the key on a PC or router.",
+        "technical": "The SSH identity's Public Key fingerprint and raw OpenSSH Public Key."
+      },
+      "prepareTitle": {
+        "simple": "Prepare connection key",
+        "technical": "Generate SSH Identity"
+      },
+      "prepareDescription": {
+        "simple": "Create a new connection key on this phone.",
+        "technical": "Generate an app-only SSH identity in Android Keystore."
+      },
+      "fingerprintTitle": {
+        "simple": "Public-key fingerprint",
+        "technical": "SSH Public Key Fingerprint"
+      },
+      "publicKeyTitle": {
+        "simple": "SSH public key",
+        "technical": "OpenSSH Public Key"
+      },
+      "showDescription": "View description",
+      "status": "Status",
+      "ready": "Ready",
+      "missing": "No connection key is available yet.",
+      "fingerprint": "Public-key fingerprint",
+      "publicKey": "SSH public key",
+      "copy": "Copy public key",
+      "prepare": "Prepare connection key",
+      "preparing": "Preparing connection key…",
+      "prepareFailed": "Could not prepare the connection key. Try again in the Android app.",
+      "fingerprintCopied": "Public-key fingerprint copied to the clipboard.",
+      "fingerprintCopyFailed": "Could not copy the public-key fingerprint. Prepare the connection key first.",
+      "copied": "Public key copied to the clipboard.",
+      "copyFailed": "Could not copy the public key. Prepare the connection key first.",
+      "registration": "Register the copied public key in SSH authorized_keys on the PC and router. The private key never leaves this device."
+    },
+    "more": "More",
+    "editHelp": {
+      "pcName": "The name shown on the home screen.",
+      "pcHost": "The PC's private IP address or hostname.",
+      "pcUsername": "The Windows account used to sign in to the PC.",
+      "pcPort": "The port used by Windows OpenSSH. The default is 22.",
+      "pcMac": "The MAC address used to wake the PC on the network.",
+      "routerHost": "The address of the router that runs the WOL command.",
+      "routerUsername": "The account used to sign in to the router over SSH.",
+      "routerPort": "The port used by router SSH. The default is 22.",
+      "wolInterface": "The router LAN interface that sends the WOL packet."
+    },
+    "reset": {
+      "title": "Reset settings?",
+      "message": "This clears the saved PC address, user, MAC address, router details, WOL information, and setup progress. SSH ports, theme, language, explanation style, display settings, and VPN auto-disconnect are kept. It does not affect the PC or router."
+    },
+    "dialog": {
+      "theme": "Theme",
+      "language": "Language",
+      "copyMode": "Explanation style",
+      "profile": "Profile",
+      "refresh": "Automatic status refresh",
+      "selected": "Selected"
+    },
+    "toast": {
+      "themeApplied": "{value} theme applied.",
+      "profileSelected": "Remote access profile selected.",
+      "profileSelectFailed": "Could not select the profile.",
+      "profilesRefreshed": "Profile list refreshed.",
+      "profilesLoadFailed": "Could not load OpenVPN profiles.",
+      "openVpnAppOpenFailed": "Could not open OpenVPN for Android.",
+      "vpnPermissionChecked": "OpenVPN connection permission checked.",
+      "vpnPermissionFailed": "Could not check OpenVPN connection permission.",
+      "saved": "Could not save settings.",
+      "reset": "Connection settings reset."
+    }
+  },
+  "diagnostics": {
+    "title": {
+      "simple": "Diagnostics",
+      "technical": "Diagnostics"
+    },
+    "labels": {
+      "pcConnection": {
+        "simple": "PC connection",
+        "technical": "PC SSH Endpoint"
+      },
+      "routerConnection": {
+        "simple": "Router connection",
+        "technical": "Router SSH Endpoint"
+      },
+      "routerLogin": {
+        "simple": "Router sign-in",
+        "technical": "Router SSH Authentication"
+      },
+      "vpnApp": {
+        "simple": "OpenVPN app",
+        "technical": "OpenVPN Provider"
+      },
+      "vpnProfile": {
+        "simple": "Profile",
+        "technical": "OpenVPN Profile"
+      },
+      "vpnPermission": {
+        "simple": "Connection permission",
+        "technical": "VPN Connection Permission"
+      },
+      "vpnConnection": {
+        "simple": "VPN connection",
+        "technical": "OpenVPN Tunnel Status"
+      },
+      "connectionTarget": {
+        "simple": "Connection target",
+        "technical": "SSH Connection Target"
+      },
+      "securityCheck": {
+        "simple": "Check security information",
+        "technical": "SSH Host Key Scan"
+      }
+    },
+    "statusSummary": {
+      "notChecked": {
+        "simple": "Not checked yet.",
+        "technical": "Diagnostic check has not run."
+      },
+      "checking": {
+        "simple": "Checking now.",
+        "technical": "Diagnostic check is in progress."
+      },
+      "passed": {
+        "simple": "Checked successfully.",
+        "technical": "Diagnostic check passed."
+      },
+      "attention": {
+        "simple": "Needs attention.",
+        "technical": "Diagnostic check requires attention."
+      },
+      "pcConnected": {
+        "simple": "The PC is reachable.",
+        "technical": "PC SSH endpoint is reachable."
+      },
+      "pcUnavailable": {
+        "simple": "The PC cannot be reached.",
+        "technical": "PC SSH endpoint is unreachable."
+      },
+      "pcLoginSucceeded": {
+        "simple": "You can sign in to the PC.",
+        "technical": "PC SSH Public Key authentication succeeded."
+      },
+      "pcLoginFailed": {
+        "simple": "PC sign-in failed.",
+        "technical": "PC SSH authentication failed."
+      },
+      "securityPending": {
+        "simple": "Security information needs checking.",
+        "technical": "SSH Host Key verification is pending."
+      },
+      "routerConnected": {
+        "simple": "The router is reachable.",
+        "technical": "Router SSH endpoint is reachable."
+      },
+      "routerUnavailable": {
+        "simple": "The router cannot be reached.",
+        "technical": "Router SSH endpoint is unreachable."
+      },
+      "routerLoginSucceeded": {
+        "simple": "You can sign in to the router.",
+        "technical": "Router SSH Public Key authentication succeeded."
+      },
+      "routerLoginFailed": {
+        "simple": "Router sign-in failed.",
+        "technical": "Router SSH authentication failed."
+      },
+      "appInstalled": {
+        "simple": "The OpenVPN app is installed.",
+        "technical": "OpenVPN provider is installed."
+      },
+      "appRequired": {
+        "simple": "Install the OpenVPN app.",
+        "technical": "OpenVPN provider installation is required."
+      },
+      "profileSelected": {
+        "simple": "A connection profile is selected.",
+        "technical": "An OpenVPN profile is selected."
+      },
+      "profileRequired": {
+        "simple": "Select a connection profile.",
+        "technical": "Select an OpenVPN profile."
+      },
+      "permissionGranted": {
+        "simple": "VPN connection permission is allowed.",
+        "technical": "VPN connection permission is granted."
+      },
+      "permissionRequired": {
+        "simple": "VPN connection permission is needed.",
+        "technical": "VPN connection permission is required."
+      },
+      "vpnConnected": {
+        "simple": "VPN is connected.",
+        "technical": "OpenVPN tunnel is connected."
+      },
+      "vpnDisconnected": {
+        "simple": "VPN is not connected.",
+        "technical": "OpenVPN tunnel is disconnected."
+      },
+      "unavailable": {
+        "simple": "This cannot be checked right now.",
+        "technical": "This check is currently unavailable."
+      }
+    },
+    "overview": {
+      "connectionTitle": {
+        "simple": "PC Connection",
+        "technical": "SSH Connection"
+      },
+      "connectionDescription": {
+        "simple": "Checks whether this device can connect to the PC.",
+        "technical": "Reachability · Public Key Auth · Host Key"
+      },
+      "wakeTitle": {
+        "simple": "Power-on Check",
+        "technical": "WOL Path Check"
+      },
+      "wakeDescription": {
+        "simple": "Checks the router connection and authentication needed to wake the PC.",
+        "technical": "Router SSH endpoint reachability"
+      },
+      "remoteTitle": {
+        "simple": "Remote Connection",
+        "technical": "OpenVPN"
+      },
+      "remoteDescription": {
+        "simple": "Checks the OpenVPN state used for remote network access.",
+        "technical": "Install · Connection status"
+      },
+      "securityTitle": {
+        "simple": "Connection Security",
+        "technical": "SSH Security"
+      },
+      "securityDescription": {
+        "simple": "Checks whether this device is configured to connect securely to the PC.",
+        "technical": "Identity · Host Key"
+      }
+    },
+    "pcTrust": {
+      "title": {
+        "simple": "PC trust check",
+        "technical": "SSH Host Key"
+      }
+    },
+    "routerTrust": {
+      "title": {
+        "simple": "Router trust check",
+        "technical": "Router SSH Host Key"
+      }
+    },
+    "connection": {
+      "title": {
+        "simple": "PC Connection",
+        "technical": "SSH Connection"
+      },
+      "pcStatus": "PC connection",
+      "pcStatusDescription": "Checks whether this device can connect to the PC.",
+      "pcAddress": "PC address",
+      "enterAddress": "Enter the PC address in Settings.",
+      "loginTitle": {
+        "simple": "PC login",
+        "technical": "SSH Authentication"
+      },
+      "loginDescription": {
+        "simple": "Checks whether the saved account and connection key can sign in to the PC.",
+        "technical": "Public Key authentication status"
+      },
+      "success": {
+        "simple": "This device can connect securely to the PC.",
+        "technical": "PC SSH connection and Public Key authentication successful."
+      },
+      "checking": "Checking the PC address and SSH authentication…",
+      "pcOfflinePending": {
+        "simple": "The PC may be powered off or its SSH server may not be responding. This is not a setup error. Turn on the PC and try again.",
+        "technical": "The PC SSH endpoint did not respond. TCP non-response alone cannot prove that the PC is powered off."
+      },
+      "hostKeyPending": {
+        "simple": "The PC is online, but its Host Key has not been checked yet. Review the security information and try again.",
+        "technical": "PC reachability succeeded. SSH authentication is pending because no trusted Host Key is stored."
+      },
+      "authFailedStatus": {
+        "simple": "SSH authentication failed. Check that this device's public key is registered on the PC.",
+        "technical": "SSH Public Key authentication failed after reachability and Host Key verification."
+      },
+      "hostKeyPendingStatus": "Host Key not verified",
+      "notChecked": "Not checked yet."
+    },
+    "wake": {
+      "title": {
+        "simple": "Power-on Check",
+        "technical": "WOL Path Check"
+      },
+      "method": "Power-on method",
+      "routerMethod": {
+        "simple": "Router SSH",
+        "technical": "Router SSH · WOL"
+      },
+      "localMethod": {
+        "simple": "Same network only",
+        "technical": "Local WOL"
+      },
+      "disabledMethod": {
+        "simple": "Disabled",
+        "technical": "Power On disabled"
+      },
+      "routerDescription": {
+        "simple": "Checks whether the router used to wake the PC is reachable.",
+        "technical": "Router SSH endpoint reachability"
+      },
+      "routerCheck": "Router connection check",
+      "routerReachability": "Router connection",
+      "routerLogin": "Router login",
+      "routerLoginDescription": {
+        "simple": "Checks whether the saved account and connection key can sign in to the router.",
+        "technical": "Router SSH Public Key authentication"
+      },
+      "routerLoginSuccess": {
+        "simple": "Router login succeeded.",
+        "technical": "Router SSH authentication successful."
+      },
+      "routerAddress": "Enter the router address in Settings.",
+      "routerSuccess": {
+        "simple": "The router is reachable.",
+        "technical": "Router SSH endpoint reachable."
+      },
+      "checking": "Checking the router connection…",
+      "notChecked": "Not checked yet."
+    },
+    "remote": {
+      "title": {
+        "simple": "Remote Connection",
+        "technical": "OpenVPN"
+      },
+      "app": "OpenVPN app",
+      "appDescription": "Checks whether the app required for remote access is installed.",
+      "profile": "Profile",
+      "profileDescription": "OpenVPN profile used for remote access",
+      "permission": "Connection permission",
+      "permissionDescription": "Checks whether the app can start a VPN connection.",
+      "vpnStatus": "VPN connection status",
+      "vpnStatusDescription": "Checks whether the VPN is currently connected.",
+      "install": "Installed",
+      "installRequired": "Install required"
+    },
+    "quickCheck": {
+      "title": {
+        "simple": "One-click diagnostics",
+        "technical": "Full diagnostics"
+      },
+      "description": {
+        "simple": "Check the settings and connections needed to control the PC.",
+        "technical": "Check configuration, SSH, WOL path, and OpenVPN prerequisites in sequence."
+      },
+      "hero": {
+        "ready": {
+          "simple": "Diagnostics ready",
+          "technical": "Diagnostics ready"
+        },
+        "running": {
+          "simple": "Diagnostics in progress…",
+          "technical": "Diagnostics in progress…"
+        },
+        "passed": {
+          "simple": "All checks passed",
+          "technical": "All diagnostics passed"
+        },
+        "attention": {
+          "simple": "{count} need attention",
+          "technical": "{count} checks need attention"
+        },
+        "planned": {
+          "simple": "We will check {total} items.",
+          "technical": "We will run {total} diagnostic checks."
+        },
+        "progress": {
+          "simple": "Checking {step}…",
+          "technical": "Checking {step}…"
+        }
+      },
+      "items": {
+        "simple": "Checks",
+        "technical": "Diagnostic checks"
+      },
+      "run": "Run diagnostics",
+      "rerun": "Run again",
+      "running": "Running diagnostics…",
+      "progress": "Checking {step}…",
+      "success": "{passed}/{total} checks passed.",
+      "attention": "{passed}/{total} checks passed. Review the items that need attention.",
+      "cleanupFailed": "Diagnostics finished, but the VPN could not be disconnected automatically.",
+      "steps": {
+        "settings": "Required settings",
+        "identity": "Connection key",
+        "pc": "PC connection",
+        "wake": "Power-on path",
+        "remote": "Remote connection",
+        "cleanup": "VPN auto-disconnect"
+      },
+      "status": {
+        "idle": "Not checked",
+        "checking": "Checking…",
+        "passed": "Passed",
+        "attention": "Needs attention"
+      }
+    },
+    "security": {
+      "title": {
+        "simple": "Connection Security",
+        "technical": "SSH Security"
+      },
+      "target": "Connection target",
+      "currentStatus": "Trust status",
+      "identity": {
+        "simple": "This device's connection key",
+        "technical": "SSH Identity"
+      },
+      "identityDescription": {
+        "simple": "The key used to sign in to the PC securely. The private key stays on this device.",
+        "technical": "Private key stored on device"
+      },
+      "identityMissing": "No connection key is available yet.",
+      "securityInfo": {
+        "simple": "Connection key security information",
+        "technical": "Public Key Fingerprint"
+      },
+      "securityInfoDescription": {
+        "simple": "View the security information.",
+        "technical": "SHA-256 fingerprint"
+      },
+      "copyPublicKey": {
+        "simple": "Copy PC registration key",
+        "technical": "Copy Public Key"
+      },
+      "copyPublicKeyDescription": {
+        "simple": "Use this to register the device on the PC.",
+        "technical": "Copy SSH public key"
+      },
+      "hostTrust": {
+        "simple": "PC trust",
+        "technical": "SSH Host Key"
+      },
+      "routerTrust": {
+        "simple": "Router trust",
+        "technical": "Router SSH Host Key"
+      },
+      "pcTrustDescription": {
+        "simple": "This PC's security information has not been checked yet.",
+        "technical": "Host Key verification"
+      },
+      "routerTrustDescription": {
+        "simple": "This router's security information has not been checked yet.",
+        "technical": "Host Key verification"
+      },
+      "trust": {
+        "simple": "Trust",
+        "technical": "Trust Host Key"
+      },
+      "trustPc": {
+        "simple": "Trust this PC",
+        "technical": "Trust Host Key"
+      },
+      "trustRouter": {
+        "simple": "Trust this router",
+        "technical": "Trust Host Key"
+      },
+      "securityInfoRefreshUnchanged": {
+        "simple": "The security information is unchanged.",
+        "technical": "The rescanned Host Key fingerprint matches the previous fingerprint."
+      },
+      "securityInfoRefreshChanged": {
+        "simple": "The security information changed. Check it again before trusting it.",
+        "technical": "The rescanned Host Key fingerprint differs from the previous fingerprint. Review it before re-trusting the host."
+      },
+      "scanDescription": "Fetch and check the security information for this target.",
+      "securityCheck": "Check security information",
+      "securityInfoNotChecked": {
+        "simple": "Security information has not been checked yet.",
+        "technical": "SSH Host Key fingerprint has not been scanned."
+      },
+      "checkingSecurityInfo": {
+        "simple": "Checking security information.",
+        "technical": "Scanning the SSH Host Key fingerprint."
+      },
+      "securityInfoChecked": {
+        "simple": "Security information has been checked.",
+        "technical": "SSH Host Key fingerprint has been scanned."
+      },
+      "securityInfoUnavailable": {
+        "simple": "Security information could not be retrieved.",
+        "technical": "SSH Host Key fingerprint could not be retrieved."
+      },
+      "checkSecurityInfoFirst": {
+        "simple": "Check the security information first.",
+        "technical": "Scan the SSH Host Key fingerprint before trusting it."
+      },
+      "readyToTrust": {
+        "simple": "Ready to trust this connection target.",
+        "technical": "SSH Host Key fingerprint is ready to be trusted."
+      },
+      "pcTrusted": {
+        "simple": "This PC is trusted.",
+        "technical": "PC SSH Host Key fingerprint is trusted."
+      },
+      "routerTrusted": {
+        "simple": "This router is trusted.",
+        "technical": "Router SSH Host Key fingerprint is trusted."
+      },
+      "viewFingerprint": "Tap to view the full fingerprint",
+      "verifyFirst": "Check required",
+      "reviewRequired": "Review required",
+      "addressRequired": "Address required",
+      "verified": "Verified",
+      "algorithm": "Algorithm",
+      "serverFingerprint": "SHA-256 server fingerprint",
+      "identityFingerprint": "SHA-256 connection-key fingerprint"
+    },
+    "status": {
+      "configured": "Configured",
+      "required": "Required",
+      "stored": "Stored",
+      "view": "View"
+    }
+  },
+  "validation": {
+    "pcHost": "Enter a valid PC address.",
+    "pcPort": "Enter a PC SSH port from 1 to 65535.",
+    "pcUsername": "Enter the Windows username.",
+    "pcMac": "Enter a MAC address in AA:BB:CC:DD:EE:FF format.",
+    "routerHost": "Enter a valid network equipment (router) address.",
+    "routerPort": "Enter a network equipment SSH port from 1 to 65535.",
+    "routerUsername": "Enter the network equipment SSH username.",
+    "wolInterface": "Enter the LAN interface name.",
+    "refreshInterval": "Choose a refresh interval of 0, 10, 15, 20, 30, or 60 seconds."
+  },
+  "errors": {
+    "identityNotAvailable": {
+      "simple": "Prepare this device's connection key first.",
+      "technical": "SSH identity is not available."
+    },
+    "hostUnreachable": {
+      "simple": "The target cannot be reached. Check the network.",
+      "technical": "SSH host is unreachable."
+    },
+    "connectionTimeout": {
+      "simple": "The connection timed out.",
+      "technical": "SSH connection timeout."
+    },
+    "hostKeyUnknown": {
+      "simple": "This PC's security information has not been checked yet. Run the PC trust check first.",
+      "technical": "Stored SSH Host Key is missing. Scan and trust the Host Key first."
+    },
+    "routerHostKeyUnknown": {
+      "simple": "This router's security information has not been checked yet. Run the router trust check first.",
+      "technical": "Stored router SSH Host Key is missing. Scan and trust the Host Key first."
+    },
+    "hostKeyMismatch": {
+      "simple": "The security information differs from the previously checked PC. The connection was blocked for safety.",
+      "technical": "SSH Host Key mismatch. Connection blocked."
+    },
+    "routerHostKeyMismatch": {
+      "simple": "The security information differs from the previously checked router. The connection was blocked for safety.",
+      "technical": "Router SSH Host Key mismatch. Connection blocked."
+    },
+    "authFailed": {
+      "simple": "Could not sign in to the PC. Check that this device's connection key is registered on the PC.",
+      "technical": "SSH authentication failed. Check Public Key registration."
+    },
+    "routerSshAuthFailed": {
+      "simple": "Could not sign in to the router. Check that this device's connection key is registered on the router.",
+      "technical": "Router SSH authentication failed. Check Public Key registration."
+    },
+    "windowsSshAuthFailed": {
+      "simple": "Could not sign in to the PC. Check that this device's connection key is registered on the PC.",
+      "technical": "Windows SSH authentication failed. Check the OpenSSH authorized keys configuration."
+    },
+    "commandTimeout": {
+      "simple": "The action timed out.",
+      "technical": "SSH command timeout."
+    },
+    "commandFailed": {
+      "simple": "The action could not be completed.",
+      "technical": "SSH command failed."
+    },
+    "ioError": {
+      "simple": "A network communication problem occurred.",
+      "technical": "Network I/O error."
+    },
+    "openVpnAppNotInstalled": {
+      "simple": "Install OpenVPN for Android.",
+      "technical": "OpenVPN for Android is not installed."
+    },
+    "openVpnServiceBindFailed": {
+      "simple": "Could not connect to the OpenVPN app.",
+      "technical": "Failed to bind OpenVPN external API service."
+    },
+    "openVpnPermissionRequired": {
+      "simple": "Check the OpenVPN connection permission.",
+      "technical": "OpenVPN external-control permission is required."
+    },
+    "openVpnPermissionDenied": {
+      "simple": "OpenVPN connection permission was denied.",
+      "technical": "OpenVPN external-control permission was denied."
+    },
+    "openVpnProfileNotSelected": {
+      "simple": "Select an OpenVPN profile for remote access first.",
+      "technical": "OpenVPN profile not selected."
+    },
+    "openVpnProfileNotFound": {
+      "simple": "The selected OpenVPN profile cannot be found.",
+      "technical": "Selected OpenVPN profile was not found."
+    },
+    "openVpnConnectFailed": {
+      "simple": "VPN connection failed.",
+      "technical": "OpenVPN connection failed."
+    },
+    "openVpnConnectTimeout": {
+      "simple": "The VPN connection timed out.",
+      "technical": "OpenVPN connection timeout."
+    },
+    "openVpnDisconnectFailed": {
+      "simple": "VPN disconnection failed.",
+      "technical": "OpenVPN disconnection failed."
+    },
+    "openVpnStatusUnavailable": {
+      "simple": "VPN status is unavailable.",
+      "technical": "OpenVPN status unavailable."
+    },
+    "hostUnreachableNetwork": {
+      "simple": "The target cannot be reached.",
+      "technical": "Target host is unreachable."
+    },
+    "reachabilityTimeout": {
+      "simple": "The network check timed out.",
+      "technical": "Reachability check timeout."
+    },
+    "homeNetworkUnavailable": {
+      "simple": "The target network cannot be reached. Check the remote connection settings.",
+      "technical": "Target network unreachable. Check the OpenVPN profile and routing."
+    },
+    "pcStatusCheckFailed": {
+      "simple": "PC status is unavailable.",
+      "technical": "PC status check failed."
+    },
+    "pcWakeTimeout": {
+      "simple": "The PC did not respond in time. Check its power and power-on settings.",
+      "technical": "PC wake verification timeout. Check power and WOL configuration."
+    },
+    "pcShutdownTimeout": {
+      "simple": "The PC did not turn off in time.",
+      "technical": "PC shutdown verification timed out."
+    },
+    "pcRebootOfflineTimeout": {
+      "simple": "The PC did not go offline during reboot.",
+      "technical": "PC did not transition offline during reboot."
+    },
+    "pcRebootOnlineTimeout": {
+      "simple": "The PC did not come back online after reboot.",
+      "technical": "PC did not return online after reboot."
+    },
+    "powerActionInProgress": {
+      "simple": "Another power action is already in progress.",
+      "technical": "Another power action is already in progress."
+    },
+    "powerCommandFailed": {
+      "simple": "The power action could not be completed.",
+      "technical": "Power command failed."
+    },
+    "routerWolFailed": {
+      "simple": "Could not wake the PC. Check the router settings.",
+      "technical": "Router WOL command failed."
+    },
+    "unknown": {
+      "simple": "Something went wrong. Check the settings and network.",
+      "technical": "Unknown error."
+    }
+  },
+  "home": {
+    "pcControl": "PC power control",
+    "settingsOpen": "Open settings",
+    "historyOpen": "Open action history",
+    "historyOpenUnread": "Open action history, new entries available",
+    "statusRefresh": "Refresh PC status",
+    "defaultPcName": "My PC",
+    "rename": "Rename PC",
+    "statusUnknown": "Unknown",
+    "statusNeedsAttention": "Needs attention",
+    "statusWaking": "Waking…",
+    "statusShuttingDown": "Shutting down…",
+    "statusRebooting": "Rebooting…",
+    "setupRequired": "PC setup is required.",
+    "setupDescription": "Add connection details to check status and control power.",
+    "startSetup": "Start setup",
+    "offline": "The PC is not responding.",
+    "pcUnavailable": "The PC may be powered off or its SSH server may not be responding.",
+    "networkUnavailable": "The PC cannot be checked on the current network.",
+    "onlineLatencyTrend": "Recent latency trend over {count} checks",
+    "latencyAfterCheck": "The trend appears after latency is measured.",
+    "currentLatency": "Latency",
+    "averageLatency": "Avg latency",
+    "lastOnline": "Last online",
+    "refreshSuccess": "PC status refreshed.",
+    "vpnConnect": "Connect VPN",
+    "vpnConnecting": "Connecting VPN",
+    "vpnDisconnect": "Disconnect VPN",
+    "vpnDisconnecting": "Disconnecting VPN",
+    "vpnDisconnected": "VPN disconnected.",
+    "vpnConnected": "VPN connected.",
+    "vpnDisconnectFailed": "The power action completed, but the VPN could not be disconnected automatically.",
+    "confirmAction": "{action}?",
+    "confirmActionMessage": "Press Confirm to start the action.",
+    "pcNameDialogTitle": "Rename PC",
+    "saving": "Saving…",
+    "nameRequired": "Enter a PC name.",
+    "nameChanged": "PC name changed.",
+    "nameSaveFailed": "Could not save the PC name.",
+    "powerOn": "Power On",
+    "shutdown": "Shutdown",
+    "reboot": "Reboot",
+    "actionRunning": "{action}…",
+    "actionCompleted": "{action} action completed.",
+    "alreadyOn": "The PC is already on.",
+    "alreadyOff": "The PC is already off.",
+    "rebootOffline": "The PC is not responding, so it cannot be rebooted.",
+    "networkChecking": "Checking network status.",
+    "networkCheck": "Check the router or VPN connection.",
+    "connectionPath": "Connection path",
+    "phone": "Phone",
+    "router": "Router",
+    "pcChecking": "Checking PC status.",
+    "pcCheckRequired": "PC status needs to be checked.",
+    "powerSetupRequired": "Check the power-on settings.",
+    "routerTrustRequired": "The router needs to be verified.",
+    "pcTrustRequired": "The PC needs to be verified.",
+    "elapsed": "Elapsed {value}s",
+    "lastOnlineNever": "None",
+    "duration": "Duration {value}"
+  },
+  "history": {
+    "title": "Action history",
+    "recent": "Recent action",
+    "openRecent": "Open recent action history",
+    "doneSuffix": "complete",
+    "noCompletedActions": "No completed actions yet.",
+    "completedActionsHint": "Completed power actions appear here.",
+    "emptyTitle": "No action history yet.",
+    "justNow": "Just now",
+    "secondsAgo": "{value}s ago",
+    "minutesAgo": "{value}m ago",
+    "hoursAgo": "{value}h ago",
+    "daysAgo": "{value}d ago",
+    "actionReconnected": "Connected again successfully.",
+    "actionPoweredOn": "The PC is online.",
+    "actionShutdown": "The PC shut down safely.",
+    "actionFailed": "The action could not be completed.",
+    "actionDone": "The action is complete.",
+    "pending": "Needs attention"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "Get started",
+      "pc": "Prepare the PC",
+      "identity": "Register phone",
+      "power": "Power-on method",
+      "remote": "Remote access",
+      "test": "Connection check"
+    },
+    "header": {
+      "brandLabel": "PC Control",
+      "skip": "Continue later",
+      "progress": "Step {current} of {total}",
+      "stepLabel": "{current} / {total} · {title}"
+    },
+    "stepDescriptions": {
+      "welcome": "Turn on the PC and get ready to continue at the PC.",
+      "pc": "Enter the address and account used to connect to the PC.",
+      "identity": "Register this phone with the PC.",
+      "power": "Choose how to turn on the PC.",
+      "remote": "Prepare the connection used from another network.",
+      "test": "Check that the configured connection works."
+    },
+    "navigation": {
+      "previous": "Back",
+      "continue": "Continue",
+      "finish": "Finish setup"
+    },
+    "dialog": {
+      "helpTitle": "Setup help",
+      "close": "OK",
+      "skipTitle": "Your progress won’t be saved",
+      "skipDescription": "If you leave now, everything you entered will be discarded. The setup wizard will start from the beginning next time.",
+      "continueSetup": "Continue setup",
+      "skip": "Do it later"
+    },
+    "welcome": {
+      "eyebrow": "Manage your PC from any network",
+      "title": "Continue at your PC",
+      "description": "Turn on the PC you want to connect and keep this phone with you. You will complete a few steps on the PC.",
+      "prepareTitle": "Before you start",
+      "prepareDescription": "Be ready to find the PC address and Windows username.",
+      "pcOn": "Keep the PC turned on.",
+      "admin": "You need Windows administrator access.",
+      "sameNetwork": "For initial setup, connecting the PC and phone to the same network is recommended."
+    },
+    "pc": {
+      "title": "Prepare the PC",
+      "description": "Enter the PC connection information. Change advanced settings only if you changed the defaults.",
+      "hostLabel": "PC IP address",
+      "hostHint": "The IPv4 address or hostname used to connect to the PC.",
+      "macHint": "Required to turn the PC on. Enter pairs separated by colons (:).",
+      "helpLabel": "How to find these on the PC",
+      "advancedHint": "Change this only if you changed the SSH port.",
+      "help": "Find the IPv4 address under Windows Settings > Network & internet > Properties. Run whoami in PowerShell to find the username. In an administrator PowerShell window, run Get-Service sshd. If the service is missing or stopped, install OpenSSH Server from Optional features and run Start-Service sshd."
+    },
+    "key": {
+      "title": "Register this phone with the PC",
+      "description": "Register this phone with the PC so it can connect securely.",
+      "readyTitle": "Connection key is ready",
+      "readyDescription": "The connection key is ready to register with the PC.",
+      "missingDescription": "Not prepared yet.",
+      "preparingDescription": "Preparing the connection key.",
+      "details": "Details",
+      "publicKeyLabel": "Connection key",
+      "copy": "Copy public key",
+      "prepare": "Prepare connection key",
+      "preparing": "Preparing…",
+      "registrationTitle": "Register on the PC",
+      "scriptHelp": "The PC setup tool guides you through Windows connection setup and key registration.",
+      "stepDownloadTitle": "Get the setup tool",
+      "stepDownload": "Download the setup tool on the PC.",
+      "stepRunTitle": "Run the setup tool",
+      "stepRun": "Run the setup tool in an administrator PowerShell window.",
+      "stepPasteTitle": "Register the public key",
+      "stepPaste": "When prompted, paste this phone's public key.",
+      "copyDownloadUrl": "Copy download address",
+      "downloadUrlCopied": "Copied the PC setup tool download address.",
+      "downloadUrlCopyFailed": "Could not copy the download address.",
+      "openSetupTool": "Open PC setup tool",
+      "resetNotice": "If you delete the app or clear its data, you must register a new public key.",
+      "helpLabel": "Why register a public key",
+      "help": "A public key is not a password. Add one line containing the public key to Windows authorized_keys so this device can connect to the PC. The private key never leaves the Android device."
+    },
+    "wake": {
+      "title": "Power On (optional)",
+      "description": "Enter the MAC address and router information used to wake the PC.",
+      "optionalDescription": "This is optional. Shutdown and reboot work without Power On settings.",
+      "routerChoice": "Wake from the router",
+      "routerChoiceDescription": "Use network equipment that supports SSH and WOL.",
+      "localChoice": "Same network only",
+      "localChoiceDescription": "Wake the PC only when this device is on the same network.",
+      "unsupportedChoice": "Power On unavailable",
+      "unsupportedChoiceDescription": "Use shutdown and reboot only.",
+      "disabledChoice": "Do not use Power On",
+      "disabledChoiceDescription": "Use shutdown and reboot only.",
+      "helpLabel": "Router compatibility",
+      "help": "On the same network, the network equipment must forward a WOL signal to the PC. Check SSH and LAN WOL tool support. If the environment does not support WOL, Power On is unavailable and only shutdown and reboot can be used."
+    },
+    "remote": {
+      "title": "Set up remote access",
+      "description": "To control the PC from another network, the phone must connect securely to the target network. PC Control uses an existing OpenVPN for Android profile.",
+      "optional": "Optional",
+      "install": "OpenVPN for Android is required to connect from another network.",
+      "appRequired": "OpenVPN app required",
+      "installAction": "Install OpenVPN",
+      "checkingTitle": "Checking OpenVPN",
+      "checkingDescription": "Checking whether the app is installed.",
+      "selectTitle": "Remote connection profile",
+      "profileEmptyTitle": "No OpenVPN profiles",
+      "profileEmptyDescription": "Import a profile in the OpenVPN app first.",
+      "importProfile": "Import an OpenVPN profile.",
+      "selectProfile": "Select the profile in Settings and run the connection test."
+    },
+    "connection": {
+      "title": "Connection check",
+      "description": "Check everything needed to connect to the PC at once. Only items that need your attention are shown.",
+      "pcSsh": "PC connection",
+      "test": "Start connection check",
+      "powerOnTitle": "Continue verification after powering on",
+      "powerOnDescription": "Use router SSH and WOL to turn on the PC, then check its Host Key and SSH authentication.",
+      "powerOn": "Power on and check again",
+      "powerOnDetails": "View instructions",
+      "trustTitle": "Check PC security",
+      "trustDescription": "Compare the fingerprint shown on first connection with a trusted source before saving it.",
+      "scan": "View server fingerprint",
+      "reviewFingerprint": "Review fingerprint",
+      "scanBusy": "Checking…",
+      "actionRequired": "Action required",
+      "pcRecovery": "Check the PC address and sign-in information.",
+      "authRecovery": "Make sure this phone's connection key is registered on the PC.",
+      "editPc": "Edit PC connection",
+      "editKey": "View key registration",
+      "editRouter": "Edit router information",
+      "securityBlocked": "Available after the PC connection succeeds.",
+      "securityPending": "Security information needs review.",
+      "securityVerified": "Security information verified.",
+      "routerBlocked": "Available after the PC connection succeeds.",
+      "routerPending": "Not checked yet.",
+      "routerVerified": "Connected successfully.",
+      "routerFailed": "Cannot connect to the router.",
+      "pcState": {
+        "idle": "Not checked yet.",
+        "checking": "Checking the connection.",
+        "offline": "Cannot connect to the PC.",
+        "host-key-unverified": "The PC security information needs review.",
+        "auth-failed": "Cannot sign in to the PC.",
+        "verified": "Connected successfully.",
+        "error": "Could not check the connection."
+      }
+    },
+    "pcOfflineVerificationPending": {
+      "simple": "The PC may be powered off or its SSH server may not be responding. This is not a setup error. Turn on the PC and try again.",
+      "technical": "PC reachability failed. Power state cannot be concluded from TCP/SSH non-response alone."
+    },
+    "hostKeyVerificationPending": {
+      "simple": "The PC is online, but its security information (Host Key) has not been checked. Review and trust the fingerprint first.",
+      "technical": "PC reachability succeeded, but the SSH Host Key is not trusted yet."
+    },
+    "pcAndRouterTestSuccess": "PC SSH authentication and router connection verified.",
+    "pcTestSuccess": "PC address, SSH port, and public-key authentication verified.",
+    "comparePcFingerprint": "Compare the displayed server fingerprint with a trusted source.",
+    "pcFingerprintFailed": "Could not fetch the PC server fingerprint. Check the address and network.",
+    "pcTrusted": "PC server verified.",
+    "trustSaveFailed": "Could not save the server verification.",
+    "compareRouterFingerprint": "Compare the router fingerprint with a trusted source.",
+    "routerFingerprintFailed": "Could not fetch the router fingerprint. Check the address and network.",
+    "routerTrusted": "Router server verified.",
+    "setupComplete": "Setup complete.",
+    "setupCompletePending": {
+      "simple": "Setup was saved. Turn on the PC and continue connection verification.",
+      "technical": "Required setup saved. PC SSH verification remains pending."
+    },
+    "identityReady": "App public key prepared.",
+    "identityFailed": "Could not prepare the app public key. Try again in the Android app.",
+    "publicKeyCopied": "Public key copied to the clipboard.",
+    "publicKeyCopyFailed": "Could not copy the public key. Prepare the key first.",
+    "testSuccess": "Connection test succeeded",
+    "back": "Previous step",
+    "flow": {
+      "later": "Later",
+      "progress": "Setup progress",
+      "yes": "Yes",
+      "no": "No",
+      "confirmYes": "Yes",
+      "how": "How to find it",
+      "welcome": {
+        "title": "Let’s get the app ready for you",
+        "description": "We’ll connect your PC or server and set up control one step at a time.",
+        "action": "Get started"
+      },
+      "prepare": {
+        "title": "Turn on the PC you want to control",
+        "description": "You’ll complete a few steps on the PC during setup. Stay near it if possible.",
+        "note": "Windows administrator access may be required.",
+        "action": "I’m ready"
+      },
+      "wakeIntent": {
+        "title": "Would you also like to turn on the PC from the app?",
+        "description": "Shutdown and restart work without this feature.",
+        "yes": "Yes, I’ll use it"
+      },
+      "wolSupport": {
+        "title": "Do the PC and network equipment support WOL?",
+        "description": "Both must support Wake on LAN for the app to turn on the PC.",
+        "yes": "Yes, both support it",
+        "unknown": "I’m not sure"
+      },
+      "wolGuide": {
+        "title": "Let’s check WOL support",
+        "description": "Check the computer and network equipment separately.",
+        "pc": "Check the computer",
+        "pcDescription": "Check BIOS/UEFI and the network adapter.",
+        "pcHelp": "Enable Wake on LAN or PCI-E wake in BIOS/UEFI, then allow the Windows network adapter to wake the computer in its power-management settings.",
+        "network": "Check network equipment",
+        "networkDescription": "Check whether it can forward WOL packets.",
+        "networkHelp": "Look for WOL, Wake on LAN, or magic-packet forwarding in the network equipment’s admin page or manual.",
+        "supported": "Both support it",
+        "unsupported": "At least one does not",
+        "later": "I’ll check later",
+        "laterDialogTitle": "Set up PC power on later?",
+        "laterDialogDescription": "If you continue now, you won’t be able to turn on the PC from the app. You can use this feature after adding the WOL details manually in Settings.",
+        "unsupportedDialogTitle": "Continue without PC power on?",
+        "unsupportedDialogDescription": "If the PC or network equipment does not support WOL, the app cannot turn on the PC. You can still set up shutdown and restart."
+      },
+      "pcInfo": {
+        "title": "Enter your PC's IP address",
+        "description": "Use the IPv4 address your phone will connect to.",
+        "portNote": "Use the default value 22 if you did not change the port.",
+        "usernameTitle": "Enter your Windows username",
+        "usernameDescription": "Use the account for SSH access to your PC.",
+        "portTitle": "Did you change the PC's SSH port?",
+        "portDescription": "If not, we'll use the default port 22.",
+        "useDefaultPort": "Use port 22",
+        "useOtherPort": "Use another port",
+        "customPortTitle": "Enter your PC's SSH port",
+        "customPortDescription": "Use the port configured for the PC's SSH server."
+      },
+      "phone": {
+        "title": "Let’s register this phone with the PC",
+        "description": "A connection key created on this phone provides secure access without a password.",
+        "action": "Start registration",
+        "retry": "Try again",
+        "errorDescription": "The connection key could not be prepared. Try again in the Android app."
+      },
+      "tool": {
+        "title": "Get the setup tool on the PC",
+        "description": "Open the address below in the PC’s browser.",
+        "copy": "Copy address",
+        "qr": "View QR code",
+        "action": "Opened on the PC"
+      },
+      "run": {
+        "title": "Run it in an administrator PowerShell",
+        "description": "Run the setup tool you just downloaded with administrator access.",
+        "help": "How to run it",
+        "helpText": "Find the downloaded setup-windows-ssh.ps1 file, open PowerShell as administrator, and run the file.",
+        "action": "I ran it"
+      },
+      "paste": {
+        "title": "Paste the connection key on the PC",
+        "description": "When the setup tool asks for the key, copy it below and paste it on the PC.",
+        "copy": "Copy connection key",
+        "copied": "Connection key copied",
+        "action": "Pasted on the PC"
+      },
+      "wakeMethod": {
+        "title": "How should the PC turn on?",
+        "router": "Through network equipment",
+        "routerDescription": "Works from another network too.",
+        "local": "Only on the same network",
+        "disable": "Don’t use Power On"
+      },
+      "wakeInfo": {
+        "title": "Enter your PC's MAC address",
+        "description": "This identifies the network adapter that receives the wake signal.",
+        "routerHostTitle": "Enter your router address",
+        "routerHostDescription": "Use the router address for SSH access and WOL commands.",
+        "routerUsernameTitle": "Enter your router's SSH username",
+        "routerUsernameDescription": "Use the account for SSH access to the router.",
+        "interfaceTitle": "Enter the LAN interface for WOL",
+        "interfaceDescription": "Use the router's LAN interface connected to the PC.",
+        "networkHost": "Network equipment (router) address",
+        "username": "Network equipment SSH username",
+        "networkPort": "Network equipment SSH port",
+        "advanced": "Advanced settings"
+      },
+      "fieldHelp": {
+        "pcHost": "1. Open Settings on the PC.\n2. Open the properties of the current connection under Network & internet.\n3. Find the IPv4 address and enter it here.\n\nExample: 192.168.0.10",
+        "pcUsername": "1. Open PowerShell on the PC.\n2. Run whoami.\n3. Enter the name shown after the backslash (\\).\n\nExample: enter admin for PC-NAME\\admin",
+        "pcPort": "1. Open an administrator PowerShell on the PC.\n2. Run Get-ItemProperty HKLM:\\SOFTWARE\\OpenSSH.\n3. Use the default value 22 if you did not configure another port.",
+        "pcMac": "1. Open Settings on the PC.\n2. Open the network adapter’s hardware properties.\n3. Find and enter the physical address (MAC).\n\nExample: 2C:F0:5D:83:5B:07",
+        "routerHost": "1. Find the current network’s default gateway on the PC.\n2. Enter the displayed IPv4 address.\n\nExample: 192.168.0.1",
+        "routerUsername": "1. Open the network equipment (router) admin page.\n2. Find the username used for SSH access.\n3. Use the SSH setting because it may differ from the admin-page login.",
+        "routerPort": "1. Open the SSH settings on the network equipment (router).\n2. Find the port used by the SSH service.\n3. Use the default value 22 if it was not changed.",
+        "wolInterface": "1. Connect to the network equipment (router) over SSH.\n2. Run ip link.\n3. Enter the LAN interface connected to the PC.\n\nExample: br0 or lan0"
+      },
+      "fieldHelpSummary": {
+        "pcHost": "Find the IPv4 address of the current connection.",
+        "pcUsername": "Find your Windows sign-in username.",
+        "pcPort": "Check the PC's SSH port setting.",
+        "pcMac": "Find the network adapter's physical address.",
+        "routerHost": "Find the current network's default gateway.",
+        "routerUsername": "Find the username used for SSH access.",
+        "routerPort": "Find the port used by the SSH service.",
+        "wolInterface": "Find the LAN interface connected to the PC."
+      },
+      "feedback": {
+        "errorTitle": "Can’t continue"
+      },
+      "remoteIntent": {
+        "title": "Would you like to connect from another network?",
+        "description": "You can connect even when the phone and computer are on different networks."
+      },
+      "vpn": {
+        "checking": "Checking OpenVPN",
+        "installTitle": "Install the OpenVPN app",
+        "installDescription": "It provides a secure connection from another network.",
+        "install": "Install OpenVPN",
+        "later": "Set up remote access later",
+        "profileTitle": "An OpenVPN profile is required",
+        "profileDescription": "Import the profile you’ll use in the OpenVPN app first.",
+        "open": "Open OpenVPN",
+        "recheck": "Check again",
+        "selectTitle": "Select a VPN profile"
+      },
+      "verifyStart": {
+        "title": "Now let’s check the connection",
+        "description": "We’ll automatically check the information and connection state.",
+        "action": "Start check"
+      },
+      "verifying": {
+        "title": "Checking the connection",
+        "pc": "PC connection",
+        "key": "Connection key",
+        "security": "PC security",
+        "network": "Network equipment",
+        "vpn": "VPN",
+        "checking": "Checking…",
+        "done": "Done",
+        "waiting": "Waiting"
+      },
+      "trust": {
+        "title": "Confirm this is the PC you want to connect",
+        "description": "Compare the security information shown on the PC with the value below.",
+        "same": "They match",
+        "different": "They’re different"
+      },
+      "complete": {
+        "title": "Setup is complete",
+        "description": "You can now check and control the connected computer.",
+        "action": "Start PC Control"
+      },
+      "failure": {
+        "retry": "Try again",
+        "pc": {
+          "title": "Can’t connect to the PC",
+          "description": "Check the PC address and Windows username.",
+          "action": "Check PC information"
+        },
+        "auth": {
+          "title": "Can’t sign in to the PC",
+          "description": "Make sure this phone’s connection key is registered on the PC.",
+          "action": "Review phone registration"
+        },
+        "wol": {
+          "title": "Can’t turn on the PC",
+          "description": "Check the MAC address and Power On settings.",
+          "action": "Check Power On settings"
+        },
+        "vpn": {
+          "title": "Can’t connect from another network",
+          "description": "Check the OpenVPN app and profile settings.",
+          "action": "Check remote access"
+        },
+        "security": {
+          "title": "Security information doesn’t match",
+          "description": "Check the connection target and network again.",
+          "action": "Check PC information"
+        }
+      }
+    },
+    "master": {
+      "continue": "Continue",
+      "later": "Later",
+      "skipNow": "Skip for now",
+      "defaultPort": "Use default port 22",
+      "otherPort": "Use a different port",
+      "checking": "Checking…",
+      "done": "Done",
+      "waiting": "Waiting",
+      "retry": "Try again",
+      "trustSame": "They match",
+      "trustDifferent": "They differ",
+      "identityError": "Could not prepare the connection key. Try again.",
+      "identityBusy": "Preparing connection key…",
+      "identityPrepare": "Prepare connection key again",
+      "copyUrl": "Copy download URL",
+      "copyKey": "Copy connection key",
+      "urlCopied": "Download URL copied.",
+      "keyCopied": "Connection key copied.",
+      "urlCopyError": "Could not copy the download URL. Try again.",
+      "keyCopyError": "Could not copy the connection key. Try again.",
+      "runHelpTitle": "How to run it",
+      "runHelp": "1. Find the downloaded setup-windows-ssh.ps1 file.\n2. Open PowerShell as administrator.\n3. Run the setup tool.",
+      "welcome": {
+        "title": "Let’s set up the app",
+        "description": "We’ll go through the steps to connect to and control your PC or server.",
+        "action": "Get started"
+      },
+      "prepare": {
+        "title": "Turn on the PC you want to control",
+        "description": "Some setup steps must be done on the PC. Keep it nearby if possible.",
+        "note": "You may need Windows administrator access.",
+        "action": "I’m ready"
+      },
+      "pcHost": {
+        "title": "Enter your PC’s IP address",
+        "description": "The IPv4 address your phone will use to connect to the PC.",
+        "label": "PC IP address",
+        "helpSummary": "Find the IPv4 address of your current connection.",
+        "help": "1. Open Settings on the PC.\n2. Open the properties of the current connection under Network & Internet.\n3. Find the IPv4 address and enter it here.",
+        "error": "Enter a valid PC IPv4 address."
+      },
+      "pcUsername": {
+        "title": "Enter your Windows username",
+        "description": "The account used to connect to the PC over SSH.",
+        "label": "Windows username",
+        "helpSummary": "Find the name used to sign in to Windows.",
+        "help": "1. Open PowerShell on the PC.\n2. Run whoami.\n3. Enter the name after the backslash."
+      },
+      "pcPortChoice": {
+        "title": "Have you changed the PC’s SSH port?",
+        "description": "If not, use the default port 22."
+      },
+      "pcPort": {
+        "title": "Enter the PC’s SSH port",
+        "description": "The port configured for the PC’s SSH server.",
+        "label": "PC SSH port",
+        "helpSummary": "Check the PC’s SSH settings.",
+        "help": "1. Open PowerShell as administrator.\n2. Check the Port value in the OpenSSH server settings.\n3. Use 22 if you have not changed it."
+      },
+      "pcPrepare": {
+        "title": "Prepare the connection on your PC",
+        "description": "Run the setup tool to register this phone on your PC.",
+        "task1": "Get the setup tool",
+        "task1Body": "Open this setup tool URL in a browser on your PC.",
+        "task2": "Run it in administrator PowerShell",
+        "task2Body": "Run the downloaded setup tool as administrator.",
+        "action": "I ran the setup tool"
+      },
+      "pcKey": {
+        "title": "Paste the connection key on your PC",
+        "description": "When the setup tool asks for the key, copy it below and paste it on your PC.",
+        "keyReady": "Connection key · Ready to use",
+        "action": "I pasted it on the PC"
+      },
+      "pcVerify": {
+        "title": "Checking the PC connection",
+        "pc": "PC connection",
+        "security": "PC security",
+        "key": "Connection key"
+      },
+      "pcTrust": {
+        "title": "Confirm this is your PC",
+        "description": "Compare the security information shown on your PC with the information below."
+      },
+      "pcFailure": {
+        "connection": {
+          "title": "Cannot connect to the PC",
+          "description": "Check the PC IP address and Windows username.",
+          "action": "Check PC details"
+        },
+        "auth": {
+          "title": "Cannot sign in to the PC",
+          "description": "Check that this phone’s connection key is registered on the PC.",
+          "action": "Check connection key"
+        },
+        "security": {
+          "title": "The PC security information differs",
+          "description": "Check the PC and current network again.",
+          "action": "Check PC details"
+        }
+      },
+      "pcReady": {
+        "title": "PC connection confirmed",
+        "description": "You can now check and control this PC."
+      },
+      "wakeIntent": {
+        "title": "Do you also want to turn on the PC from the app?",
+        "description": "You can shut down and restart the PC without this feature.",
+        "yes": "Yes, set it up"
+      },
+      "wakeReadiness": {
+        "title": "Are you ready to set up PC power on?",
+        "description": "Your PC must support WOL, and your router must allow SSH access.",
+        "ready": "Yes, I’m ready",
+        "help": "Show me how to check"
+      },
+      "wakeHelp": {
+        "title": "Check PC power-on requirements",
+        "description": "There are items to check on both your PC and router.",
+        "pcTitle": "Check on the PC",
+        "pcSummary": "Check whether WOL can be used.",
+        "pcBody": "1. Check Wake on LAN or PCI-E wake in BIOS/UEFI.\n2. Check Wake on LAN settings in the Windows network adapter.\n3. Find the wired adapter’s MAC address.",
+        "routerTitle": "Check on the router",
+        "routerSummary": "Check SSH and WOL commands.",
+        "routerBody": "1. Confirm you can access the router over SSH.\n2. Find the LAN interface connected to the PC.\n3. Confirm ether-wake is available over SSH.",
+        "canSetup": "I can set it up"
+      },
+      "mac": {
+        "title": "Enter your PC’s MAC address",
+        "description": "The address of the wired adapter that receives the wake signal.",
+        "label": "PC MAC address",
+        "helpSummary": "Find the adapter’s physical address.",
+        "help": "1. Open network settings on the PC.\n2. Open hardware properties of the wired adapter.\n3. Enter its physical (MAC) address."
+      },
+      "routerHost": {
+        "title": "Enter your router address",
+        "description": "The SSH address of the router that will run the wake command.",
+        "label": "Router address",
+        "helpSummary": "Check the default gateway on your current network.",
+        "help": "1. Open current network information on the PC.\n2. Find the default gateway IPv4 address.\n3. Confirm it is the SSH destination and enter it."
+      },
+      "routerUsername": {
+        "title": "Enter the router SSH username",
+        "description": "The account used to connect to the router over SSH.",
+        "label": "SSH username",
+        "helpSummary": "Find the SSH account name.",
+        "help": "1. Open the router management page.\n2. Check SSH access settings.\n3. Enter the SSH username. It may differ from your management login."
+      },
+      "interface": {
+        "title": "Enter the LAN interface connected to the PC",
+        "description": "The router interface used to send the wake signal.",
+        "label": "LAN interface name",
+        "helpSummary": "Find the LAN interface connected to your PC.",
+        "help": "1. Connect to the router over SSH.\n2. Run ip link to list interfaces.\n3. Enter the LAN interface name, such as br0 or lan0."
+      },
+      "routerPortChoice": {
+        "title": "Have you changed the router’s SSH port?",
+        "description": "If not, use the default port 22."
+      },
+      "routerPort": {
+        "title": "Enter the router SSH port",
+        "description": "The port configured for its SSH service.",
+        "label": "SSH port",
+        "helpSummary": "Check the SSH service port.",
+        "help": "1. Open the router’s SSH settings.\n2. Find the SSH service port.\n3. Use 22 if you have not changed it."
+      },
+      "wakeVerify": {
+        "title": "Checking PC power-on settings",
+        "router": "Router connection",
+        "security": "Security information",
+        "settings": "PC power-on settings"
+      },
+      "routerTrust": {
+        "title": "Confirm this is your router",
+        "description": "Compare the router’s security information with the information below."
+      },
+      "wakeFailure": {
+        "router": {
+          "title": "Cannot connect to the router",
+          "description": "Check the router address and SSH username.",
+          "action": "Check router details"
+        },
+        "settings": {
+          "title": "Cannot verify PC power-on settings",
+          "description": "Check the MAC address and LAN interface.",
+          "action": "Check power-on details"
+        },
+        "security": {
+          "title": "The router security information differs",
+          "description": "Check the router you are connecting to.",
+          "action": "Check router details"
+        }
+      },
+      "wakeReady": {
+        "title": "PC power-on settings checked",
+        "description": "The required details are ready. Actual wake behavior depends on the PC power state and network."
+      },
+      "remoteIntent": {
+        "title": "Connect from a different network too?",
+        "description": "Use OpenVPN when your phone and PC are on different networks.",
+        "yes": "Yes, set it up"
+      },
+      "vpn": {
+        "checking": "Checking OpenVPN",
+        "installTitle": "OpenVPN is required",
+        "installDescription": "Install OpenVPN to connect from another network.",
+        "install": "Install OpenVPN",
+        "profileTitle": "An OpenVPN profile is required",
+        "profileDescription": "Import a profile in OpenVPN first.",
+        "open": "Open OpenVPN",
+        "recheck": "Check again",
+        "selectTitle": "Select a VPN profile",
+        "selectDescription": "This profile will be used to connect to your PC from another network.",
+        "checkError": "Could not check OpenVPN",
+        "checkErrorDescription": "There was a problem checking the app. Try again or set it up later."
+      },
+      "summary": {
+        "title": "Review your settings",
+        "description": "Save to use PC Control with these settings.",
+        "pc": "PC connection",
+        "wake": "PC power on",
+        "remote": "Different network",
+        "verified": "Verified",
+        "configured": "Settings checked",
+        "profileSelected": "Profile selected",
+        "off": "Not used",
+        "unavailable": "Needs verification",
+        "save": "Save settings"
+      },
+      "saveFailure": {
+        "title": "Could not save settings",
+        "description": "Try again shortly. Your entries will remain until you leave this screen.",
+        "review": "Review settings"
+      },
+      "complete": {
+        "title": "Setup is complete",
+        "description": "You can now check and control the connected PC.",
+        "note": "You can change these features later in Settings.",
+        "action": "Start PC Control"
+      },
+      "stage": {
+        "pc": "PC connection",
+        "wake": "PC power on",
+        "remote": "Different network",
+        "ariaPrefix": "Setup stage"
+      }
+    }
+  }
+}

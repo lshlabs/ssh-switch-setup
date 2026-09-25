@@ -192,9 +192,9 @@ interface ExecuteSshCommandResult {
   stderr: string;
 }
 
-ensureSshIdentity()
-getSshPublicKey()
-executeSshCommand(options)
+ensureSshIdentity();
+getSshPublicKey();
+executeSshCommand(options);
 ```
 
 이름은 더 나은 설계가 있으면 변경 가능하다.

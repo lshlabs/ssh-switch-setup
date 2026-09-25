@@ -6,7 +6,7 @@ import java.io.DataOutputStream
 import java.math.BigInteger
 import java.security.MessageDigest
 
-internal object SshEncoding {
+object SshEncoding {
     fun rsaPublicKeyBlob(exponent: BigInteger, modulus: BigInteger): ByteArray =
         ByteArrayOutputStream().use { bytes ->
             DataOutputStream(bytes).use { output ->

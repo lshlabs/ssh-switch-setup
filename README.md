@@ -1,239 +1,86 @@
 # PC Control
 
-개인용 Windows PC의 상태와 전원을 Android에서 제어하기 위한 Capacitor 앱이다. React는 화면과 사용자 피드백만 담당하고, SSH·네트워크 판별·OpenVPN for Android 연동은 Kotlin 기반 Capacitor 플러그인에서 구현한다.
+PC Control은 Android 휴대폰에서 개인 Windows PC를 안전하게 켜고, 종료하고, 재부팅하는 앱입니다. 집 안에서는 LAN을 사용하고, 집 밖에서는 [OpenVPN for Android](https://play.google.com/store/apps/details?id=de.blinkt.openvpn)의 기존 프로필을 사용합니다.
 
-현재 Phase 1은 Android Keystore 기반 앱 전용 SSH identity, 호스트 키 고정, 그리고 무해한 SSH 진단 명령까지만 구현한다. 실제 전원 명령과 VPN은 아직 실행하지 않으며, 미구현 메서드는 성공을 흉내 내지 않고 명시적으로 `unimplemented` 오류를 반환한다.
+## 빠른 시작
 
-## Architecture
+1. Android 앱을 설치하고 온보딩을 시작합니다.
+2. Windows PC에서 관리자 PowerShell로 [`scripts/setup-windows-ssh.ps1`](scripts/setup-windows-ssh.ps1)를 실행합니다.
+3. 앱에서 만든 공개키를 스크립트에 붙여 넣어 Windows SSH 인증을 준비합니다.
+4. 앱에서 PC 주소, Windows 사용자 이름, MAC 주소를 입력합니다.
+5. PC를 켤 때 사용할 MAC 주소와 공유기 SSH/WOL 정보를 선택적으로 입력합니다.
+6. 집 밖에서도 사용할 경우 OpenVPN 프로필을 선택합니다.
+7. 온보딩의 연결 테스트를 통과하면 전원 버튼을 사용할 수 있습니다.
 
-```text
-apps/mobile (React + Vite + Tailwind)
-        │
-        ├── packages/core (순수 TypeScript 모델과 비밀이 아닌 설정)
-        │
-        └── packages/capacitor-pc-control (공개 Plugin API)
-                      │
-                      └── Android / Kotlin
-                          ├── SSH harmless commands [Phase 1]
-                          ├── Android Keystore       [Phase 1]
-                          ├── Network reachability   [다음 단계]
-                          └── OpenVPN External AIDL  [다음 단계]
+전원 명령은 연결 테스트에서 실행하지 않습니다. 테스트는 주소 확인과 `hostname` 같은 harmless SSH 명령만 사용합니다.
+
+## 준비물
+
+- Windows 10/11 PC와 OpenSSH Server
+- Android 휴대폰
+- PC의 LAN 주소 또는 hostname, Windows 사용자 이름, MAC 주소
+- 외부 접속이 필요하면 OpenVPN for Android와 집으로 연결되는 VPN 프로필
+- 원격 Power On이 필요하면 SSH와 LAN-side WOL 도구를 제공하는 공유기 또는 게이트웨이
+
+## Windows 설정
+
+1. 앱 온보딩 또는 진단 화면에서 앱 공개키를 복사합니다.
+2. Windows PC에서 **관리자 권한 PowerShell**을 엽니다.
+3. 저장소의 스크립트를 내려받아 다음처럼 실행합니다.
+
+```powershell
+.\scripts\setup-windows-ssh.ps1 -PublicKey "ssh-rsa AAAA..."
 ```
 
-React 코드에서는 AIDL, `ServiceConnection`, Android socket, Keystore 또는 SSH 라이브러리 클래스를 직접 다루지 않는다.
+키를 명령줄에 남기고 싶지 않다면 인자를 생략하면 스크립트가 붙여 넣기를 요청합니다.
 
-## Monorepo
-
-```text
-pc-control/
-├── apps/
-│   └── mobile/                    # React UI + Capacitor Android 앱
-├── packages/
-│   ├── core/                      # 플랫폼 독립 TypeScript 모델과 configuration
-│   ├── capacitor-pc-control/      # 앱 전용 Capacitor Android 플러그인
-│   ├── eslint-config/             # 공통 ESLint flat config
-│   └── tsconfig/                  # 공통 strict TypeScript config
-├── package.json
-├── pnpm-workspace.yaml
-└── turbo.json
+```powershell
+.\scripts\setup-windows-ssh.ps1
 ```
 
-현재 검증 대상의 IP, MAC, 포트와 네트워크 대역은 [packages/core/src/config.ts](packages/core/src/config.ts) 한 곳에서만 관리한다. 이 파일에는 credential을 추가하지 않는다.
+스크립트는 OpenSSH Server 설치 여부를 확인하고, `sshd`를 자동 시작 서비스로 설정하며, `administrators_authorized_keys`에 키를 중복 없이 추가하고, TCP 22 방화벽 규칙을 Private profile의 `LocalSubnet`으로 제한합니다. 기존 키를 지우고 교체하는 동작은 명시적으로 `-ReplaceKey`를 사용할 때만 수행합니다.
 
-## 확인된 개발환경
+## 공개키와 서버 확인
 
-```text
-macOS:          26.5.2 (Apple Silicon arm64)
-Node.js:        22.22.2
-Corepack:       0.34.6
-pnpm:           10.12.1
-Git:            2.39.2
-Java / JDK:     21.0.10
-Android Studio: 2026.1 계열 (JBR 21.0.10)
-Android SDK:    API 36
-Build Tools:    35.0.0
-Platform Tools: 37.0.0
-Capacitor:      8.5.0
-Gradle wrapper: 8.14.3
-AGP:            8.13.0
-Kotlin:         2.2.20
-```
+PC Control은 비밀번호 대신 Android 기기에서 만든 SSH 키를 사용합니다. 개인키는 Android Keystore에 남고 기기 밖으로 내보내지지 않습니다. 공개키를 Windows와 공유기에 각각 한 줄씩 추가하세요.
 
-Capacitor 8 기준으로 Node 22 이상, Android Studio 2025.2.1 이상, Android SDK API 24 이상이 필요하다. 이 프로젝트는 `minSdk 24`, `compileSdk 36`, `targetSdk 36`, Java 21을 사용한다.
+첫 연결 전에는 앱의 호스트 키 스캔 결과를 별도의 신뢰 경로에서 확인한 뒤 신뢰해야 합니다. 서버를 재설치하거나 키가 바뀌면 앱은 연결을 차단할 수 있습니다.
 
-## 최초 설정
+앱을 삭제하거나 앱 데이터를 초기화하면 SSH identity가 새로 만들어질 수 있습니다. 그 경우 PC와 공유기에 새 공개키를 다시 등록하세요.
+
+## Wake-on-LAN과 공유기 호환성
+
+Power On은 유효한 MAC 주소와 공유기 SSH/WOL 설정이 있을 때 자동으로 사용할 수 있습니다. 설정이 없으면 Power On만 비활성화되고 Shutdown과 Reboot는 계속 사용할 수 있습니다.
+
+공유기 SSH를 통해 LAN 안으로 WOL 패킷을 보냅니다. ASUS Router + `ether-wake`는 현재 검증된 preset입니다.
+
+ASUS가 아닌 공유기도 SSH와 LAN-side WOL 유틸리티를 제공하면 호환될 수 있지만 보장하지 않습니다. OpenWrt/Linux 기반 공유기는 모델별 설정을 확인해야 합니다. ISP 제공 공유기처럼 SSH 또는 LAN WOL을 제공하지 않는 장치에서는 원격 Power On을 사용할 수 없을 수 있습니다. 공유기를 WAN에 노출하거나 SSH 방화벽을 전체 인터넷으로 열지 마세요.
+
+## 집 밖에서 사용하기
+
+휴대폰이 집 네트워크에 안전하게 들어와야 PC의 사설 주소에 접근할 수 있습니다. PC Control은 VPN 엔진이나 인증서를 직접 관리하지 않고 OpenVPN for Android의 External API와 사용자가 선택한 프로필만 사용합니다. 프로필 이름만 앱에 저장하며 VPN 자격 증명과 프로필 내용은 저장하지 않습니다.
+
+## 문제 해결
+
+- **PC에 연결할 수 없음**: PC 주소, TCP 22, Windows 방화벽의 LocalSubnet 범위, VPN 연결을 확인합니다.
+- **SSH 공개키 인증 실패**: 현재 앱 공개키가 `C:\ProgramData\ssh\administrators_authorized_keys`에 있는지 확인합니다.
+- **서버 확인 실패**: 서버 지문이 바뀐 이유를 먼저 확인한 뒤 앱에서 새 지문을 신뢰합니다.
+- **공유기 연결 실패**: 공유기 SSH가 LAN only인지, 앱 공개키와 사용자가 맞는지, WOL 도구와 인터페이스 이름이 맞는지 확인합니다.
+- **OpenVPN 프로필이 없음**: OpenVPN for Android에서 프로필을 가져온 뒤 앱의 설정에서 목록을 새로고침합니다.
+- **Power On만 사용할 수 없음**: 필요한 MAC 주소·공유기 주소·사용자·인터페이스가 입력되었는지 확인합니다.
+
+## 개발자 문서
 
 ```bash
 pnpm install
-source ~/.zshrc
-```
-
-`~/.zshrc`에는 다음 Android SDK 위치와 실행 경로가 idempotent한 블록으로 설정되어 있다.
-
-```text
-ANDROID_HOME=$HOME/Library/Android/sdk
-PATH: platform-tools, emulator, cmdline-tools/latest/bin(설치된 경우)
-```
-
-기존 zsh 설정의 작업 전 백업은 `~/.zshrc.pc-control-backup-20260828`에 있다.
-
-현재 SDK의 오래된 `tools/bin/sdkmanager`는 사용하지 않는다. Android Studio의 **Settings → Languages & Frameworks → Android SDK → SDK Tools**에서 **Android SDK Command-line Tools (latest)**를 설치한다. APK 빌드에는 이미 필요한 SDK가 준비되어 있어 이 항목 없이도 빌드할 수 있다.
-
-## 개발 명령
-
-웹 개발 서버:
-
-```bash
-pnpm dev
-```
-
-코드 품질과 프로덕션 웹 빌드:
-
-```bash
 pnpm lint
 pnpm typecheck
+pnpm test
 pnpm build
-pnpm format
-```
-
-`pnpm format`은 파일을 수정한다. 변경 없이 검사하려면 `pnpm format:check`를 사용한다.
-
-## Capacitor와 Android
-
-웹 빌드 후 Android assets와 플러그인을 동기화한다.
-
-```bash
-pnpm android:sync
-```
-
-Android Studio에서 연다.
-
-```bash
-pnpm android:open
-```
-
-또는 Android Studio에서 `apps/mobile/android` 디렉터리를 직접 연다. 연결된 실제 기기나 API 24 이상의 emulator를 선택하고 Run을 실행한다.
-
-CLI에서 debug APK를 빌드한다.
-
-```bash
+pnpm android:test
 pnpm android:build
 ```
 
-생성 위치:
+구조는 `apps/mobile`(React UI), `packages/core`(플랫폼 독립 모델), `packages/capacitor-pc-control`(Android native bridge)로 나뉩니다. React는 UI를 담당하고 SSH, 네트워크, VPN, 전원 orchestration은 native layer가 담당합니다.
 
-```text
-apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk
-```
-
-`Native bridge test` 버튼은 기존과 동일하게 다음을 구분한다.
-
-- Android: Kotlin 플러그인이 직접 응답하면 연결 성공을 표시한다.
-- 웹 개발 서버: 웹 미리보기임을 표시하며 네이티브 연결 성공으로 취급하지 않는다.
-
-`cap sync android` 출력에는 아래 로컬 플러그인이 한 개 감지되어야 한다.
-
-```text
-@pc-control/capacitor-pc-control
-```
-
-플러그인은 Capacitor가 자동 등록하므로 `MainActivity`에 수동 등록 코드를 추가하지 않는다.
-
-## Package 역할
-
-### `apps/mobile`
-
-React 화면 상태, 사용자 입력, 플러그인 호출과 사용자 피드백을 담당한다. Android 네이티브 구현 세부사항은 포함하지 않는다.
-
-### `packages/core`
-
-PC/VPN/network 상태 타입, power action 타입과 비밀이 아닌 기본 configuration을 제공한다. Android, Capacitor, React, DOM API에 의존하지 않는다.
-
-### `packages/capacitor-pc-control`
-
-TypeScript 공개 API와 Kotlin 구현을 연결한다. Phase 1에서는 identity 생성·공개키 복사·호스트 키 스캔/고정·SSH 명령 실행을 Kotlin이 담당한다. reachability와 OpenVPN API는 다음 단계의 명시적 placeholder다.
-
-### `packages/eslint-config`, `packages/tsconfig`
-
-workspace 전체의 ESLint 및 TypeScript strict 설정을 공유한다.
-
-## Secret 관리
-
-다음 파일이나 값을 저장소에 넣지 않는다.
-
-- SSH private key와 비밀번호
-- OpenVPN private key, profile (`*.ovpn`), 인증서와 credential
-- ASUS 또는 Windows 비밀번호
-- Android keystore (`*.jks`, `*.keystore`)
-- 실제 secret이 들어 있는 `.env` 파일
-
-앱 전용 SSH key는 Android Keystore에서 RSA 3072비트로 생성한다. 개인키는 non-exportable Keystore key로 직접 서명에 사용되며 React, 파일, assets, `localStorage`, 평문 `SharedPreferences`에 저장되지 않는다. Termux private key도 복사하거나 재사용하지 않는다.
-
-SSH 구현은 유지보수 중인 `com.github.mwiede:jsch:2.28.6`을 사용한다. 앱 key 인증은 SHA-2 RSA 서명만 허용한다. Android 호환성을 위해 서버 호스트 키는 ECDSA P-256 또는 RSA SHA-2, 키 교환은 ECDH P-256 또는 DH group14 SHA-256으로 제한한다.
-
-## Phase 1 SSH 검증 절차
-
-앱의 순서는 다음과 같다.
-
-1. **앱 전용 SSH identity 생성**을 누른다.
-2. 공개키와 `SHA256:` fingerprint가 표시되는지 확인한다.
-3. **공개키 복사**로 공개키 한 줄만 복사한다.
-4. 공개키를 각 서버의 기존 `authorized_keys`에 덮어쓰지 말고 한 줄로 추가한다.
-5. 서버의 실제 host key fingerprint를 별도 신뢰 경로에서 확인한다.
-6. 앱에서 **호스트 키 스캔** 후 두 fingerprint를 비교한다.
-7. 일치할 때만 **확인한 지문 신뢰**를 누른다.
-8. Windows에서는 `hostname`, `whoami`, ASUS에서는 `uname -n`, `printf "%s\n" "$USER"`, `uname -a`만 실행한다.
-
-첫 연결도 호스트 키를 자동 승인하지 않는다. 저장된 알고리즘 또는 fingerprint가 달라지면 `HOST_KEY_MISMATCH`로 연결을 차단한다. 호스트별 고정 값은 앱 내부 `SharedPreferences`에 저장하지만, 이는 공개 정보인 fingerprint만 포함한다.
-
-### Windows 공개키 등록
-
-대상 계정은 `admin`이며 관리자 권한 계정이므로 공개키 한 줄을 다음 파일에 **추가**한다.
-
-```text
-C:\ProgramData\ssh\administrators_authorized_keys
-```
-
-파일을 새로 만들거나 수정한 경우 OpenSSH가 요구하는 대로 `SYSTEM`과 로컬 Administrators 그룹만 수정할 수 있는 ACL인지 확인한다. 기존 줄을 삭제하거나 파일 전체를 앱 공개키로 교체하지 않는다. Windows에서 host key fingerprint를 확인할 때는 관리자 PowerShell에서 다음처럼 실제 공개 host key들을 조회한다.
-
-```powershell
-Get-ChildItem C:\ProgramData\ssh\ssh_host_*_key.pub |
-  ForEach-Object { ssh-keygen -lf $_.FullName -E sha256 }
-```
-
-앱 스캔 화면에 표시된 알고리즘과 같은 항목의 `SHA256:` 값을 비교한다.
-
-### ASUS 공개키 등록
-
-ASUS의 SSH 사용자 이름과 `authorized_keys`의 영구 저장 위치는 펌웨어 설정에 따라 달라질 수 있으므로 코드에서 추측하지 않는다. 기존 SSH 접속으로 사용자 이름, 실제 읽히는 `authorized_keys` 경로, 재부팅 후 지속 여부를 먼저 확인한 다음 공개키 한 줄을 보존 추가한다. 이 값들이 확인되기 전에는 앱의 ASUS 사용자 입력을 비워 둔다.
-
-신뢰 가능한 LAN 컴퓨터에서 ASUS fingerprint를 교차 확인할 수 있다면 다음 결과를 앱 표시와 비교한다.
-
-```bash
-ssh-keyscan -T 5 -t ecdsa,rsa 192.168.60.1 2>/dev/null |
-  ssh-keygen -lf - -E sha256
-```
-
-### 오류 코드
-
-SSH 오류는 사용자 메시지와 별도로 다음 코드로 구분한다.
-
-```text
-IDENTITY_NOT_AVAILABLE
-HOST_UNREACHABLE
-CONNECTION_TIMEOUT
-HOST_KEY_UNKNOWN
-HOST_KEY_MISMATCH
-AUTH_FAILED
-COMMAND_TIMEOUT
-COMMAND_FAILED
-IO_ERROR
-UNKNOWN
-```
-
-## 다음 구현 순서
-
-1. Galaxy S20에서 Windows/ASUS harmless SSH 명령과 host-key mismatch 차단을 완료 검증
-2. OpenVPN for Android External AIDL 연결 및 lifecycle 처리
-3. 실제 target reachability 기반 network/VPN orchestration
-4. Power On, Shutdown, Reboot와 PC 상태 확인 연결
+실제 기기에서의 SSH host-key 등록, VPN 연결, 그리고 Power On/Shutdown/Reboot는 이 저장소의 자동 빌드가 대신 실행하지 않습니다. 변경 후에는 harmless SSH 테스트를 먼저 수행하고, 실제 전원 명령은 기기에서 수동으로 확인하세요.

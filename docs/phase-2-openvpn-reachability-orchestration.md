@@ -186,11 +186,11 @@ React는 Capacitor Plugin의 추상화된 API만 호출한다.
 예:
 
 ```ts
-isOpenVpnInstalled()
-getOpenVpnProfiles()
-getOpenVpnStatus()
-connectOpenVpn()
-disconnectOpenVpn()
+isOpenVpnInstalled();
+getOpenVpnProfiles();
+getOpenVpnStatus();
+connectOpenVpn();
+disconnectOpenVpn();
 ```
 
 더 나은 API 구조가 있다면 변경해도 된다.
@@ -356,11 +356,7 @@ UNKNOWN
 예:
 
 ```ts
-type HomeNetworkState =
-  | "local"
-  | "vpn"
-  | "unavailable"
-  | "unknown";
+type HomeNetworkState = 'local' | 'vpn' | 'unavailable' | 'unknown';
 ```
 
 판정 예:
@@ -383,7 +379,7 @@ Wi-Fi 여부 자체를 `LOCAL` 판정 근거로 사용하지 않는다.
 예:
 
 ```ts
-ensureHomeNetwork()
+ensureHomeNetwork();
 ```
 
 목표 동작:
@@ -408,7 +404,7 @@ ensureHomeNetwork()
 
 ```ts
 interface EnsureHomeNetworkResult {
-  path: "local" | "vpn";
+  path: 'local' | 'vpn';
   vpnWasStartedByApp: boolean;
 }
 ```

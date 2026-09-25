@@ -10,8 +10,10 @@ import java.security.SecureRandom
 import java.security.Signature
 import java.security.interfaces.RSAPublicKey
 
-internal class SshIdentityManager {
-    fun getIdentity(): SshIdentityInfo? {
+class SshIdentityManager {
+    private val lock = Any()
+
+    fun getIdentity(): SshIdentityInfo? = synchronized(lock) {
         val keyStore = loadKeyStore()
         if (!keyStore.containsAlias(KEY_ALIAS)) {
             return null
@@ -20,7 +22,7 @@ internal class SshIdentityManager {
         return identityInfo(keyStore, created = false)
     }
 
-    fun ensureIdentity(): SshIdentityInfo {
+    fun ensureIdentity(): SshIdentityInfo = synchronized(lock) {
         val keyStore = loadKeyStore()
         val created = !keyStore.containsAlias(KEY_ALIAS)
         if (created) {
@@ -164,6 +166,7 @@ internal class SshIdentityManager {
 
     private companion object {
         const val ANDROID_KEYSTORE = "AndroidKeyStore"
+        // DO NOT RENAME — changing this alias invalidates all registered authorized_keys
         const val KEY_ALIAS = "pc-control.ssh.identity.v1"
         const val KEY_SIZE_BITS = 3072
         const val SELF_TEST_BYTES = 32

@@ -1,0 +1,1622 @@
+{
+  "common": {
+    "cancel": "취소",
+    "reset": "초기화",
+    "save": "저장",
+    "saved": "저장했습니다.",
+    "confirm": "확인",
+    "close": "닫기",
+    "view": "보기",
+    "check": "확인",
+    "recheck": "재확인",
+    "checking": "확인 중…",
+    "beforeCheck": "확인 전",
+    "ok": "정상",
+    "needsAttention": "확인 필요",
+    "configured": "설정됨",
+    "needsSetup": "필요",
+    "registrationRequired": "등록 필요",
+    "online": "온라인",
+    "offline": "오프라인",
+    "error": "오류",
+    "unknown": "확인 안 됨",
+    "connected": "연결됨",
+    "connecting": "연결 중…",
+    "disconnecting": "연결 해제 중…",
+    "disconnected": "연결 안 됨",
+    "installed": "설치됨",
+    "installRequired": "설치 필요",
+    "optional": "선택 사항",
+    "selected": "선택됨",
+    "notSelected": "선택 안 함",
+    "stored": "보관됨",
+    "copied": "복사",
+    "notAvailable": "사용하지 않음",
+    "system": "시스템",
+    "light": "밝게",
+    "dark": "어둡게",
+    "languageSystem": "시스템 설정",
+    "korean": "한국어",
+    "english": "English",
+    "simple": "쉬운 설명",
+    "technical": "기술 용어",
+    "completed": "완료",
+    "failed": "실패",
+    "needsCheck": "확인 필요",
+    "verificationPending": "검증 대기",
+    "seconds": "초",
+    "never": "없음",
+    "loading": "불러오는 중…",
+    "settings": "설정",
+    "diagnostics": "진단",
+    "profile": "프로필",
+    "ssh": "SSH",
+    "vpn": "VPN",
+    "selectionRequired": "선택 필요",
+    "permissionRequired": "권한 필요",
+    "checkUnavailable": "확인 불가"
+  },
+  "navigation": {
+    "backToHome": "홈으로 돌아가기",
+    "backToSettings": "설정으로 돌아가기",
+    "backToDiagnostics": "진단 목록으로 돌아가기",
+    "back": "이전 화면으로 돌아가기",
+    "settingsItems": "설정 항목"
+  },
+  "settings": {
+    "title": "설정",
+    "pages": {
+      "pc": "PC 연결",
+      "power": "PC 켜기",
+      "remote": "원격 연결",
+      "display": "앱 설정",
+      "identity": "연결 키"
+    },
+    "overview": {
+      "pcDescription": "주소 · 계정",
+      "powerDescription": "MAC · 공유기",
+      "remoteDescription": "OpenVPN 프로필",
+      "displayDescription": "테마 · 언어 · 표시",
+      "diagnosticsDescription": "연결 상태와 문제 확인",
+      "infoSet": "정보 입력됨",
+      "infoNeeded": "정보 입력 필요",
+      "profileSelected": "프로필 선택됨",
+      "profileNeeded": "확인 필요",
+      "setupWizard": "설정 마법사",
+      "resetConnection": "연결 설정 초기화"
+    },
+    "pc": {
+      "section": "PC 연결 정보",
+      "name": "표시 이름",
+      "host": "PC 주소 또는 호스트 이름",
+      "hostPlaceholder": "예: 192.168.1.100",
+      "username": {
+        "simple": "Windows 사용자 이름",
+        "technical": "SSH Username"
+      },
+      "usernamePlaceholder": "예: windows-user",
+      "advanced": "고급 설정",
+      "port": "PC SSH 포트",
+      "connectionSecurity": {
+        "simple": "연결 보안",
+        "technical": "SSH Security"
+      },
+      "connectionSecurityDescription": {
+        "simple": "앱 연결 키 등록 상태",
+        "technical": "App identity registration state"
+      }
+    },
+    "power": {
+      "section": "PC 켜기 정보",
+      "advanced": "고급 설정",
+      "method": "PC 켜기 방식",
+      "router": {
+        "simple": "원격에서도 PC 켜기",
+        "technical": "Router SSH · WOL"
+      },
+      "routerDescription": {
+        "simple": "PC와 다른 네트워크에 있어도 원격 연결을 통해 PC를 켭니다.",
+        "technical": "Router SSH · WOL"
+      },
+      "local": {
+        "simple": "같은 네트워크에서만 사용",
+        "technical": "Local WOL"
+      },
+      "localDescription": {
+        "simple": "PC와 같은 네트워크에 연결되어 있을 때만 PC를 켭니다.",
+        "technical": "Same-LAN Wake-on-LAN"
+      },
+      "unsupported": {
+        "simple": "PC 켜기 사용 안 함",
+        "technical": "Power On disabled"
+      },
+      "unsupportedDescription": {
+        "simple": "종료·재부팅만 사용",
+        "technical": "Power On disabled"
+      },
+      "info": "PC 켜기 정보",
+      "mac": {
+        "simple": "PC MAC 주소",
+        "technical": "MAC Address"
+      },
+      "macPlaceholder": "예: AA:BB:CC:DD:EE:FF",
+      "routerInfo": "공유기 연결 정보",
+      "routerHost": "공유기 주소",
+      "routerUsername": {
+        "simple": "공유기 SSH 사용자 이름",
+        "technical": "Router SSH Username"
+      },
+      "routerUsernamePlaceholder": "공유기 계정",
+      "routerPort": "공유기 SSH 포트",
+      "interface": {
+        "simple": "LAN 인터페이스 이름",
+        "technical": "LAN Interface"
+      },
+      "interfacePlaceholder": "예: lan0"
+    },
+    "remote": {
+      "section": "원격 연결 정보",
+      "app": "OpenVPN 앱",
+      "appDescription": "원격 연결에 필요한 앱이 설치되어 있는지 확인합니다.",
+      "profile": "프로필",
+      "profileDescription": "원격 연결에 사용할 OpenVPN 프로필",
+      "refresh": "새로고침",
+      "openApp": "OpenVPN 앱 열기",
+      "refreshProfilesDescription": "OpenVPN 프로필 목록을 다시 불러옵니다.",
+      "permission": "OpenVPN 연결 권한 확인",
+      "permissionDescription": "OpenVPN 앱의 연결 권한을 다시 확인합니다.",
+      "autoDisconnect": "작업 후 VPN 자동 해제",
+      "autoDisconnectDescription": "앱이 연결한 VPN만 해제합니다.",
+      "profileNotFound": "프로필을 찾을 수 없음",
+      "profileRequired": "OpenVPN for Android 필요",
+      "profileEmpty": "사용할 수 있는 OpenVPN 프로필이 없습니다."
+    },
+    "display": {
+      "theme": "테마",
+      "themeDescription": "앱의 밝기와 색상 테마",
+      "language": "언어",
+      "languageDescription": "앱에 표시할 언어",
+      "copyMode": "설명 방식",
+      "copyModeDescription": "화면에 표시할 용어와 설명의 수준",
+      "refresh": "상태 자동 새로고침",
+      "refreshDescription": "메인 화면에서 PC 상태를 주기적으로 확인",
+      "refreshOff": "끄기",
+      "refreshSeconds": "{value}초"
+    },
+    "identity": {
+      "overviewDescription": "이 휴대폰의 SSH 공개키와 지문",
+      "pageTitle": {
+        "simple": "연결 키",
+        "technical": "SSH Identity"
+      },
+      "description": {
+        "simple": "PC와 공유기에 이 휴대폰을 등록할 때 사용하는 연결 키입니다.",
+        "technical": "Android Keystore에 보관되는 앱 전용 SSH identity입니다."
+      },
+      "keyTitle": {
+        "simple": "연결 키",
+        "technical": "SSH Identity"
+      },
+      "readySummary": {
+        "simple": "사용할 준비가 되었습니다.",
+        "technical": "SSH identity가 준비되어 있습니다."
+      },
+      "missingSummary": {
+        "simple": "아직 연결 키가 없습니다.",
+        "technical": "SSH identity가 생성되지 않았습니다."
+      },
+      "failedSummary": {
+        "simple": "연결 키를 준비하지 못했습니다.",
+        "technical": "SSH identity 생성에 실패했습니다."
+      },
+      "preparingSummary": {
+        "simple": "연결 키를 준비하는 중입니다.",
+        "technical": "SSH identity를 생성하는 중입니다."
+      },
+      "copyTitle": {
+        "simple": "공개키 복사",
+        "technical": "SSH Public Key 복사"
+      },
+      "copyDescription": {
+        "simple": "PC나 공유기에 등록할 키를 복사합니다.",
+        "technical": "authorized_keys에 등록할 SSH Public Key를 복사합니다."
+      },
+      "securityTitle": {
+        "simple": "보안 정보",
+        "technical": "SSH Key Details"
+      },
+      "securityDescription": {
+        "simple": "공개키 지문과 세부 정보를 확인합니다.",
+        "technical": "SSH Public Key fingerprint와 원문을 확인합니다."
+      },
+      "securityPageDescription": {
+        "simple": "연결 키의 공개 정보입니다. PC나 공유기에 등록할 때 확인할 수 있습니다.",
+        "technical": "SSH identity의 Public Key fingerprint와 OpenSSH Public Key 원문입니다."
+      },
+      "prepareTitle": {
+        "simple": "연결 키 준비",
+        "technical": "SSH Identity 생성"
+      },
+      "prepareDescription": {
+        "simple": "이 휴대폰에서 새 연결 키를 만듭니다.",
+        "technical": "Android Keystore에서 앱 전용 SSH identity를 생성합니다."
+      },
+      "fingerprintTitle": {
+        "simple": "공개키 지문",
+        "technical": "SSH Public Key Fingerprint"
+      },
+      "publicKeyTitle": {
+        "simple": "SSH 공개키",
+        "technical": "OpenSSH Public Key"
+      },
+      "showDescription": "설명 보기",
+      "status": "상태",
+      "ready": "준비됨",
+      "missing": "아직 연결 키가 없습니다.",
+      "fingerprint": "공개키 지문",
+      "publicKey": "SSH 공개키",
+      "copy": "공개키 복사",
+      "prepare": "연결 키 준비",
+      "preparing": "연결 키 준비 중…",
+      "prepareFailed": "연결 키를 준비하지 못했습니다. Android 앱에서 다시 시도하세요.",
+      "fingerprintCopied": "공개키 지문을 클립보드에 복사했습니다.",
+      "fingerprintCopyFailed": "공개키 지문을 복사하지 못했습니다. 먼저 연결 키를 준비하세요.",
+      "copied": "공개키를 클립보드에 복사했습니다.",
+      "copyFailed": "공개키를 복사하지 못했습니다. 먼저 연결 키를 준비하세요.",
+      "registration": "복사한 공개키를 PC와 공유기의 SSH authorized_keys에 등록하세요. 개인 키는 이 기기 밖으로 나가지 않습니다."
+    },
+    "more": "더보기",
+    "editHelp": {
+      "pcName": "홈 화면에 표시할 이름입니다.",
+      "pcHost": "PC의 사설 IP 주소 또는 호스트 이름입니다.",
+      "pcUsername": "PC에 로그인할 때 사용하는 Windows 계정 이름입니다.",
+      "pcPort": "Windows OpenSSH가 수신하는 포트입니다. 기본값은 22입니다.",
+      "pcMac": "네트워크에서 PC를 켤 때 사용하는 MAC 주소입니다.",
+      "routerHost": "WOL 명령을 실행할 공유기의 주소입니다.",
+      "routerUsername": "공유기 SSH에 로그인할 계정 이름입니다.",
+      "routerPort": "공유기 SSH가 수신하는 포트입니다. 기본값은 22입니다.",
+      "wolInterface": "공유기에서 WOL 패킷을 보낼 LAN 인터페이스입니다."
+    },
+    "reset": {
+      "title": "설정을 초기화할까요?",
+      "message": "저장된 PC 주소·사용자·MAC, 공유기 주소·사용자·WOL 정보와 연결 설정 진행 상태를 지웁니다. SSH 포트, 테마·언어·설명 방식·화면 설정과 VPN 자동 해제 설정은 유지됩니다. 실제 PC나 공유기에는 영향을 주지 않습니다."
+    },
+    "dialog": {
+      "theme": "테마",
+      "language": "언어",
+      "copyMode": "설명 방식",
+      "profile": "프로필",
+      "refresh": "상태 자동 새로고침",
+      "selected": "선택됨"
+    },
+    "toast": {
+      "themeApplied": "{value} 테마를 적용했습니다.",
+      "profileSelected": "원격 접속 프로필을 선택했습니다.",
+      "profileSelectFailed": "프로필을 선택하지 못했습니다.",
+      "profilesRefreshed": "프로필 목록을 새로고침했습니다.",
+      "profilesLoadFailed": "OpenVPN 프로필을 불러오지 못했습니다.",
+      "openVpnAppOpenFailed": "OpenVPN for Android를 열지 못했습니다.",
+      "vpnPermissionChecked": "OpenVPN 연결 권한을 확인했습니다.",
+      "vpnPermissionFailed": "OpenVPN 연결 권한을 확인하지 못했습니다.",
+      "saved": "설정을 저장하지 못했습니다.",
+      "reset": "연결 설정을 초기화했습니다."
+    }
+  },
+  "diagnostics": {
+    "title": {
+      "simple": "진단",
+      "technical": "Diagnostics"
+    },
+    "labels": {
+      "pcConnection": {
+        "simple": "PC 연결",
+        "technical": "PC SSH Endpoint"
+      },
+      "routerConnection": {
+        "simple": "공유기 연결",
+        "technical": "Router SSH Endpoint"
+      },
+      "routerLogin": {
+        "simple": "공유기 로그인",
+        "technical": "Router SSH Authentication"
+      },
+      "vpnApp": {
+        "simple": "OpenVPN 앱",
+        "technical": "OpenVPN Provider"
+      },
+      "vpnProfile": {
+        "simple": "프로필",
+        "technical": "OpenVPN Profile"
+      },
+      "vpnPermission": {
+        "simple": "연결 권한",
+        "technical": "VPN Connection Permission"
+      },
+      "vpnConnection": {
+        "simple": "VPN 연결 상태",
+        "technical": "OpenVPN Tunnel Status"
+      },
+      "connectionTarget": {
+        "simple": "연결 대상",
+        "technical": "SSH Connection Target"
+      },
+      "securityCheck": {
+        "simple": "보안 정보 확인",
+        "technical": "SSH Host Key Scan"
+      }
+    },
+    "statusSummary": {
+      "notChecked": {
+        "simple": "아직 확인하지 않았습니다.",
+        "technical": "Diagnostic check has not run."
+      },
+      "checking": {
+        "simple": "확인하는 중입니다.",
+        "technical": "Diagnostic check is in progress."
+      },
+      "passed": {
+        "simple": "정상적으로 확인했습니다.",
+        "technical": "Diagnostic check passed."
+      },
+      "attention": {
+        "simple": "확인이 필요합니다.",
+        "technical": "Diagnostic check requires attention."
+      },
+      "pcConnected": {
+        "simple": "PC에 연결할 수 있습니다.",
+        "technical": "PC SSH endpoint is reachable."
+      },
+      "pcUnavailable": {
+        "simple": "PC에 연결할 수 없습니다.",
+        "technical": "PC SSH endpoint is unreachable."
+      },
+      "pcLoginSucceeded": {
+        "simple": "PC에 로그인할 수 있습니다.",
+        "technical": "PC SSH Public Key authentication succeeded."
+      },
+      "pcLoginFailed": {
+        "simple": "PC 로그인에 실패했습니다.",
+        "technical": "PC SSH authentication failed."
+      },
+      "securityPending": {
+        "simple": "보안 정보 확인이 필요합니다.",
+        "technical": "SSH Host Key verification is pending."
+      },
+      "routerConnected": {
+        "simple": "공유기에 연결할 수 있습니다.",
+        "technical": "Router SSH endpoint is reachable."
+      },
+      "routerUnavailable": {
+        "simple": "공유기에 연결할 수 없습니다.",
+        "technical": "Router SSH endpoint is unreachable."
+      },
+      "routerLoginSucceeded": {
+        "simple": "공유기에 로그인할 수 있습니다.",
+        "technical": "Router SSH Public Key authentication succeeded."
+      },
+      "routerLoginFailed": {
+        "simple": "공유기 로그인에 실패했습니다.",
+        "technical": "Router SSH authentication failed."
+      },
+      "appInstalled": {
+        "simple": "OpenVPN 앱이 설치되어 있습니다.",
+        "technical": "OpenVPN provider is installed."
+      },
+      "appRequired": {
+        "simple": "OpenVPN 앱 설치가 필요합니다.",
+        "technical": "OpenVPN provider installation is required."
+      },
+      "profileSelected": {
+        "simple": "연결에 사용할 프로필을 선택했습니다.",
+        "technical": "An OpenVPN profile is selected."
+      },
+      "profileRequired": {
+        "simple": "연결에 사용할 프로필을 선택하세요.",
+        "technical": "Select an OpenVPN profile."
+      },
+      "permissionGranted": {
+        "simple": "VPN 연결 권한이 허용되었습니다.",
+        "technical": "VPN connection permission is granted."
+      },
+      "permissionRequired": {
+        "simple": "VPN 연결 권한이 필요합니다.",
+        "technical": "VPN connection permission is required."
+      },
+      "vpnConnected": {
+        "simple": "VPN이 연결되어 있습니다.",
+        "technical": "OpenVPN tunnel is connected."
+      },
+      "vpnDisconnected": {
+        "simple": "VPN이 연결되어 있지 않습니다.",
+        "technical": "OpenVPN tunnel is disconnected."
+      },
+      "unavailable": {
+        "simple": "현재 확인할 수 없습니다.",
+        "technical": "This check is currently unavailable."
+      }
+    },
+    "overview": {
+      "connectionTitle": {
+        "simple": "PC 연결 확인",
+        "technical": "SSH 연결"
+      },
+      "connectionDescription": {
+        "simple": "PC와 정상적으로 연결되는지 확인합니다.",
+        "technical": "Reachability · Public Key Auth · Host Key"
+      },
+      "wakeTitle": {
+        "simple": "PC 켜기 확인",
+        "technical": "WOL 경로 확인"
+      },
+      "wakeDescription": {
+        "simple": "PC를 켜는 데 필요한 공유기 연결과 인증 상태를 확인합니다.",
+        "technical": "Router SSH endpoint 연결 가능 여부"
+      },
+      "remoteTitle": {
+        "simple": "원격 연결 확인",
+        "technical": "OpenVPN"
+      },
+      "remoteDescription": {
+        "simple": "다른 네트워크에서 연결할 때 필요한 OpenVPN 상태를 확인합니다.",
+        "technical": "Install · Connection status"
+      },
+      "securityTitle": {
+        "simple": "연결 보안",
+        "technical": "SSH Security"
+      },
+      "securityDescription": {
+        "simple": "이 휴대폰이 PC와 안전하게 연결되도록 설정되어 있는지 확인합니다.",
+        "technical": "Identity · Host Key"
+      }
+    },
+    "pcTrust": {
+      "title": {
+        "simple": "PC 신뢰 확인",
+        "technical": "SSH Host Key"
+      }
+    },
+    "routerTrust": {
+      "title": {
+        "simple": "공유기 신뢰 확인",
+        "technical": "Router SSH Host Key"
+      }
+    },
+    "connection": {
+      "title": {
+        "simple": "PC 연결 확인",
+        "technical": "SSH 연결"
+      },
+      "pcStatus": "PC 연결",
+      "pcStatusDescription": "이 휴대폰에서 PC에 연결할 수 있는지 확인합니다.",
+      "pcAddress": "PC 주소",
+      "enterAddress": "설정에서 PC 주소를 입력하세요.",
+      "loginTitle": {
+        "simple": "PC 로그인",
+        "technical": "SSH 인증"
+      },
+      "loginDescription": {
+        "simple": "저장된 계정과 연결 키로 PC에 로그인할 수 있는지 확인합니다.",
+        "technical": "Public Key 인증 상태"
+      },
+      "success": {
+        "simple": "PC와 안전하게 연결할 수 있습니다.",
+        "technical": "SSH 연결 및 Public Key 인증 정상"
+      },
+      "checking": "PC 주소와 SSH 인증을 확인하는 중…",
+      "pcOfflinePending": {
+        "simple": "PC가 꺼져 있거나 SSH 서버가 응답하지 않습니다. 설정 오류는 아닙니다. PC를 켠 뒤 다시 확인하세요.",
+        "technical": "PC SSH endpoint가 응답하지 않습니다. TCP 미응답만으로 전원 꺼짐을 단정할 수 없습니다."
+      },
+      "hostKeyPending": {
+        "simple": "PC는 온라인이지만 Host Key를 아직 확인하지 않았습니다. 보안 정보를 확인한 뒤 다시 시도하세요.",
+        "technical": "PC reachability 정상. 저장된 SSH Host Key가 없어 인증을 보류합니다."
+      },
+      "authFailedStatus": {
+        "simple": "SSH 인증에 실패했습니다. PC에 이 휴대폰의 공개키가 등록되어 있는지 확인하세요.",
+        "technical": "SSH Public Key authentication failed after reachability and Host Key verification."
+      },
+      "hostKeyPendingStatus": "Host Key 미확인",
+      "notChecked": "아직 확인하지 않았습니다."
+    },
+    "wake": {
+      "title": {
+        "simple": "PC 켜기 확인",
+        "technical": "WOL 경로 확인"
+      },
+      "method": "PC 켜기 방식",
+      "routerMethod": {
+        "simple": "공유기 SSH",
+        "technical": "Router SSH · WOL"
+      },
+      "localMethod": {
+        "simple": "같은 네트워크에서만 사용",
+        "technical": "Local WOL"
+      },
+      "disabledMethod": {
+        "simple": "사용하지 않음",
+        "technical": "Power On disabled"
+      },
+      "routerDescription": {
+        "simple": "PC를 켤 때 사용할 공유기에 연결할 수 있는지 확인합니다.",
+        "technical": "Router SSH endpoint 연결 가능 여부"
+      },
+      "routerCheck": "공유기 연결 확인",
+      "routerReachability": "공유기 연결",
+      "routerLogin": "공유기 로그인",
+      "routerLoginDescription": {
+        "simple": "저장된 계정과 연결 키로 공유기에 로그인할 수 있는지 확인합니다.",
+        "technical": "Router SSH Public Key authentication"
+      },
+      "routerLoginSuccess": {
+        "simple": "공유기 로그인에 성공했습니다.",
+        "technical": "Router SSH 인증 정상"
+      },
+      "routerAddress": "설정에서 공유기 주소를 입력하세요.",
+      "routerSuccess": {
+        "simple": "공유기에 정상적으로 연결할 수 있습니다.",
+        "technical": "Router SSH endpoint 연결 가능"
+      },
+      "checking": "공유기 연결을 확인하는 중…",
+      "notChecked": "아직 확인하지 않았습니다."
+    },
+    "remote": {
+      "title": {
+        "simple": "원격 연결 확인",
+        "technical": "OpenVPN"
+      },
+      "app": "OpenVPN 앱",
+      "appDescription": "원격 연결에 필요한 앱이 설치되어 있는지 확인합니다.",
+      "profile": "프로필",
+      "profileDescription": "원격 연결에 사용할 OpenVPN 프로필",
+      "permission": "연결 권한",
+      "permissionDescription": "앱에서 VPN 연결을 시작할 수 있는지 확인합니다.",
+      "vpnStatus": "VPN 연결 상태",
+      "vpnStatusDescription": "현재 VPN이 연결되어 있는지 확인합니다.",
+      "install": "설치됨",
+      "installRequired": "설치 필요"
+    },
+    "quickCheck": {
+      "title": {
+        "simple": "원클릭 진단",
+        "technical": "전체 진단"
+      },
+      "description": {
+        "simple": "PC 제어에 필요한 설정과 연결을 한 번에 확인합니다.",
+        "technical": "설정 · SSH · WOL 경로 · OpenVPN 사전 조건을 순차 확인합니다."
+      },
+      "hero": {
+        "ready": {
+          "simple": "진단 준비됨",
+          "technical": "진단 준비 완료"
+        },
+        "running": {
+          "simple": "진단 진행 중…",
+          "technical": "진단 진행 중…"
+        },
+        "passed": {
+          "simple": "모든 항목 정상",
+          "technical": "모든 진단 통과"
+        },
+        "attention": {
+          "simple": "확인 필요 {count}개",
+          "technical": "확인이 필요한 항목 {count}개"
+        },
+        "planned": {
+          "simple": "총 {total}개 항목을 확인합니다.",
+          "technical": "총 {total}개 진단 항목을 확인합니다."
+        },
+        "progress": {
+          "simple": "{step} 확인 중…",
+          "technical": "{step} 확인 중…"
+        }
+      },
+      "items": {
+        "simple": "검사 항목",
+        "technical": "진단 항목"
+      },
+      "run": "진단 시작",
+      "rerun": "다시 진단",
+      "running": "진단하는 중…",
+      "progress": "{step} 확인 중…",
+      "success": "{passed}/{total}개 항목이 정상입니다.",
+      "attention": "{passed}/{total}개 항목이 정상입니다. 확인이 필요합니다.",
+      "cleanupFailed": "진단은 끝났지만 VPN 연결을 자동으로 해제하지 못했습니다.",
+      "steps": {
+        "settings": "필수 설정",
+        "identity": "연결 키",
+        "pc": "PC 연결",
+        "wake": "PC 켜기 경로",
+        "remote": "원격 연결",
+        "cleanup": "VPN 자동 해제"
+      },
+      "status": {
+        "idle": "확인 전",
+        "checking": "확인 중…",
+        "passed": "정상",
+        "attention": "확인 필요"
+      }
+    },
+    "security": {
+      "title": {
+        "simple": "연결 보안",
+        "technical": "SSH Security"
+      },
+      "target": "연결 대상",
+      "currentStatus": "신뢰 상태",
+      "identity": {
+        "simple": "이 휴대폰의 연결 키",
+        "technical": "SSH Identity"
+      },
+      "identityDescription": {
+        "simple": "PC에 안전하게 로그인할 때 사용하는 키입니다. 개인 키는 이 기기에만 보관됩니다.",
+        "technical": "Private key 기기 보관"
+      },
+      "identityMissing": "아직 연결 키가 없습니다.",
+      "securityInfo": {
+        "simple": "연결 키 보안 정보",
+        "technical": "Public Key Fingerprint"
+      },
+      "securityInfoDescription": {
+        "simple": "보안 정보를 확인합니다.",
+        "technical": "SHA-256 Fingerprint 확인"
+      },
+      "copyPublicKey": {
+        "simple": "PC 등록용 키 복사",
+        "technical": "Copy Public Key"
+      },
+      "copyPublicKeyDescription": {
+        "simple": "이 휴대폰을 PC에 등록할 때 사용합니다.",
+        "technical": "SSH Public Key 복사"
+      },
+      "hostTrust": {
+        "simple": "PC 신뢰",
+        "technical": "SSH Host Key"
+      },
+      "routerTrust": {
+        "simple": "공유기 신뢰",
+        "technical": "Router SSH Host Key"
+      },
+      "pcTrustDescription": {
+        "simple": "이 PC의 보안 정보를 아직 확인하지 않았습니다.",
+        "technical": "Host Key verification"
+      },
+      "routerTrustDescription": {
+        "simple": "직접 확인한 공유기만 신뢰하세요.",
+        "technical": "Host Key verification"
+      },
+      "trust": {
+        "simple": "신뢰",
+        "technical": "Trust Host Key"
+      },
+      "trustPc": {
+        "simple": "이 PC 신뢰",
+        "technical": "Trust Host Key"
+      },
+      "trustRouter": {
+        "simple": "이 공유기 신뢰",
+        "technical": "Trust Host Key"
+      },
+      "securityInfoRefreshUnchanged": {
+        "simple": "보안 정보가 동일합니다.",
+        "technical": "다시 확인한 Host Key 지문이 이전 지문과 같습니다."
+      },
+      "securityInfoRefreshChanged": {
+        "simple": "보안 정보가 변경되었습니다. 다시 신뢰 확인이 필요합니다.",
+        "technical": "다시 확인한 Host Key 지문이 이전 지문과 다릅니다. 재신뢰 전 확인이 필요합니다."
+      },
+      "scanDescription": "연결 대상의 보안 정보를 가져와 확인합니다.",
+      "securityCheck": "보안 정보 확인",
+      "securityInfoNotChecked": {
+        "simple": "아직 보안 정보를 확인하지 않았습니다.",
+        "technical": "SSH Host Key fingerprint has not been scanned."
+      },
+      "checkingSecurityInfo": {
+        "simple": "보안 정보를 확인하는 중입니다.",
+        "technical": "Scanning the SSH Host Key fingerprint."
+      },
+      "securityInfoChecked": {
+        "simple": "보안 정보를 확인했습니다.",
+        "technical": "SSH Host Key fingerprint has been scanned."
+      },
+      "securityInfoUnavailable": {
+        "simple": "보안 정보를 가져올 수 없습니다.",
+        "technical": "SSH Host Key fingerprint could not be retrieved."
+      },
+      "checkSecurityInfoFirst": {
+        "simple": "먼저 보안 정보를 확인하세요.",
+        "technical": "Scan the SSH Host Key fingerprint before trusting it."
+      },
+      "readyToTrust": {
+        "simple": "신뢰할 준비가 되었습니다.",
+        "technical": "SSH Host Key fingerprint is ready to be trusted."
+      },
+      "pcTrusted": {
+        "simple": "이 PC를 신뢰하고 있습니다.",
+        "technical": "PC SSH Host Key fingerprint is trusted."
+      },
+      "routerTrusted": {
+        "simple": "이 공유기를 신뢰하고 있습니다.",
+        "technical": "Router SSH Host Key fingerprint is trusted."
+      },
+      "viewFingerprint": "탭하여 전체 지문 보기",
+      "verifyFirst": "확인 필요",
+      "reviewRequired": "검토 필요",
+      "addressRequired": "주소 필요",
+      "verified": "확인됨",
+      "algorithm": "알고리즘",
+      "serverFingerprint": "SHA-256 서버 지문",
+      "identityFingerprint": "SHA-256 연결 키 지문"
+    },
+    "status": {
+      "configured": "설정됨",
+      "required": "필요",
+      "stored": "보관됨",
+      "view": "보기"
+    }
+  },
+  "validation": {
+    "pcHost": "올바른 PC 주소를 입력해주세요.",
+    "pcPort": "1~65535 사이의 PC SSH 포트를 입력해주세요.",
+    "pcUsername": "Windows 사용자 이름을 입력해주세요.",
+    "pcMac": "MAC 주소를 AA:BB:CC:DD:EE:FF 형식으로 입력해주세요.",
+    "routerHost": "올바른 네트워크 장비(공유기) 주소를 입력해주세요.",
+    "routerPort": "1~65535 사이의 네트워크 장비 SSH 포트를 입력해주세요.",
+    "routerUsername": "네트워크 장비의 SSH 사용자 이름을 입력해주세요.",
+    "wolInterface": "LAN 인터페이스 이름을 입력해주세요.",
+    "refreshInterval": "새로고침 간격 0, 10, 15, 20, 30, 60 중 선택하세요."
+  },
+  "errors": {
+    "identityNotAvailable": {
+      "simple": "이 휴대폰의 연결 키를 먼저 준비하세요.",
+      "technical": "SSH identity 없음"
+    },
+    "hostUnreachable": {
+      "simple": "대상에 연결할 수 없습니다. 네트워크를 확인하세요.",
+      "technical": "SSH host 연결 불가"
+    },
+    "connectionTimeout": {
+      "simple": "연결 시간이 초과되었습니다.",
+      "technical": "SSH connection timeout"
+    },
+    "hostKeyUnknown": {
+      "simple": "이 PC의 보안 정보가 아직 확인되지 않았습니다. 먼저 PC 신뢰 확인을 진행하세요.",
+      "technical": "저장된 SSH Host Key 없음. Host Key를 확인하고 신뢰하세요."
+    },
+    "routerHostKeyUnknown": {
+      "simple": "이 공유기의 보안 정보가 아직 확인되지 않았습니다. 먼저 공유기 신뢰 확인을 진행하세요.",
+      "technical": "저장된 Router SSH Host Key 없음. Host Key를 확인하고 신뢰하세요."
+    },
+    "hostKeyMismatch": {
+      "simple": "이전에 확인한 PC와 보안 정보가 다릅니다. 안전을 위해 연결을 차단했습니다.",
+      "technical": "SSH Host Key 불일치. 연결 차단"
+    },
+    "routerHostKeyMismatch": {
+      "simple": "이전에 확인한 공유기와 보안 정보가 다릅니다. 안전을 위해 연결을 차단했습니다.",
+      "technical": "Router SSH Host Key 불일치. 연결 차단"
+    },
+    "authFailed": {
+      "simple": "PC에 로그인할 수 없습니다. 이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인하세요.",
+      "technical": "SSH 인증 실패. Public Key 등록을 확인하세요."
+    },
+    "routerSshAuthFailed": {
+      "simple": "공유기에 로그인할 수 없습니다. 이 휴대폰의 연결 키가 공유기에 등록되어 있는지 확인하세요.",
+      "technical": "Router SSH 인증 실패. Public Key 등록을 확인하세요."
+    },
+    "windowsSshAuthFailed": {
+      "simple": "PC에 로그인할 수 없습니다. 이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인하세요.",
+      "technical": "Windows SSH 인증 실패. OpenSSH authorized keys 설정을 확인하세요."
+    },
+    "commandTimeout": {
+      "simple": "작업 시간이 초과되었습니다.",
+      "technical": "SSH command timeout"
+    },
+    "commandFailed": {
+      "simple": "작업을 완료하지 못했습니다.",
+      "technical": "SSH command 실패"
+    },
+    "ioError": {
+      "simple": "네트워크 통신 중 문제가 발생했습니다.",
+      "technical": "Network I/O 오류"
+    },
+    "openVpnAppNotInstalled": {
+      "simple": "OpenVPN for Android 앱을 설치하세요.",
+      "technical": "OpenVPN for Android 미설치"
+    },
+    "openVpnServiceBindFailed": {
+      "simple": "OpenVPN 앱에 연결할 수 없습니다.",
+      "technical": "OpenVPN external API service 연결 실패"
+    },
+    "openVpnPermissionRequired": {
+      "simple": "OpenVPN 연결 권한을 확인하세요.",
+      "technical": "OpenVPN external-control 권한 필요"
+    },
+    "openVpnPermissionDenied": {
+      "simple": "OpenVPN 연결 권한이 거부되었습니다.",
+      "technical": "OpenVPN external-control 권한 거부"
+    },
+    "openVpnProfileNotSelected": {
+      "simple": "원격 연결에 사용할 OpenVPN 프로필을 먼저 선택하세요.",
+      "technical": "OpenVPN profile 미선택"
+    },
+    "openVpnProfileNotFound": {
+      "simple": "선택한 OpenVPN 프로필을 찾을 수 없습니다.",
+      "technical": "선택한 OpenVPN profile 없음"
+    },
+    "openVpnConnectFailed": {
+      "simple": "VPN 연결에 실패했습니다.",
+      "technical": "OpenVPN connection 실패"
+    },
+    "openVpnConnectTimeout": {
+      "simple": "VPN 연결 시간이 초과되었습니다.",
+      "technical": "OpenVPN connection timeout"
+    },
+    "openVpnDisconnectFailed": {
+      "simple": "VPN 연결 해제에 실패했습니다.",
+      "technical": "OpenVPN disconnection 실패"
+    },
+    "openVpnStatusUnavailable": {
+      "simple": "VPN 상태를 확인할 수 없습니다.",
+      "technical": "OpenVPN status 확인 불가"
+    },
+    "hostUnreachableNetwork": {
+      "simple": "대상에 연결할 수 없습니다.",
+      "technical": "Target host 연결 불가"
+    },
+    "reachabilityTimeout": {
+      "simple": "네트워크 확인 시간이 초과되었습니다.",
+      "technical": "Reachability check timeout"
+    },
+    "homeNetworkUnavailable": {
+      "simple": "대상 네트워크에 연결할 수 없습니다. 원격 연결 설정을 확인하세요.",
+      "technical": "Target network unreachable. Check OpenVPN profile and routing."
+    },
+    "pcStatusCheckFailed": {
+      "simple": "PC 상태를 확인할 수 없습니다.",
+      "technical": "PC status check 실패"
+    },
+    "pcWakeTimeout": {
+      "simple": "PC가 제한 시간 안에 응답하지 않았습니다. 전원과 PC 켜기 설정을 확인하세요.",
+      "technical": "PC wake verification timeout. Check power and WOL configuration."
+    },
+    "pcShutdownTimeout": {
+      "simple": "PC가 제한 시간 안에 꺼지지 않았습니다.",
+      "technical": "PC shutdown verification timeout"
+    },
+    "pcRebootOfflineTimeout": {
+      "simple": "재부팅 중 PC가 오프라인으로 전환되지 않았습니다.",
+      "technical": "Reboot 중 PC offline 전환 확인 실패"
+    },
+    "pcRebootOnlineTimeout": {
+      "simple": "재부팅 후 PC가 다시 켜지지 않았습니다.",
+      "technical": "Reboot 후 PC online 복귀 확인 실패"
+    },
+    "powerActionInProgress": {
+      "simple": "다른 전원 작업이 이미 진행 중입니다.",
+      "technical": "다른 Power Action 진행 중"
+    },
+    "powerCommandFailed": {
+      "simple": "전원 작업을 실행하지 못했습니다.",
+      "technical": "Power command 실패"
+    },
+    "routerWolFailed": {
+      "simple": "PC를 켜는 작업에 실패했습니다. 공유기 설정을 확인하세요.",
+      "technical": "Router WOL command 실패"
+    },
+    "unknown": {
+      "simple": "문제가 발생했습니다. 설정과 네트워크를 확인하세요.",
+      "technical": "알 수 없는 오류"
+    }
+  },
+  "home": {
+    "pcControl": "PC 전원 제어",
+    "settingsOpen": "설정 열기",
+    "historyOpen": "작업 기록 열기",
+    "historyOpenUnread": "작업 기록 열기, 새 기록 있음",
+    "statusRefresh": "PC 상태 새로고침",
+    "defaultPcName": "내 PC",
+    "rename": "PC 이름 변경",
+    "statusUnknown": "확인 안 됨",
+    "statusNeedsAttention": "확인 필요",
+    "statusWaking": "켜는 중…",
+    "statusShuttingDown": "종료 중…",
+    "statusRebooting": "재부팅 중…",
+    "setupRequired": "PC 설정이 필요합니다.",
+    "setupDescription": "연결 정보를 입력하면 상태 확인과 전원 제어를 사용할 수 있습니다.",
+    "startSetup": "설정 시작",
+    "offline": "PC가 응답하지 않습니다.",
+    "pcUnavailable": "PC가 꺼져 있거나 SSH 서버가 응답하지 않습니다.",
+    "networkUnavailable": "현재 네트워크에서는 PC를 확인할 수 없습니다.",
+    "onlineLatencyTrend": "최근 지연시간 {count}회 추세",
+    "latencyAfterCheck": "지연시간 측정 후 추세가 표시됩니다.",
+    "currentLatency": "현재 지연시간",
+    "averageLatency": "평균 지연시간",
+    "lastOnline": "마지막 온라인",
+    "refreshSuccess": "PC 상태를 새로 확인했습니다.",
+    "vpnConnect": "VPN 연결",
+    "vpnConnecting": "VPN 연결 중",
+    "vpnDisconnect": "VPN 연결 해제",
+    "vpnDisconnecting": "VPN 해제 중",
+    "vpnDisconnected": "VPN 연결을 해제했습니다.",
+    "vpnConnected": "VPN에 연결했습니다.",
+    "vpnDisconnectFailed": "전원 작업은 완료됐지만 VPN을 자동으로 해제하지 못했습니다.",
+    "confirmAction": "{action}할까요?",
+    "confirmActionMessage": "확인을 누르면 작업을 시작합니다.",
+    "pcNameDialogTitle": "PC 이름 변경",
+    "saving": "저장 중…",
+    "nameRequired": "PC 이름을 입력하세요.",
+    "nameChanged": "PC 이름을 변경했습니다.",
+    "nameSaveFailed": "PC 이름을 저장하지 못했습니다.",
+    "powerOn": "전원 켜기",
+    "shutdown": "종료",
+    "reboot": "재부팅",
+    "actionRunning": "{action} 중…",
+    "actionCompleted": "{action} 작업이 완료되었습니다.",
+    "alreadyOn": "PC가 이미 켜져 있습니다.",
+    "alreadyOff": "PC가 이미 꺼져 있습니다.",
+    "rebootOffline": "PC가 응답하지 않아 재부팅할 수 없습니다.",
+    "networkChecking": "네트워크 상태를 확인하는 중입니다.",
+    "networkCheck": "공유기 또는 VPN 연결을 확인하세요.",
+    "connectionPath": "연결 경로",
+    "phone": "휴대폰",
+    "router": "공유기",
+    "pcChecking": "PC 상태를 확인하는 중입니다.",
+    "pcCheckRequired": "PC 상태 확인이 필요합니다.",
+    "powerSetupRequired": "전원 켜기 설정을 확인하세요.",
+    "routerTrustRequired": "공유기 서버 확인이 필요합니다.",
+    "pcTrustRequired": "PC 서버 확인이 필요합니다.",
+    "elapsed": "경과 {value}초",
+    "lastOnlineNever": "없음",
+    "duration": "소요 {value}"
+  },
+  "history": {
+    "title": "작업 기록",
+    "recent": "최근 작업",
+    "openRecent": "최근 작업 내역 열기",
+    "doneSuffix": "완료",
+    "noCompletedActions": "아직 완료된 작업이 없습니다.",
+    "completedActionsHint": "완료된 전원 작업이 여기에 표시됩니다.",
+    "emptyTitle": "아직 작업 기록이 없습니다.",
+    "justNow": "방금 전",
+    "secondsAgo": "{value}초 전",
+    "minutesAgo": "{value}분 전",
+    "hoursAgo": "{value}시간 전",
+    "daysAgo": "{value}일 전",
+    "actionReconnected": "정상적으로 다시 연결되었습니다.",
+    "actionPoweredOn": "PC가 온라인 상태가 되었습니다.",
+    "actionShutdown": "PC가 안전하게 종료되었습니다.",
+    "actionFailed": "작업을 완료하지 못했습니다.",
+    "actionDone": "작업이 완료되었습니다.",
+    "pending": "확인 필요"
+  },
+  "onboarding": {
+    "steps": {
+      "welcome": "시작하기",
+      "pc": "PC 준비",
+      "identity": "휴대폰 등록",
+      "power": "켜기 방식",
+      "remote": "원격 접속",
+      "test": "연결 확인"
+    },
+    "header": {
+      "brandLabel": "PC Control",
+      "skip": "나중에 계속",
+      "progress": "진행 단계 {current} / {total}",
+      "stepLabel": "{current} / {total} · {title}"
+    },
+    "stepDescriptions": {
+      "welcome": "PC를 켜고 PC 앞에서 설정을 준비하세요.",
+      "pc": "PC에 연결할 주소와 계정을 입력하세요.",
+      "identity": "이 휴대폰을 PC에 등록하세요.",
+      "power": "PC를 어떻게 켤지 선택하세요.",
+      "remote": "다른 네트워크에서 사용할 연결을 준비하세요.",
+      "test": "설정한 연결이 정상적으로 동작하는지 확인합니다."
+    },
+    "navigation": {
+      "previous": "이전",
+      "continue": "계속",
+      "finish": "설정 완료"
+    },
+    "dialog": {
+      "helpTitle": "설정 방법",
+      "close": "확인",
+      "skipTitle": "진행 상황이 저장되지 않아요",
+      "skipDescription": "지금 나가면 입력한 내용이 사라져요. 설정 마법사를 다시 시작하면 처음부터 진행해야 해요.",
+      "continueSetup": "계속 설정하기",
+      "skip": "나중에 하기"
+    },
+    "welcome": {
+      "eyebrow": "네트워크에 관계없이 PC를 관리하세요",
+      "title": "PC 앞에서 진행하세요",
+      "description": "연결할 PC를 켜고 이 휴대폰과 함께 준비하세요. 설정 중 PC에서 몇 가지 작업이 필요합니다.",
+      "prepareTitle": "시작하기 전에",
+      "prepareDescription": "PC 주소와 Windows 사용자 이름을 확인할 수 있도록 준비하세요.",
+      "pcOn": "연결할 PC를 켜 두세요.",
+      "admin": "Windows 관리자 권한이 필요합니다.",
+      "sameNetwork": "처음에는 PC와 휴대폰을 같은 네트워크에 연결하는 것을 권장합니다."
+    },
+    "pc": {
+      "title": "PC 준비",
+      "description": "PC 연결 정보를 입력하세요. 고급 설정은 기본값을 바꾼 경우에만 수정하면 됩니다.",
+      "hostLabel": "PC IP 주소",
+      "hostHint": "PC에 연결할 때 사용할 IPv4 주소 또는 hostname입니다.",
+      "macHint": "전원 켜기에 필요합니다. 콜론(:)으로 구분해 입력하세요.",
+      "helpLabel": "PC에서 확인하는 방법",
+      "advancedHint": "SSH 포트를 변경한 경우에만 수정하세요.",
+      "help": "PC 주소는 Windows 설정 > 네트워크 및 인터넷 > 속성의 IPv4 주소에서 확인하세요. 사용자 이름은 PowerShell에서 whoami를 실행해 확인할 수 있습니다. 관리자 PowerShell에서 Get-Service sshd를 실행했을 때 서비스를 찾을 수 없거나 실행 중이 아니라면 Windows 선택적 기능에서 OpenSSH 서버를 설치하고 Start-Service sshd를 실행하세요."
+    },
+    "key": {
+      "title": "PC에 이 휴대폰 등록",
+      "description": "이 휴대폰을 PC에 등록해야 안전하게 연결할 수 있습니다.",
+      "readyTitle": "연결 키가 준비되었습니다",
+      "readyDescription": "PC에 등록할 연결 키를 사용할 수 있습니다.",
+      "missingDescription": "아직 준비되지 않았습니다.",
+      "preparingDescription": "연결 키를 준비하고 있습니다.",
+      "details": "세부 정보",
+      "publicKeyLabel": "연결 키",
+      "copy": "공개키 복사",
+      "prepare": "연결 키 준비",
+      "preparing": "준비 중…",
+      "registrationTitle": "PC에서 등록하기",
+      "scriptHelp": "PC 설정 도구가 Windows 연결 준비와 키 등록을 안내합니다.",
+      "stepDownloadTitle": "설정 도구 받기",
+      "stepDownload": "PC에서 설정 도구를 내려받으세요.",
+      "stepRunTitle": "설정 도구 실행",
+      "stepRun": "관리자 PowerShell에서 설정 도구를 실행하세요.",
+      "stepPasteTitle": "공개키 등록",
+      "stepPaste": "요청되면 이 휴대폰의 공개키를 붙여 넣으세요.",
+      "copyDownloadUrl": "다운로드 주소 복사",
+      "downloadUrlCopied": "PC 설정 도구의 다운로드 주소를 복사했습니다.",
+      "downloadUrlCopyFailed": "다운로드 주소를 복사하지 못했습니다.",
+      "openSetupTool": "PC 설정 도구 열기",
+      "resetNotice": "앱을 삭제하거나 데이터를 초기화하면 새 공개키를 다시 등록해야 합니다.",
+      "helpLabel": "공개키 등록이 필요한 이유",
+      "help": "공개키는 비밀번호가 아닙니다. 이 휴대폰이 PC에 접속할 수 있도록 Windows의 authorized_keys에 공개키 한 줄을 추가하세요. 개인키는 Android 기기 밖으로 내보내지지 않습니다."
+    },
+    "wake": {
+      "title": "PC 켜기 (선택)",
+      "description": "PC를 켤 때 사용할 MAC 주소와 공유기 정보를 입력하세요.",
+      "optionalDescription": "선택 사항입니다. 입력하지 않아도 PC 종료와 재부팅은 사용할 수 있습니다.",
+      "routerChoice": "공유기에서 깨우기",
+      "routerChoiceDescription": "SSH와 WOL을 지원하는 네트워크 장비를 사용합니다.",
+      "localChoice": "같은 네트워크에서만 사용",
+      "localChoiceDescription": "PC와 같은 네트워크에 연결되어 있을 때만 PC를 켭니다.",
+      "unsupportedChoice": "PC 켜기 사용 안 함",
+      "unsupportedChoiceDescription": "Shutdown과 Reboot만 사용합니다.",
+      "disabledChoice": "PC 켜기 사용 안 함",
+      "disabledChoiceDescription": "종료와 재부팅만 사용합니다.",
+      "helpLabel": "공유기 호환성 안내",
+      "help": "같은 네트워크에서는 네트워크 장비가 PC에 WOL 신호를 전달해야 합니다. SSH와 LAN WOL 도구 지원 여부를 확인하세요. WOL을 지원하지 않는 환경에서는 PC 켜기를 사용할 수 없으며 종료와 재부팅만 사용할 수 있습니다."
+    },
+    "remote": {
+      "title": "원격 연결 설정",
+      "description": "다른 네트워크에서 PC를 제어하려면 휴대폰이 대상 네트워크에 안전하게 연결되어야 합니다. PC Control은 OpenVPN for Android의 기존 프로필을 사용합니다.",
+      "optional": "선택 사항",
+      "install": "다른 네트워크에서 연결하려면 OpenVPN for Android가 필요합니다.",
+      "appRequired": "OpenVPN 앱이 필요합니다",
+      "installAction": "OpenVPN 설치하기",
+      "checkingTitle": "OpenVPN 상태 확인",
+      "checkingDescription": "설치 여부를 확인하고 있습니다.",
+      "selectTitle": "원격 연결 프로필",
+      "profileEmptyTitle": "OpenVPN 프로필이 없습니다",
+      "profileEmptyDescription": "OpenVPN 앱에서 프로필을 먼저 가져오세요.",
+      "importProfile": "OpenVPN 프로필을 가져옵니다.",
+      "selectProfile": "설정 화면에서 프로필을 선택하고 연결 테스트를 진행합니다."
+    },
+    "connection": {
+      "title": "연결 확인",
+      "description": "PC와 연결할 준비가 되었는지 한 번에 확인합니다. 사용자 확인이 필요한 항목만 안내합니다.",
+      "pcSsh": "PC 연결",
+      "test": "연결 확인 시작",
+      "powerOnTitle": "PC를 켠 뒤 검증 계속",
+      "powerOnDescription": "공유기 SSH와 WOL로 PC를 켠 뒤 Host Key와 SSH 인증을 이어서 확인합니다.",
+      "powerOn": "PC 켜고 다시 확인",
+      "powerOnDetails": "방법 보기",
+      "trustTitle": "PC 보안 확인",
+      "trustDescription": "처음 연결할 때 표시되는 지문을 별도 신뢰 경로와 비교한 뒤 저장하세요.",
+      "scan": "서버 지문 보기",
+      "reviewFingerprint": "지문 확인",
+      "scanBusy": "확인 중…",
+      "actionRequired": "확인이 필요합니다",
+      "pcRecovery": "PC 주소와 로그인 정보를 확인하세요.",
+      "authRecovery": "이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인하세요.",
+      "editPc": "PC 연결 정보 수정",
+      "editKey": "공개키 등록 방법",
+      "editRouter": "공유기 정보 수정",
+      "securityBlocked": "PC 연결 후 확인할 수 있습니다.",
+      "securityPending": "보안 정보 확인이 필요합니다.",
+      "securityVerified": "보안 정보를 확인했습니다.",
+      "routerBlocked": "PC 연결 후 확인할 수 있습니다.",
+      "routerPending": "아직 확인하지 않았습니다.",
+      "routerVerified": "정상적으로 연결되었습니다.",
+      "routerFailed": "공유기에 연결할 수 없습니다.",
+      "pcState": {
+        "idle": "아직 확인하지 않았습니다.",
+        "checking": "연결 상태를 확인하고 있습니다.",
+        "offline": "PC에 연결할 수 없습니다.",
+        "host-key-unverified": "PC의 보안 정보를 확인해야 합니다.",
+        "auth-failed": "PC에 로그인할 수 없습니다.",
+        "verified": "정상적으로 연결되었습니다.",
+        "error": "연결을 확인하지 못했습니다."
+      }
+    },
+    "pcOfflineVerificationPending": {
+      "simple": "PC가 꺼져 있거나 SSH 서버가 응답하지 않습니다. 설정 오류는 아닙니다. PC를 켠 뒤 다시 확인하세요.",
+      "technical": "PC reachability failed. Power state cannot be concluded from TCP/SSH non-response alone."
+    },
+    "hostKeyVerificationPending": {
+      "simple": "PC는 온라인이지만 보안 정보(Host Key)를 아직 확인하지 않았습니다. 먼저 지문을 확인하고 신뢰하세요.",
+      "technical": "PC reachability succeeded, but SSH Host Key is not trusted yet."
+    },
+    "pcAndRouterTestSuccess": "PC SSH 인증과 공유기 연결을 확인했습니다.",
+    "pcTestSuccess": "PC 주소, SSH 포트, 공개키 인증을 확인했습니다.",
+    "comparePcFingerprint": "표시된 서버 지문을 신뢰할 수 있는 경로와 비교하세요.",
+    "pcFingerprintFailed": "PC 서버 지문을 가져오지 못했습니다. PC 주소와 네트워크를 확인하세요.",
+    "pcTrusted": "PC 서버를 확인했습니다.",
+    "trustSaveFailed": "서버 확인 정보를 저장하지 못했습니다.",
+    "compareRouterFingerprint": "공유기 지문을 신뢰할 수 있는 경로와 비교하세요.",
+    "routerFingerprintFailed": "공유기 서버 지문을 가져오지 못했습니다. 주소와 네트워크를 확인하세요.",
+    "routerTrusted": "공유기 서버를 확인했습니다.",
+    "setupComplete": "설정이 완료되었습니다.",
+    "setupCompletePending": {
+      "simple": "설정을 저장했습니다. PC를 켠 뒤 연결 검증을 이어서 진행하세요.",
+      "technical": "Required setup saved. PC SSH verification remains pending."
+    },
+    "identityReady": "앱 공개키를 준비했습니다.",
+    "identityFailed": "앱 공개키를 준비하지 못했습니다. Android 앱에서 다시 시도하세요.",
+    "publicKeyCopied": "공개키를 클립보드에 복사했습니다.",
+    "publicKeyCopyFailed": "공개키를 복사하지 못했습니다. 먼저 키를 준비하세요.",
+    "testSuccess": "연결 테스트 성공",
+    "back": "이전 단계",
+    "flow": {
+      "later": "나중에",
+      "progress": "설정 진행률",
+      "yes": "네",
+      "no": "아니요",
+      "confirmYes": "예",
+      "how": "확인하는 방법",
+      "welcome": {
+        "title": "앱을 사용할 수 있도록 설정을 도와드릴게요",
+        "description": "PC나 서버를 연결하고 제어하는 데 필요한 설정을 하나씩 진행할게요.",
+        "action": "시작하기"
+      },
+      "prepare": {
+        "title": "제어할 PC를 켜주세요",
+        "description": "설정 중 PC에서 직접 해야 하는 작업이 있어요. 가능하면 PC 앞에서 함께 진행해주세요.",
+        "note": "Windows 관리자 권한이 필요할 수 있어요.",
+        "action": "준비됐어요"
+      },
+      "wakeIntent": {
+        "title": "앱에서 PC를 켜는 기능도 사용하시겠어요?",
+        "description": "PC 끄기와 재부팅은 이 기능 없이도 사용할 수 있어요.",
+        "yes": "네, 사용할게요"
+      },
+      "wolSupport": {
+        "title": "PC와 네트워크 장비가 WOL을 지원하나요?",
+        "description": "둘 다 WOL(Wake on LAN)을 지원해야 앱에서 PC를 켤 수 있어요.",
+        "yes": "네, 둘 다 지원해요",
+        "unknown": "잘 모르겠어요"
+      },
+      "wolGuide": {
+        "title": "WOL 지원 여부를 확인해볼게요",
+        "description": "컴퓨터와 네트워크 장비에서 각각 확인해야 해요.",
+        "pc": "컴퓨터에서 확인하기",
+        "pcDescription": "BIOS/UEFI와 네트워크 어댑터를 확인해요.",
+        "pcHelp": "BIOS/UEFI에서 Wake on LAN 또는 PCI-E 깨우기를 켜고, Windows 네트워크 어댑터의 전원 관리에서 이 장치가 컴퓨터의 대기 모드를 종료할 수 있도록 허용하세요.",
+        "network": "네트워크 장비에서 확인하기",
+        "networkDescription": "WOL 패킷을 전달할 수 있는지 확인해요.",
+        "networkHelp": "네트워크 장비의 관리 화면이나 설명서에서 WOL, Wake on LAN 또는 매직 패킷 전달 기능을 확인하세요.",
+        "supported": "둘 다 지원해요",
+        "unsupported": "하나라도 지원하지 않아요",
+        "later": "나중에 확인할게요",
+        "laterDialogTitle": "PC 켜기는 나중에 설정할까요?",
+        "laterDialogDescription": "지금 넘어가면 PC 켜기 기능을 사용할 수 없어요. 나중에 설정에서 WOL 정보를 직접 추가하면 사용할 수 있어요.",
+        "unsupportedDialogTitle": "PC 켜기 없이 계속할까요?",
+        "unsupportedDialogDescription": "PC나 네트워크 장비가 WOL을 지원하지 않으면 앱에서 PC를 켤 수 없어요. PC 끄기와 재부팅 설정은 계속할 수 있어요."
+      },
+      "pcInfo": {
+        "title": "PC의 IP 주소를 입력해주세요",
+        "description": "휴대폰에서 PC에 연결할 때 사용할 IPv4 주소예요.",
+        "portNote": "변경한 적이 없다면 기본값 22를 사용하세요.",
+        "usernameTitle": "Windows 사용자 이름을 입력해주세요",
+        "usernameDescription": "PC에 SSH로 접속할 때 사용할 계정이에요.",
+        "portTitle": "PC의 SSH 포트를 변경한 적이 있나요?",
+        "portDescription": "변경하지 않았다면 기본값 22를 사용할게요.",
+        "useDefaultPort": "22를 사용할게요",
+        "useOtherPort": "다른 포트 사용",
+        "customPortTitle": "PC의 SSH 포트를 입력해주세요",
+        "customPortDescription": "PC의 SSH 서버에 설정된 포트 번호예요."
+      },
+      "phone": {
+        "title": "이 휴대폰을 PC에 등록할게요",
+        "description": "비밀번호 대신 이 휴대폰에서 만든 연결 키를 사용해 안전하게 연결해요.",
+        "action": "등록 시작하기",
+        "retry": "다시 시도",
+        "errorDescription": "연결 키를 준비할 수 없어요. Android 앱에서 다시 시도해주세요."
+      },
+      "tool": {
+        "title": "PC에서 설정 도구를 받아주세요",
+        "description": "PC의 브라우저에서 아래 주소를 열어주세요.",
+        "copy": "주소 복사",
+        "qr": "QR 코드 보기",
+        "action": "PC에서 열었어요"
+      },
+      "run": {
+        "title": "관리자 PowerShell에서 실행해주세요",
+        "description": "PC에서 방금 받은 설정 도구를 관리자 권한으로 실행해주세요.",
+        "help": "실행하는 방법",
+        "helpText": "다운로드한 setup-windows-ssh.ps1 파일을 찾은 뒤 관리자 권한으로 PowerShell을 열고 해당 파일을 실행하세요.",
+        "action": "실행했어요"
+      },
+      "paste": {
+        "title": "연결 키를 PC에 붙여 넣어주세요",
+        "description": "설정 도구가 연결 키를 요청하면 아래 버튼으로 복사해서 PC에 붙여 넣어주세요.",
+        "copy": "연결 키 복사",
+        "copied": "연결 키를 복사했어요",
+        "action": "PC에 붙여 넣었어요"
+      },
+      "wakeMethod": {
+        "title": "PC를 어떻게 켤까요?",
+        "router": "네트워크 장비를 통해 켜기",
+        "routerDescription": "다른 네트워크에서도 사용할 수 있어요.",
+        "local": "같은 네트워크에서만 켜기",
+        "disable": "PC 켜기 사용 안 함"
+      },
+      "wakeInfo": {
+        "title": "PC의 MAC 주소를 입력해주세요",
+        "description": "PC 켜기 신호를 보낼 네트워크 어댑터의 주소예요.",
+        "routerHostTitle": "공유기 주소를 입력해주세요",
+        "routerHostDescription": "WOL 명령을 실행할 공유기의 SSH 접속 주소예요.",
+        "routerUsernameTitle": "공유기의 SSH 사용자 이름을 입력해주세요",
+        "routerUsernameDescription": "공유기에 SSH로 접속할 때 사용할 계정이에요.",
+        "interfaceTitle": "WOL을 보낼 LAN 인터페이스를 입력해주세요",
+        "interfaceDescription": "공유기에서 PC가 연결된 LAN의 인터페이스 이름이에요.",
+        "networkHost": "네트워크 장비(공유기) 주소",
+        "username": "네트워크 장비 SSH 사용자 이름",
+        "networkPort": "네트워크 장비 SSH 포트",
+        "advanced": "고급 설정"
+      },
+      "fieldHelp": {
+        "pcHost": "1. PC에서 설정을 여세요.\n2. 네트워크 및 인터넷에서 현재 연결의 속성을 여세요.\n3. IPv4 주소를 찾아 앱에 입력하세요.\n\n예: 192.168.0.10",
+        "pcUsername": "1. PC에서 PowerShell을 여세요.\n2. whoami를 입력하고 실행하세요.\n3. 역슬래시(\\) 뒤에 표시된 이름을 입력하세요.\n\n예: PC-NAME\\admin이라면 admin",
+        "pcPort": "1. PC에서 관리자 PowerShell을 여세요.\n2. Get-ItemProperty HKLM:\\SOFTWARE\\OpenSSH를 실행하세요.\n3. 별도 포트를 설정하지 않았다면 기본값 22를 사용하세요.",
+        "pcMac": "1. PC에서 설정을 여세요.\n2. 네트워크 어댑터의 하드웨어 속성을 여세요.\n3. 물리적 주소(MAC)를 찾아 입력하세요.\n\n예: 2C:F0:5D:83:5B:07",
+        "routerHost": "1. PC에서 현재 네트워크의 기본 게이트웨이를 확인하세요.\n2. 표시된 IPv4 주소를 입력하세요.\n\n예: 192.168.0.1",
+        "routerUsername": "1. 네트워크 장비(공유기)의 관리 화면을 여세요.\n2. SSH 접속에 사용하는 사용자 이름을 확인하세요.\n3. 관리 화면 로그인 이름과 다를 수 있으니 SSH 설정을 기준으로 입력하세요.",
+        "routerPort": "1. 네트워크 장비(공유기)의 SSH 설정을 여세요.\n2. SSH 서비스가 사용하는 포트를 확인하세요.\n3. 변경하지 않았다면 기본값 22를 사용하세요.",
+        "wolInterface": "1. 네트워크 장비(공유기)에 SSH로 접속하세요.\n2. ip link 명령을 실행하세요.\n3. PC가 연결된 LAN 인터페이스 이름을 입력하세요.\n\n예: br0 또는 lan0"
+      },
+      "fieldHelpSummary": {
+        "pcHost": "현재 연결의 IPv4 주소를 확인해요.",
+        "pcUsername": "Windows에 로그인한 사용자 이름을 확인해요.",
+        "pcPort": "PC의 SSH 설정에서 포트를 확인해요.",
+        "pcMac": "네트워크 어댑터의 물리적 주소를 확인해요.",
+        "routerHost": "현재 네트워크의 기본 게이트웨이를 확인해요.",
+        "routerUsername": "SSH 접속에 사용하는 이름을 확인해요.",
+        "routerPort": "SSH 서비스가 사용하는 포트를 확인해요.",
+        "wolInterface": "PC가 연결된 LAN 인터페이스를 확인해요."
+      },
+      "feedback": {
+        "errorTitle": "진행할 수 없어요"
+      },
+      "remoteIntent": {
+        "title": "PC와 다른 네트워크에서도 연결하시겠어요?",
+        "description": "휴대폰과 제어할 컴퓨터가 서로 다른 네트워크에 있어도 연결할 수 있어요."
+      },
+      "vpn": {
+        "checking": "OpenVPN 상태를 확인하고 있어요",
+        "installTitle": "OpenVPN 앱을 설치해주세요",
+        "installDescription": "서로 다른 네트워크에서 안전하게 연결할 때 사용해요.",
+        "install": "OpenVPN 설치하기",
+        "later": "원격 연결은 나중에 설정",
+        "profileTitle": "OpenVPN 프로필이 필요해요",
+        "profileDescription": "OpenVPN 앱에서 사용할 프로필을 먼저 가져와주세요.",
+        "open": "OpenVPN 앱 열기",
+        "recheck": "다시 확인",
+        "selectTitle": "사용할 VPN 프로필을 선택해주세요"
+      },
+      "verifyStart": {
+        "title": "이제 연결을 확인해볼게요",
+        "description": "입력한 정보와 연결 상태를 자동으로 확인할게요.",
+        "action": "확인 시작"
+      },
+      "verifying": {
+        "title": "연결을 확인하고 있어요",
+        "pc": "PC 연결",
+        "key": "연결 키",
+        "security": "PC 보안",
+        "network": "네트워크 장비",
+        "vpn": "VPN",
+        "checking": "확인 중…",
+        "done": "완료",
+        "waiting": "대기 중"
+      },
+      "trust": {
+        "title": "연결하려는 PC가 맞는지 확인해주세요",
+        "description": "PC 화면에 표시된 보안 정보와 아래 정보가 같은지 확인해주세요.",
+        "same": "같아요",
+        "different": "달라요"
+      },
+      "complete": {
+        "title": "설정이 끝났어요",
+        "description": "이제 연결한 컴퓨터의 상태를 확인하고 제어할 수 있어요.",
+        "action": "PC Control 시작하기"
+      },
+      "failure": {
+        "retry": "다시 시도",
+        "pc": {
+          "title": "PC에 연결할 수 없어요",
+          "description": "PC 주소와 Windows 사용자 이름을 다시 확인해주세요.",
+          "action": "PC 정보 확인하기"
+        },
+        "auth": {
+          "title": "PC에 로그인할 수 없어요",
+          "description": "이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인해주세요.",
+          "action": "휴대폰 등록 다시 보기"
+        },
+        "wol": {
+          "title": "PC를 켤 수 없어요",
+          "description": "MAC 주소와 PC 켜기 설정을 다시 확인해주세요.",
+          "action": "PC 켜기 설정 확인"
+        },
+        "vpn": {
+          "title": "다른 네트워크에서 연결할 수 없어요",
+          "description": "OpenVPN 앱과 프로필 설정을 다시 확인해주세요.",
+          "action": "원격 연결 설정 확인"
+        },
+        "security": {
+          "title": "보안 정보가 일치하지 않아요",
+          "description": "연결 대상과 네트워크를 다시 확인해주세요.",
+          "action": "PC 정보 확인하기"
+        }
+      }
+    },
+    "master": {
+      "continue": "계속",
+      "later": "나중에",
+      "skipNow": "지금은 건너뛸게요",
+      "defaultPort": "기본 포트 22 사용",
+      "otherPort": "다른 포트 사용",
+      "checking": "확인 중…",
+      "done": "완료",
+      "waiting": "대기 중",
+      "retry": "다시 시도",
+      "trustSame": "같아요",
+      "trustDifferent": "달라요",
+      "identityError": "연결 키를 준비할 수 없어요. 다시 시도해주세요.",
+      "identityBusy": "연결 키 준비 중…",
+      "identityPrepare": "연결 키 다시 준비하기",
+      "copyUrl": "다운로드 주소 복사",
+      "copyKey": "연결 키 복사",
+      "urlCopied": "다운로드 주소를 복사했어요.",
+      "keyCopied": "연결 키를 복사했어요.",
+      "urlCopyError": "다운로드 주소를 복사할 수 없어요. 다시 시도해주세요.",
+      "keyCopyError": "연결 키를 복사할 수 없어요. 다시 시도해주세요.",
+      "runHelpTitle": "실행하는 방법",
+      "runHelp": "1. 받은 setup-windows-ssh.ps1 파일을 찾으세요.\n2. 관리자 권한으로 PowerShell을 여세요.\n3. 설정 도구를 실행하세요.",
+      "welcome": {
+        "title": "앱을 사용할 수 있도록 설정을 도와드릴게요",
+        "description": "PC나 서버를 연결하고 제어하는 데 필요한 설정을 하나씩 진행할게요.",
+        "action": "시작하기"
+      },
+      "prepare": {
+        "title": "제어할 PC를 켜주세요",
+        "description": "설정 중 PC에서 직접 해야 하는 작업이 있어요. 가능하면 PC 앞에서 함께 진행해주세요.",
+        "note": "Windows 관리자 권한이 필요할 수 있어요.",
+        "action": "준비됐어요"
+      },
+      "pcHost": {
+        "title": "PC의 IP 주소를 입력해주세요",
+        "description": "휴대폰에서 PC에 연결할 때 사용할 IPv4 주소예요.",
+        "label": "PC IP 주소",
+        "helpSummary": "현재 연결의 IPv4 주소를 확인해요.",
+        "help": "1. PC에서 설정을 여세요.\n2. 네트워크 및 인터넷에서 현재 연결의 속성을 여세요.\n3. IPv4 주소를 찾아 앱에 입력하세요.\n\n예: 192.168.0.10",
+        "error": "올바른 PC IP 주소를 입력해주세요."
+      },
+      "pcUsername": {
+        "title": "Windows 사용자 이름을 입력해주세요",
+        "description": "PC에 SSH로 접속할 때 사용할 계정이에요.",
+        "label": "Windows 사용자 이름",
+        "helpSummary": "Windows에 로그인한 사용자 이름을 확인해요.",
+        "help": "1. PC에서 PowerShell을 여세요.\n2. whoami를 입력하고 실행하세요.\n3. 역슬래시(\\) 뒤에 표시된 이름을 입력하세요.\n\n예: PC-NAME\\admin이라면 admin"
+      },
+      "pcPortChoice": {
+        "title": "PC의 SSH 포트를 변경한 적이 있나요?",
+        "description": "변경하지 않았다면 기본 포트 22를 사용하면 돼요."
+      },
+      "pcPort": {
+        "title": "PC의 SSH 포트를 입력해주세요",
+        "description": "PC의 SSH 서버에 설정된 포트 번호예요.",
+        "label": "PC SSH 포트",
+        "helpSummary": "PC의 SSH 설정에서 포트를 확인해요.",
+        "help": "1. PC에서 관리자 PowerShell을 여세요.\n2. OpenSSH 서버 설정의 Port 값을 확인하세요.\n3. 변경하지 않았다면 기본값 22를 사용하세요."
+      },
+      "pcPrepare": {
+        "title": "PC에서 연결 준비를 해주세요",
+        "description": "설정 도구를 실행하면 이 휴대폰을 PC에 등록할 수 있어요.",
+        "task1": "설정 도구 받기",
+        "task1Body": "PC의 브라우저에서 설정 도구 주소를 열어주세요.",
+        "task2": "관리자 PowerShell에서 실행",
+        "task2Body": "받은 설정 도구를 관리자 권한으로 실행해주세요.",
+        "action": "설정 도구를 실행했어요"
+      },
+      "pcKey": {
+        "title": "연결 키를 PC에 붙여 넣어주세요",
+        "description": "설정 도구가 연결 키를 요청하면 아래 키를 복사해서 PC에 붙여 넣어주세요.",
+        "keyReady": "연결 키 · 사용할 준비가 되었어요.",
+        "action": "PC에 붙여 넣었어요"
+      },
+      "pcVerify": {
+        "title": "PC 연결을 확인하고 있어요",
+        "pc": "PC 연결",
+        "security": "PC 보안",
+        "key": "연결 키"
+      },
+      "pcTrust": {
+        "title": "연결하려는 PC가 맞는지 확인해주세요",
+        "description": "PC 화면에 표시된 보안 정보와 아래 정보가 같은지 확인해주세요."
+      },
+      "pcFailure": {
+        "connection": {
+          "title": "PC에 연결할 수 없어요",
+          "description": "PC IP 주소와 Windows 사용자 이름을 다시 확인해주세요.",
+          "action": "PC 정보 확인하기"
+        },
+        "auth": {
+          "title": "PC에 로그인할 수 없어요",
+          "description": "이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인해주세요.",
+          "action": "연결 키 등록 확인"
+        },
+        "security": {
+          "title": "PC의 보안 정보가 일치하지 않아요",
+          "description": "연결하려는 PC와 현재 네트워크를 다시 확인해주세요.",
+          "action": "PC 정보 확인하기"
+        }
+      },
+      "pcReady": {
+        "title": "PC 연결을 확인했어요",
+        "description": "이제 이 PC의 상태를 확인하고 제어할 수 있어요."
+      },
+      "wakeIntent": {
+        "title": "앱에서 PC를 켜는 기능도 설정하시겠어요?",
+        "description": "PC 끄기와 재부팅은 이 기능 없이도 사용할 수 있어요.",
+        "yes": "네, 설정할게요"
+      },
+      "wakeReadiness": {
+        "title": "PC 켜기 기능을 사용할 준비가 되어 있나요?",
+        "description": "PC는 WOL을 지원해야 하고, 네트워크 장비(공유기)에 SSH로 접속할 수 있어야 해요.",
+        "ready": "네, 준비되어 있어요",
+        "help": "확인하는 방법을 볼게요"
+      },
+      "wakeHelp": {
+        "title": "PC 켜기 설정을 확인해볼게요",
+        "description": "PC와 네트워크 장비에서 각각 확인해야 해요.",
+        "pcTitle": "PC에서 확인하기",
+        "pcSummary": "WOL 기능을 사용할 수 있는지 확인해요.",
+        "pcBody": "1. BIOS/UEFI에서 Wake on LAN 또는 PCI-E 깨우기 기능을 확인하세요.\n2. Windows 네트워크 어댑터에서 Wake on LAN 관련 설정을 확인하세요.\n3. 사용하는 유선 네트워크 어댑터의 MAC 주소를 확인할 수 있어야 해요.",
+        "routerTitle": "네트워크 장비에서 확인하기",
+        "routerSummary": "SSH와 WOL 명령을 사용할 수 있는지 확인해요.",
+        "routerBody": "1. 네트워크 장비(공유기)에 SSH로 접속할 수 있는지 확인하세요.\n2. PC가 연결된 LAN 인터페이스 이름을 확인할 수 있어야 해요.\n3. SSH 환경에서 ether-wake 명령을 사용할 수 있어야 해요.",
+        "canSetup": "설정할 수 있어요"
+      },
+      "mac": {
+        "title": "PC의 MAC 주소를 입력해주세요",
+        "description": "PC 켜기 신호를 보낼 유선 네트워크 어댑터의 주소예요.",
+        "label": "PC MAC 주소",
+        "helpSummary": "네트워크 어댑터의 물리적 주소를 확인해요.",
+        "help": "1. PC에서 네트워크 설정을 여세요.\n2. 사용하는 유선 네트워크 어댑터의 하드웨어 속성을 여세요.\n3. 물리적 주소(MAC)를 찾아 입력하세요.\n\n예: 2C:F0:5D:83:5B:07"
+      },
+      "routerHost": {
+        "title": "네트워크 장비의 주소를 입력해주세요",
+        "description": "PC 켜기 명령을 실행할 네트워크 장비(공유기)의 SSH 접속 주소예요.",
+        "label": "네트워크 장비(공유기) 주소",
+        "helpSummary": "현재 네트워크의 기본 게이트웨이를 확인해요.",
+        "help": "1. PC에서 현재 네트워크 정보를 여세요.\n2. 기본 게이트웨이의 IPv4 주소를 확인하세요.\n3. 해당 주소가 SSH 접속 대상과 같은지 확인한 뒤 입력하세요.\n\n예: 192.168.0.1"
+      },
+      "routerUsername": {
+        "title": "네트워크 장비의 SSH 사용자 이름을 입력해주세요",
+        "description": "네트워크 장비에 SSH로 접속할 때 사용하는 계정이에요.",
+        "label": "SSH 사용자 이름",
+        "helpSummary": "SSH 접속에 사용하는 사용자 이름을 확인해요.",
+        "help": "1. 네트워크 장비(공유기)의 관리 화면을 여세요.\n2. SSH 접속 설정을 확인하세요.\n3. SSH에 사용하는 사용자 이름을 입력하세요.\n\n관리 화면 로그인 이름과 다를 수 있어요."
+      },
+      "interface": {
+        "title": "PC가 연결된 LAN 인터페이스를 입력해주세요",
+        "description": "네트워크 장비에서 WOL 신호를 보낼 인터페이스 이름이에요.",
+        "label": "LAN 인터페이스 이름",
+        "helpSummary": "PC가 연결된 LAN 인터페이스를 확인해요.",
+        "help": "1. 네트워크 장비(공유기)에 SSH로 접속하세요.\n2. ip link 명령으로 인터페이스 목록을 확인하세요.\n3. PC가 연결된 LAN의 인터페이스 이름을 입력하세요.\n\n예: br0 또는 lan0"
+      },
+      "routerPortChoice": {
+        "title": "네트워크 장비의 SSH 포트를 변경한 적이 있나요?",
+        "description": "변경하지 않았다면 기본 포트 22를 사용하면 돼요."
+      },
+      "routerPort": {
+        "title": "네트워크 장비의 SSH 포트를 입력해주세요",
+        "description": "SSH 서비스에 설정된 포트 번호예요.",
+        "label": "SSH 포트",
+        "helpSummary": "SSH 서비스가 사용하는 포트를 확인해요.",
+        "help": "1. 네트워크 장비(공유기)의 SSH 설정을 여세요.\n2. SSH 서비스가 사용하는 포트를 확인하세요.\n3. 변경하지 않았다면 기본값 22를 사용하세요."
+      },
+      "wakeVerify": {
+        "title": "PC 켜기 설정을 확인하고 있어요",
+        "router": "네트워크 장비 연결",
+        "security": "보안 정보",
+        "settings": "PC 켜기 설정"
+      },
+      "routerTrust": {
+        "title": "연결하려는 네트워크 장비가 맞는지 확인해주세요",
+        "description": "네트워크 장비의 보안 정보와 아래 정보가 같은지 확인해주세요."
+      },
+      "wakeFailure": {
+        "router": {
+          "title": "네트워크 장비에 연결할 수 없어요",
+          "description": "네트워크 장비 주소와 SSH 사용자 이름을 다시 확인해주세요.",
+          "action": "네트워크 장비 정보 확인"
+        },
+        "settings": {
+          "title": "PC 켜기 설정을 확인할 수 없어요",
+          "description": "MAC 주소와 LAN 인터페이스를 다시 확인해주세요.",
+          "action": "PC 켜기 정보 확인"
+        },
+        "security": {
+          "title": "네트워크 장비의 보안 정보가 일치하지 않아요",
+          "description": "연결하려는 네트워크 장비를 다시 확인해주세요.",
+          "action": "네트워크 장비 정보 확인"
+        }
+      },
+      "wakeReady": {
+        "title": "PC 켜기 설정을 확인했어요",
+        "description": "필요한 정보가 준비됐어요. 실제 WOL 동작은 PC의 전원 상태와 네트워크 환경에 따라 달라질 수 있어요."
+      },
+      "remoteIntent": {
+        "title": "PC와 다른 네트워크에서도 연결하시겠어요?",
+        "description": "휴대폰과 PC가 서로 다른 네트워크에 있을 때 OpenVPN을 사용해 연결할 수 있어요.",
+        "yes": "네, 설정할게요"
+      },
+      "vpn": {
+        "checking": "OpenVPN을 확인하고 있어요",
+        "installTitle": "OpenVPN 앱이 필요해요",
+        "installDescription": "다른 네트워크에서 연결할 때 사용할 OpenVPN 앱을 설치해주세요.",
+        "install": "OpenVPN 설치하기",
+        "profileTitle": "OpenVPN 프로필이 필요해요",
+        "profileDescription": "OpenVPN 앱에서 사용할 프로필을 먼저 가져와주세요.",
+        "open": "OpenVPN 앱 열기",
+        "recheck": "다시 확인",
+        "selectTitle": "사용할 VPN 프로필을 선택해주세요",
+        "selectDescription": "다른 네트워크에서 PC에 연결할 때 사용할 프로필이에요.",
+        "checkError": "OpenVPN 상태를 확인할 수 없어요",
+        "checkErrorDescription": "앱 상태를 확인하는 중 문제가 생겼어요. 다시 시도하거나 나중에 설정할 수 있어요."
+      },
+      "summary": {
+        "title": "설정할 내용을 확인해주세요",
+        "description": "저장하면 이 설정으로 PC Control을 사용할 수 있어요.",
+        "pc": "PC 연결",
+        "wake": "PC 켜기",
+        "remote": "다른 네트워크 연결",
+        "verified": "확인됨",
+        "configured": "설정 확인됨",
+        "profileSelected": "프로필 선택됨",
+        "off": "사용하지 않음",
+        "unavailable": "확인 필요",
+        "save": "설정 저장하기"
+      },
+      "saveFailure": {
+        "title": "설정을 저장하지 못했어요",
+        "description": "잠시 후 다시 시도해주세요. 입력한 내용은 이 화면을 나가기 전까지 유지돼요.",
+        "review": "설정 내용 확인"
+      },
+      "complete": {
+        "title": "설정이 끝났어요",
+        "description": "이제 연결한 PC의 상태를 확인하고 제어할 수 있어요.",
+        "note": "필요한 기능은 설정에서 언제든 다시 변경할 수 있어요.",
+        "action": "PC Control 시작하기"
+      },
+      "stage": {
+        "pc": "PC 연결",
+        "wake": "PC 켜기",
+        "remote": "다른 네트워크",
+        "ariaPrefix": "설정 진행 단계"
+      }
+    }
+  }
+}

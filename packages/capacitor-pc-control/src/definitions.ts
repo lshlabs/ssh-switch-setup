@@ -1,12 +1,66 @@
-import type { NetworkState, VpnStatus } from '@pc-control/core';
+import type { PluginListenerHandle } from '@capacitor/core';
+
+import type {
+  AppSettings,
+  NetworkState,
+  PcStatusResult,
+  PowerAction,
+  PowerActionResult,
+  VpnStatus,
+} from '@pc-control/core';
+
+export type {
+  AppSettings,
+  CopyMode,
+  LanguagePreference,
+  ThemePreference,
+  PcStatus,
+  PcReachabilityReason,
+  PcStatusResult,
+  PowerAction,
+  PowerActionResult,
+} from '@pc-control/core';
+
+export interface AppSettingsResult {
+  /** Native storage returns only persisted values; the JS layer merges product defaults. */
+  settings: Partial<AppSettings>;
+}
 
 export interface BridgeStatusResult {
   native: boolean;
   platform: 'android' | 'web';
 }
 
+export interface SystemToastOptions {
+  duration?: 'short' | 'long';
+  message: string;
+  skipWhenClipboardConfirmationAvailable?: boolean;
+}
+
 export interface NetworkStateResult {
+  ssid?: string;
   state: NetworkState;
+}
+
+export interface NetworkSsidPermissionResult {
+  granted: boolean;
+}
+
+export interface NetworkChangeEvent {
+  reason: 'available' | 'lost' | 'capabilities-changed' | 'link-properties-changed';
+}
+
+export interface HomeNetworkOptions {
+  connectTimeoutMs?: number;
+  postConnectReachabilityTimeoutMs?: number;
+  reachabilityTimeoutMs?: number;
+  routerHost: string;
+  routerPort: number;
+}
+
+export interface EnsureHomeNetworkResult {
+  path: 'local' | 'vpn';
+  vpnWasStartedByApp: boolean;
 }
 
 export interface CheckHostOptions {
@@ -18,6 +72,43 @@ export interface CheckHostOptions {
 export interface CheckHostResult {
   latencyMs?: number;
   reachable: boolean;
+}
+
+export interface PcStatusOptions {
+  host: string;
+  port: number;
+  timeoutMs?: number;
+  /** Optional home-network anchor for unknown/offline distinction. If provided and unreachable, status is `unknown`. */
+  routerHost?: string;
+  routerPort?: number;
+  routerTimeoutMs?: number;
+}
+
+export interface RunPowerActionOptions {
+  action: PowerAction;
+  autoDisconnectVpn?: boolean;
+  initialStatusTimeoutMs?: number;
+  macAddress: string;
+  pcHost: string;
+  pcHostFingerprint?: string;
+  pcPort: number;
+  pcUsername: string;
+  pollIntervalMs?: number;
+  rebootOfflineTimeoutMs?: number;
+  rebootOnlineTimeoutMs?: number;
+  /** Required for power-on; omitted for PC-only shutdown/reboot. */
+  routerHost?: string;
+  routerHostFingerprint?: string;
+  routerPort?: number;
+  routerUsername?: string;
+  shutdownTimeoutMs?: number;
+  wakeTimeoutMs?: number;
+  wolInterface?: string;
+  connectTimeoutMs?: number;
+  commandTimeoutMs?: number;
+  reachabilityTimeoutMs?: number;
+  postConnectReachabilityTimeoutMs?: number;
+  vpnDisconnectTimeoutMs?: number;
 }
 
 export type SshTarget = 'windows' | 'router';
@@ -86,6 +177,14 @@ export interface ExecuteSshCommandResult {
   stdout: string;
 }
 
+export interface ExecuteEnsuredSshCommandOptions
+  extends ExecuteSshCommandOptions, HomeNetworkOptions {}
+
+export interface ExecuteEnsuredSshCommandResult extends ExecuteSshCommandResult {
+  networkPath: 'local' | 'vpn';
+  vpnWasStartedByApp: boolean;
+}
+
 export interface OpenVpnProfile {
   id: string;
   name: string;
@@ -93,6 +192,12 @@ export interface OpenVpnProfile {
 
 export interface OpenVpnProfilesResult {
   profiles: OpenVpnProfile[];
+  selectedProfileId?: string;
+}
+
+export interface OpenVpnPermissionResult {
+  granted: boolean;
+  installed: boolean;
 }
 
 export interface ConnectOpenVpnOptions {
@@ -100,20 +205,54 @@ export interface ConnectOpenVpnOptions {
   timeoutMs?: number;
 }
 
+export interface DisconnectOpenVpnOptions {
+  onlyIfStartedByApp?: boolean;
+  timeoutMs?: number;
+}
+
 export interface OpenVpnStatusResult {
   profileId?: string;
   status: VpnStatus;
+  vpnWasStartedByApp: boolean;
+}
+
+export interface OpenVpnInstallationResult {
+  installed: boolean;
+}
+
+export type OpenVpnLaunchDestination = 'app' | 'play-store';
+
+export interface OpenVpnLaunchResult {
+  destination: OpenVpnLaunchDestination;
+}
+
+export interface SelectOpenVpnProfileOptions {
+  profileId: string;
 }
 
 export interface PcControlPlugin {
   /** Verifies that JavaScript can invoke the platform implementation. */
   getBridgeStatus(): Promise<BridgeStatusResult>;
 
-  /** Planned native API: detects direct LAN, VPN, or unavailable state. */
-  getNetworkState(): Promise<NetworkStateResult>;
+  /** Notifies the app when the Android network changes so status can be refreshed immediately. */
+  addListener(
+    eventName: 'networkChange',
+    listenerFunc: (event: NetworkChangeEvent) => void,
+  ): Promise<PluginListenerHandle>;
+
+  /** Requests the Android permission required to display the current Wi-Fi SSID. */
+  requestNetworkSsidPermission(): Promise<NetworkSsidPermissionResult>;
+
+  /** Determines the home-network path using router TCP reachability. */
+  getNetworkState(
+    options: Pick<HomeNetworkOptions, 'routerHost' | 'routerPort'>,
+  ): Promise<NetworkStateResult>;
 
   /** Planned native API: performs a bounded TCP reachability check. */
   checkHost(options: CheckHostOptions): Promise<CheckHostResult>;
+
+  /** Checks the Windows SSH endpoint without automatically connecting a VPN. */
+  getPcStatus(options: PcStatusOptions): Promise<PcStatusResult>;
 
   /** Returns the app-only SSH identity without creating it. */
   getSshIdentity(): Promise<SshIdentityResult>;
@@ -123,6 +262,9 @@ export interface PcControlPlugin {
 
   /** Copies only the OpenSSH public key to the Android clipboard. */
   copySshPublicKey(): Promise<void>;
+
+  /** Copies the SSH public-key fingerprint to the Android clipboard. */
+  copySshFingerprint(): Promise<void>;
 
   /** Reads the presented host key without authenticating or trusting it. */
   scanSshHostKey(options: SshHostOptions): Promise<SshHostKeyResult>;
@@ -136,15 +278,56 @@ export interface PcControlPlugin {
   /** Executes an allowlisted harmless command after strict host-key verification. */
   executeSshCommand(options: ExecuteSshCommandOptions): Promise<ExecuteSshCommandResult>;
 
+  /** Ensures LAN/VPN connectivity before running a Phase 1 allowlisted SSH command. */
+  executeEnsuredSshCommand(
+    options: ExecuteEnsuredSshCommandOptions,
+  ): Promise<ExecuteEnsuredSshCommandResult>;
+
+  /** Reports whether the supported external OpenVPN controller is installed. */
+  isOpenVpnInstalled(): Promise<OpenVpnInstallationResult>;
+
+  /** Opens OpenVPN for Android, or its Play Store page when it is not installed. */
+  openOpenVpnApp(): Promise<OpenVpnLaunchResult>;
+
+  /** Starts the official OpenVPN for Android external-control approval flow if needed. */
+  prepareOpenVpnControl(): Promise<OpenVpnInstallationResult>;
+
   /** Planned native API: lists profiles exposed by OpenVPN for Android. */
   getOpenVpnProfiles(): Promise<OpenVpnProfilesResult>;
+
+  /** Checks external-control permission without opening the approval activity. */
+  getOpenVpnPermissionStatus(): Promise<OpenVpnPermissionResult>;
+
+  /** Persists only the selected external profile UUID, never profile credentials or contents. */
+  selectOpenVpnProfile(options: SelectOpenVpnProfileOptions): Promise<OpenVpnProfilesResult>;
+
+  /** Clears the saved external profile selection without changing the OpenVPN app. */
+  clearOpenVpnProfileSelection(): Promise<void>;
 
   /** Planned native API: connects one OpenVPN for Android profile and awaits readiness. */
   connectOpenVpn(options: ConnectOpenVpnOptions): Promise<OpenVpnStatusResult>;
 
   /** Planned native API: disconnects the VPN session controlled by this app. */
-  disconnectOpenVpn(): Promise<OpenVpnStatusResult>;
+  disconnectOpenVpn(options?: DisconnectOpenVpnOptions): Promise<OpenVpnStatusResult>;
 
   /** Planned native API: returns the latest OpenVPN callback state. */
   getOpenVpnStatus(): Promise<OpenVpnStatusResult>;
+
+  /** Uses router reachability, then OpenVPN fallback when a profile is selected. */
+  ensureHomeNetwork(options: HomeNetworkOptions): Promise<EnsureHomeNetworkResult>;
+
+  /** Runs one fixed, native power action with bounded state verification. */
+  runPowerAction(options: RunPowerActionOptions): Promise<PowerActionResult>;
+
+  /** Returns persisted app settings (non-secret). */
+  getAppSettings(): Promise<AppSettingsResult>;
+
+  /** Persists validated app settings (non-secret, no credentials). */
+  setAppSettings(options: { settings: AppSettings }): Promise<AppSettingsResult>;
+
+  /** Returns current app version info. */
+  getAppVersion(): Promise<{ versionName: string; versionCode: number }>;
+
+  /** Shows a native device Toast instead of rendering an in-app notification. */
+  showSystemToast(options: SystemToastOptions): Promise<void>;
 }
