@@ -8,7 +8,7 @@ import { PcControl } from '@pc-control/capacitor-pc-control';
 import { useAppSettings } from './hooks/useAppSettings';
 import { ActionHistoryPage } from './components/ActionHistoryPage';
 import { MainScreen } from './components/MainScreen';
-import { OnboardingScreen } from './components/OnboardingScreen';
+import { V1OnboardingScreen } from './components/V1OnboardingScreen';
 import { SettingsScreen } from './components/SettingsScreen';
 import { useHomeSession } from './hooks/useHomeSession';
 import type { ThemePreference } from '@pc-control/core';
@@ -18,7 +18,7 @@ type Screen = 'main' | 'settings' | 'settings-sample' | 'history' | 'onboarding'
 type BackHandler = () => boolean;
 
 export default function App() {
-  const { settings, config, loaded, save } = useAppSettings();
+  const { settings, config, loaded, save, reload } = useAppSettings();
   const homeSession = useHomeSession(config.pc.host);
   const [screen, setScreen] = useState<Screen>('main');
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
@@ -148,9 +148,21 @@ export default function App() {
   const content =
     screen === 'onboarding' ? (
       <main className="app-shell">
-        <OnboardingScreen
+        <V1OnboardingScreen
           settings={settings}
-          onSave={save}
+          onCommit={async (next, pcKey, routerKey, selectedVpnProfileId) => {
+            if (Capacitor.isNativePlatform()) {
+              await PcControl.commitOnboarding({
+                settings: next,
+                pcKey,
+                ...(routerKey ? { routerKey } : {}),
+                ...(selectedVpnProfileId ? { selectedVpnProfileId } : {}),
+              });
+              await reload();
+            } else {
+              await save(next);
+            }
+          }}
           onComplete={() => setScreen('main')}
           onSkip={() => {
             setOnboardingDismissed(true);

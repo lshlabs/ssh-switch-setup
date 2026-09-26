@@ -38,6 +38,7 @@ data class PowerActionResult(
     val vpnDisconnectFailed: Boolean,
     val commandExecuted: Boolean,
     val durationMs: Long,
+    val resolvedPcHost: String,
 )
 
 fun interface Sleeper {
@@ -62,6 +63,7 @@ class PowerOrchestrator(
     private val sshClient: NativeSshClient,
     private val openVpnClient: OpenVpnExternalApiClient,
     private val pcStatusChecker: PcStatusChecker,
+    private val endpointResolver: PcEndpointResolver? = null,
     private val sleeper: Sleeper = ThreadSleeper(),
     private val clock: MonotonicClock = SystemClock(),
 ) {
@@ -80,6 +82,7 @@ class PowerOrchestrator(
         }
         // Reset per-run state so a previous exception does not leak stale values.
         lastCommandExecuted = false
+        lastResolvedHost = request.pcHost
 
         val startedAt = clock.nanoTime()
         var networkPath = "local"
@@ -107,17 +110,32 @@ class PowerOrchestrator(
             networkPath = network.path
             vpnWasStartedByApp = network.vpnWasStartedByApp
 
-            val initial = pcStatusChecker.check(
+            var effectiveRequest = request
+            var initial = pcStatusChecker.check(
                 request.pcHost,
                 request.pcPort,
                 request.initialStatusTimeoutMs,
             )
+            if (initial.reachable && !request.pcHostFingerprint.isNullOrBlank()) {
+                endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                    request.pcHostFingerprint, allowScan = false)
+            }
+            if (!initial.reachable && request.action != "power-on") {
+                val recovered = endpointResolver?.connectToPC(
+                    request.pcHost, request.pcPort, request.pcHostFingerprint,
+                )
+                if (recovered != null) {
+                    effectiveRequest = request.copy(pcHost = recovered)
+                    lastResolvedHost = recovered
+                    initial = pcStatusChecker.check(recovered, request.pcPort, request.initialStatusTimeoutMs)
+                }
+            }
             previousStatus = initial.status
 
             val finalStatus: String = when (request.action) {
-                "power-on" -> handlePowerOn(request, initial)
-                "shutdown" -> handleShutdown(request, initial)
-                "reboot" -> handleReboot(request, initial)
+                "power-on" -> handlePowerOn(effectiveRequest, initial)
+                "shutdown" -> handleShutdown(effectiveRequest, initial)
+                "reboot" -> handleReboot(effectiveRequest, initial)
                 else -> throw NativeNetworkException(
                     NetworkErrorCode.POWER_COMMAND_FAILED,
                     "지원하지 않는 power action입니다: ${request.action}",
@@ -139,6 +157,7 @@ class PowerOrchestrator(
                 vpnDisconnectFailed = false,
                 commandExecuted = commandExecuted,
                 durationMs = durationMs,
+                resolvedPcHost = lastResolvedHost,
             )
         } finally {
             var vpnDisconnectFailed = false
@@ -162,6 +181,8 @@ class PowerOrchestrator(
     // Used to communicate commandExecuted from handlers to run()
     @Volatile
     private var lastCommandExecuted: Boolean = false
+    @Volatile
+    private var lastResolvedHost: String = ""
 
     private fun handlePowerOn(request: PowerActionRequest, initial: PcStatusResult): String {
         if (initial.reachable) {
@@ -207,7 +228,34 @@ class PowerOrchestrator(
             )
         }
         lastCommandExecuted = true
-        val reached = pollUntilReachable(request.pcHost, request.pcPort, request.wakeTimeoutMs, request.pollIntervalMs)
+        val deadline = clock.nanoTime() + TimeUnit.MILLISECONDS.toNanos(request.wakeTimeoutMs.toLong())
+        val firstWait = minOf(request.wakeTimeoutMs / 3, 10_000)
+        var reached = pollUntilReachable(request.pcHost, request.pcPort, firstWait, request.pollIntervalMs)
+        if (!reached) {
+            val recovered = endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                request.pcHostFingerprint, scanBudgetMs = minOf(6_000, remainingMs(deadline)).toLong(),
+                scanCooldownMs = 0)
+            if (recovered != null) {
+                lastResolvedHost = recovered
+                reached = true
+            } else if (remainingMs(deadline) > 6_000) {
+                reached = pollUntilReachable(request.pcHost, request.pcPort,
+                    remainingMs(deadline) - 6_000, request.pollIntervalMs)
+                if (!reached) {
+                    val lateRecovery = endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                        request.pcHostFingerprint, scanBudgetMs = remainingMs(deadline).toLong(),
+                        scanCooldownMs = 0)
+                    if (lateRecovery != null) {
+                        lastResolvedHost = lateRecovery
+                        reached = true
+                    }
+                }
+            }
+        }
+        if (reached && lastResolvedHost == request.pcHost && !request.pcHostFingerprint.isNullOrBlank()) {
+            endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                request.pcHostFingerprint, allowScan = false)
+        }
         if (!reached) {
             throw NativeNetworkException(
                 NetworkErrorCode.PC_WAKE_TIMEOUT,
@@ -306,7 +354,34 @@ class PowerOrchestrator(
                 details = mapOf("host" to request.pcHost, "port" to request.pcPort),
             )
         }
-        val backOnline = pollUntilReachable(request.pcHost, request.pcPort, request.rebootOnlineTimeoutMs, request.pollIntervalMs)
+        val firstWait = minOf(request.rebootOnlineTimeoutMs / 3, 10_000)
+        val deadline = clock.nanoTime() + TimeUnit.MILLISECONDS.toNanos(request.rebootOnlineTimeoutMs.toLong())
+        var backOnline = pollUntilReachable(request.pcHost, request.pcPort, firstWait, request.pollIntervalMs)
+        if (!backOnline) {
+            val recovered = endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                request.pcHostFingerprint, scanBudgetMs = minOf(6_000, remainingMs(deadline)).toLong(),
+                scanCooldownMs = 0)
+            if (recovered != null) {
+                lastResolvedHost = recovered
+                backOnline = true
+            } else if (remainingMs(deadline) > 6_000) {
+                backOnline = pollUntilReachable(request.pcHost, request.pcPort,
+                    remainingMs(deadline) - 6_000, request.pollIntervalMs)
+                if (!backOnline) {
+                    val lateRecovery = endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                        request.pcHostFingerprint, scanBudgetMs = remainingMs(deadline).toLong(),
+                        scanCooldownMs = 0)
+                    if (lateRecovery != null) {
+                        lastResolvedHost = lateRecovery
+                        backOnline = true
+                    }
+                }
+            }
+        }
+        if (backOnline && lastResolvedHost == request.pcHost && !request.pcHostFingerprint.isNullOrBlank()) {
+            endpointResolver?.connectToPC(request.pcHost, request.pcPort,
+                request.pcHostFingerprint, allowScan = false)
+        }
         if (!backOnline) {
             throw NativeNetworkException(
                 NetworkErrorCode.PC_REBOOT_ONLINE_TIMEOUT,
@@ -320,7 +395,8 @@ class PowerOrchestrator(
     private fun pollUntilReachable(host: String, port: Int, totalTimeoutMs: Int, pollIntervalMs: Int): Boolean {
         val deadline = clock.nanoTime() + TimeUnit.MILLISECONDS.toNanos(totalTimeoutMs.toLong())
         while (clock.nanoTime() < deadline) {
-            val reachable = reachabilityChecker.check(host, port, POLL_CHECK_TIMEOUT_MS).reachable
+            val reachable = reachabilityChecker.check(host, port,
+                minOf(POLL_CHECK_TIMEOUT_MS, remainingMs(deadline).coerceAtLeast(1))).reachable
             if (reachable) return true
             val remainingNanos = deadline - clock.nanoTime()
             if (remainingNanos <= 0) break
@@ -335,10 +411,15 @@ class PowerOrchestrator(
         return false
     }
 
+    private fun remainingMs(deadline: Long): Int =
+        TimeUnit.NANOSECONDS.toMillis((deadline - clock.nanoTime()).coerceAtLeast(0))
+            .coerceAtMost(Int.MAX_VALUE.toLong()).toInt()
+
     private fun pollUntilUnreachable(host: String, port: Int, totalTimeoutMs: Int, pollIntervalMs: Int): Boolean {
         val deadline = clock.nanoTime() + TimeUnit.MILLISECONDS.toNanos(totalTimeoutMs.toLong())
         while (clock.nanoTime() < deadline) {
-            val reachable = reachabilityChecker.check(host, port, POLL_CHECK_TIMEOUT_MS).reachable
+            val reachable = reachabilityChecker.check(host, port,
+                minOf(POLL_CHECK_TIMEOUT_MS, remainingMs(deadline).coerceAtLeast(1))).reachable
             if (!reachable) return true
             val remainingNanos = deadline - clock.nanoTime()
             if (remainingNanos <= 0) break

@@ -21,6 +21,7 @@ export interface PcStatusResult {
   reachable: boolean;
   latencyMs?: number;
   reason?: PcReachabilityReason;
+  resolvedHost?: string;
 }
 
 export interface PowerActionResult {
@@ -32,6 +33,7 @@ export interface PowerActionResult {
   vpnDisconnectFailed?: boolean;
   commandExecuted: boolean;
   durationMs: number;
+  resolvedPcHost?: string;
 }
 
 export interface PcControlConfig {

@@ -20,6 +20,11 @@ function normalizeSettings(stored: LegacyStoredSettings): AppSettings {
   delete (currentSettings as Record<string, unknown>).wakeStrategy;
   const merged: AppSettings = { ...defaults, ...currentSettings };
   if (typeof merged.pcName !== 'string') merged.pcName = defaults.pcName;
+  if (typeof merged.pcHostId !== 'string') merged.pcHostId = defaults.pcHostId;
+  if (typeof merged.pcHostname !== 'string') merged.pcHostname = defaults.pcHostname;
+  if (typeof merged.pcHostFingerprint !== 'string') merged.pcHostFingerprint = defaults.pcHostFingerprint;
+  if (typeof merged.pcLanPrefix !== 'number' || merged.pcLanPrefix < 0 || merged.pcLanPrefix > 32)
+    merged.pcLanPrefix = defaults.pcLanPrefix;
   if (typeof merged.pcHost !== 'string') merged.pcHost = defaults.pcHost;
   if (typeof merged.pcUsername !== 'string') merged.pcUsername = defaults.pcUsername;
   if (typeof merged.pcMac !== 'string') merged.pcMac = defaults.pcMac;

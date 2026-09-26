@@ -19,9 +19,11 @@ import java.util.concurrent.TimeoutException
 class OpenVpnExternalApiClient(context: Context) {
     private val appContext = context.applicationContext
     private val preferences: SharedPreferences = appContext.getSharedPreferences(
-        PREFERENCES_NAME,
+        AppSettingsStore.PREFS_NAME,
         Context.MODE_PRIVATE,
     )
+    private val legacyPreferences: SharedPreferences =
+        appContext.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
     private val lock = Object()
 
     @Volatile
@@ -139,10 +141,13 @@ class OpenVpnExternalApiClient(context: Context) {
         }
     }
 
-    fun getSelectedProfileId(): String? = preferences.getString(SELECTED_PROFILE_KEY, null)
+    fun getSelectedProfileId(): String? =
+        if (preferences.contains(SELECTED_PROFILE_KEY)) {
+            preferences.getString(SELECTED_PROFILE_KEY, null)?.takeIf { it.isNotEmpty() }
+        } else legacyPreferences.getString(SELECTED_PROFILE_KEY, null)
 
     fun clearSelectedProfile() {
-        preferences.edit().remove(SELECTED_PROFILE_KEY).apply()
+        preferences.edit().putString(SELECTED_PROFILE_KEY, "").apply()
     }
 
     fun selectProfile(profileId: String) {

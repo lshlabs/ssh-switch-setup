@@ -49,6 +49,7 @@ data class SshCommandRequest(
     val connectTimeoutMs: Int,
     val commandTimeoutMs: Int,
     val expectedHostFingerprint: String?,
+    val temporaryHostKey: TrustedSshHostKey? = null,
 )
 
 data class SshCommandResult(

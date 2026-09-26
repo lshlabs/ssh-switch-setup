@@ -8,6 +8,7 @@ import java.security.KeyStore
 import java.security.PrivateKey
 import java.security.SecureRandom
 import java.security.Signature
+import android.util.Base64
 import java.security.interfaces.RSAPublicKey
 
 class SshIdentityManager {
@@ -58,6 +59,20 @@ class SshIdentityManager {
             privateKey,
             SshEncoding.rsaPublicKeyBlob(publicKey.publicExponent, publicKey.modulus),
         )
+    }
+
+    fun signPairingCompletion(requestId: String, challenge: String): String = synchronized(lock) {
+        require(requestId.matches(Regex("^[0-9a-f]{32}$")))
+        require(challenge.matches(Regex("^[0-9a-f]{64}$")))
+        val privateKey = loadKeyStore().getKey(KEY_ALIAS, null) as? PrivateKey
+            ?: throw NativeSshException(SshErrorCode.IDENTITY_NOT_AVAILABLE, "휴대폰 SSH 키가 없습니다.")
+        val message = "pc-control-pairing-v1:$requestId:$challenge".toByteArray(Charsets.UTF_8)
+        val signature = Signature.getInstance("SHA256withRSA").run {
+            initSign(privateKey)
+            update(message)
+            sign()
+        }
+        Base64.encodeToString(signature, Base64.NO_WRAP)
     }
 
     private fun identityInfo(keyStore: KeyStore, created: Boolean): SshIdentityInfo {

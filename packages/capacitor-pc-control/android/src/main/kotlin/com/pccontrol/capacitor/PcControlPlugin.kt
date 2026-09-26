@@ -17,6 +17,7 @@ import android.widget.Toast
 import android.app.Activity
 import androidx.activity.result.ActivityResult
 import com.getcapacitor.JSObject
+import com.getcapacitor.JSArray
 import com.getcapacitor.Plugin
 import com.getcapacitor.PluginCall
 import com.getcapacitor.annotation.ActivityCallback
@@ -45,7 +46,9 @@ class PcControlPlugin : Plugin() {
     private lateinit var homeNetworkOrchestrator: HomeNetworkOrchestrator
     private lateinit var pcStatusChecker: PcStatusChecker
     private lateinit var powerOrchestrator: PowerOrchestrator
+    private lateinit var endpointResolver: PcEndpointResolver
     private lateinit var appSettingsStore: AppSettingsStore
+    private lateinit var setupPairingClient: SetupPairingClient
     private lateinit var executor: ExecutorService
     private val pendingOpenVpnOperations = ConcurrentHashMap<String, () -> JSObject>()
     private var connectivityManager: ConnectivityManager? = null
@@ -59,16 +62,19 @@ class PcControlPlugin : Plugin() {
         reachabilityChecker = HostReachabilityChecker()
         homeNetworkOrchestrator = HomeNetworkOrchestrator(reachabilityChecker, openVpnClient)
         pcStatusChecker = PcStatusChecker(reachabilityChecker)
+        appSettingsStore = AppSettingsStore(appContext)
+        connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
+        endpointResolver = PcEndpointResolver(reachabilityChecker, sshClient, appSettingsStore, connectivityManager)
         powerOrchestrator = PowerOrchestrator(
             reachabilityChecker = reachabilityChecker,
             homeNetworkOrchestrator = homeNetworkOrchestrator,
             sshClient = sshClient,
             openVpnClient = openVpnClient,
             pcStatusChecker = pcStatusChecker,
+            endpointResolver = endpointResolver,
         )
-        appSettingsStore = AppSettingsStore(appContext)
+        setupPairingClient = SetupPairingClient(appContext)
         executor = Executors.newFixedThreadPool(3)
-        connectivityManager = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager
         registerNetworkCallback()
     }
 
@@ -222,6 +228,83 @@ class PcControlPlugin : Plugin() {
     }
 
     @PluginMethod
+    fun discoverSetupDevices(call: PluginCall) = runAsync(call) {
+        JSObject().apply {
+            put("devices", JSArray().apply {
+                setupPairingClient.discover().forEach { device ->
+                    put(JSObject().apply {
+                        put("name", device.name)
+                        put("endpoint", device.endpoint)
+                    })
+                }
+            })
+        }
+    }
+
+    @PluginMethod
+    fun getSetupBootstrap(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        runAsync(call) { JSObject().apply { put("bootstrap", setupPairingClient.bootstrap(endpoint)) } }
+    }
+
+    @PluginMethod
+    fun startSetupPairing(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        val token = requireString(call, "oneTimeToken") ?: return
+        val deviceName = requireString(call, "deviceName") ?: return
+        runAsync(call) {
+            val publicKey = identityManager.ensureIdentity().publicKey
+            val result = setupPairingClient.start(endpoint, token, deviceName, publicKey)
+            JSObject().apply {
+                put("started", result.getJSONObject("started"))
+                put("requestSecret", result.getString("requestSecret"))
+            }
+        }
+    }
+
+    @PluginMethod
+    fun getSetupPairingStatus(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        val requestId = requireString(call, "requestId") ?: return
+        val requestSecret = requireString(call, "requestSecret") ?: return
+        runAsync(call) { JSObject().apply { put("status", setupPairingClient.status(endpoint, requestId, requestSecret)) } }
+    }
+
+    @PluginMethod
+    fun completeSetupPairing(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        val requestId = requireString(call, "requestId") ?: return
+        val requestSecret = requireString(call, "requestSecret") ?: return
+        val challenge = requireString(call, "challenge") ?: return
+        runAsync(call) {
+            val signature = identityManager.signPairingCompletion(requestId, challenge)
+            JSObject().apply {
+                put("result", setupPairingClient.complete(endpoint, requestId, requestSecret, signature))
+            }
+        }
+    }
+
+    @PluginMethod
+    fun finalizeSetupPairing(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        val requestId = requireString(call, "requestId") ?: return
+        val requestSecret = requireString(call, "requestSecret") ?: return
+        runAsync(call) { JSObject().apply {
+            put("result", setupPairingClient.finalize(endpoint, requestId, requestSecret))
+        } }
+    }
+
+    @PluginMethod
+    fun cancelSetupPairing(call: PluginCall) {
+        val endpoint = requireString(call, "endpoint") ?: return
+        val requestId = requireString(call, "requestId") ?: return
+        val requestSecret = requireString(call, "requestSecret") ?: return
+        runAsync(call) { JSObject().apply {
+            put("result", setupPairingClient.cancel(endpoint, requestId, requestSecret))
+        } }
+    }
+
+    @PluginMethod
     fun getSshIdentity(call: PluginCall) = runAsync(call) {
         val identity = identityManager.getIdentity()
         JSObject().apply {
@@ -324,18 +407,25 @@ class PcControlPlugin : Plugin() {
         val commandTimeout = parseTimeout(call, "commandTimeoutMs", DEFAULT_COMMAND_TIMEOUT_MS)
             ?: return
         val expectedHostFingerprint = call.getString("expectedHostFingerprint")
+        val temporaryAlgorithm = call.getString("temporaryHostKeyAlgorithm")
+        val temporaryFingerprint = call.getString("temporaryHostKeyFingerprint")
 
         runAsync(call) {
+            val resolvedHost = if (target == "windows" && temporaryAlgorithm == null) {
+                endpointResolver.connectToPC(host, port, expectedHostFingerprint) ?: host
+            } else host
             val result = sshClient.execute(
                 SshCommandRequest(
                     target = target,
-                    host = host,
+                    host = resolvedHost,
                     port = port,
                     username = username,
                     command = command,
                     connectTimeoutMs = connectTimeout,
                     commandTimeoutMs = commandTimeout,
                     expectedHostFingerprint = expectedHostFingerprint,
+                    temporaryHostKey = if (temporaryAlgorithm != null && temporaryFingerprint != null)
+                        TrustedSshHostKey(temporaryAlgorithm, temporaryFingerprint) else null,
                 ),
             )
             JSObject().apply {
@@ -362,10 +452,13 @@ class PcControlPlugin : Plugin() {
 
         runOpenVpnOperation(call) {
             val network = homeNetworkOrchestrator.ensure(homeRequest)
+            val resolvedHost = if (target == "windows") {
+                endpointResolver.connectToPC(host, port, expectedHostFingerprint) ?: host
+            } else host
             val result = sshClient.execute(
                 SshCommandRequest(
                     target = target,
-                    host = host,
+                    host = resolvedHost,
                     port = port,
                     username = username,
                     command = command,
@@ -521,7 +614,7 @@ class PcControlPlugin : Plugin() {
         runAsync(call) {
             val vpnConnected = openVpnClient.isInstalled() &&
                 openVpnClient.getStatus().status == NativeVpnStatus.CONNECTED
-            val result = when {
+            var result = when {
                 vpnConnected -> pcStatusChecker.checkAfterVpn(
                     host,
                     port,
@@ -541,11 +634,24 @@ class PcControlPlugin : Plugin() {
                 )
                 else -> pcStatusChecker.check(host, port, timeout)
             }
+            var resolvedHost = host
+            val expectedFingerprint = appSettingsStore.get()[AppSettingsStore.KEY_PC_HOST_FINGERPRINT]?.toString()
+            if (result.reachable && !expectedFingerprint.isNullOrBlank()) {
+                endpointResolver.connectToPC(host, port, expectedFingerprint, allowScan = false)
+            }
+            if (result.status == "offline") {
+                val recovered = endpointResolver.connectToPC(host, port, expectedFingerprint)
+                if (recovered != null) {
+                    resolvedHost = recovered
+                    result = pcStatusChecker.check(recovered, port, timeout)
+                }
+            }
             JSObject().apply {
                 put("status", result.status)
                 put("reachable", result.reachable)
                 put("reason", result.reason)
                 result.latencyMs?.let { put("latencyMs", it) }
+                put("resolvedHost", resolvedHost)
             }
         }
     }
@@ -564,6 +670,7 @@ class PcControlPlugin : Plugin() {
                 put("vpnDisconnectFailed", result.vpnDisconnectFailed)
                 put("commandExecuted", result.commandExecuted)
                 put("durationMs", result.durationMs)
+                put("resolvedPcHost", result.resolvedPcHost)
             }
         }
     }
@@ -588,6 +695,10 @@ class PcControlPlugin : Plugin() {
         fun boolKey(key: String) { if (settingsObj.has(key)) map[key] = settingsObj.optBoolean(key) }
         // Allow empty routerUsername
         if (settingsObj.has("pcName")) map["pcName"] = settingsObj.optString("pcName") ?: ""
+        if (settingsObj.has("pcHostId")) map["pcHostId"] = settingsObj.optString("pcHostId") ?: ""
+        if (settingsObj.has("pcHostname")) map["pcHostname"] = settingsObj.optString("pcHostname") ?: ""
+        if (settingsObj.has("pcHostFingerprint")) map["pcHostFingerprint"] = settingsObj.optString("pcHostFingerprint") ?: ""
+        if (settingsObj.has("pcLanPrefix")) map["pcLanPrefix"] = settingsObj.optInt("pcLanPrefix")
         if (settingsObj.has("pcHost")) map["pcHost"] = settingsObj.optString("pcHost") ?: ""
         if (settingsObj.has("pcPort")) map["pcPort"] = settingsObj.optInt("pcPort")
         if (settingsObj.has("pcUsername")) map["pcUsername"] = settingsObj.optString("pcUsername") ?: ""
@@ -606,6 +717,7 @@ class PcControlPlugin : Plugin() {
 
         // Minimal native validation (port, MAC, interface)
         (map["pcPort"] as? Int)?.let { if (it !in 1..65535) { call.reject("pcPort 1~65535", NetworkErrorCode.POWER_COMMAND_FAILED.name); return } }
+        (map["pcLanPrefix"] as? Int)?.let { if (it !in 0..32) { call.reject("pcLanPrefix 0~32", NetworkErrorCode.POWER_COMMAND_FAILED.name); return } }
         (map["routerPort"] as? Int)?.let { if (it !in 1..65535) { call.reject("routerPort 1~65535", NetworkErrorCode.POWER_COMMAND_FAILED.name); return } }
         (map["pcHost"] as? String)?.let {
             if (!isValidHostValue(it)) {
@@ -648,6 +760,44 @@ class PcControlPlugin : Plugin() {
 
         appSettingsStore.set(map)
         call.resolve(JSObject().apply { put("settings", appSettingsStore.toJSObject()) })
+    }
+
+    @PluginMethod
+    fun commitOnboarding(call: PluginCall) {
+        val settings = call.getObject("settings") ?: run {
+            call.reject("설정이 필요합니다.")
+            return
+        }
+        val pc = call.getObject("pcKey") ?: run {
+            call.reject("PC 호스트 키가 필요합니다.")
+            return
+        }
+        val router = call.getObject("routerKey")
+        val vpnId = call.getString("selectedVpnProfileId")?.takeIf { it.isNotBlank() }
+        fun readKey(value: JSObject) = SshHostKeyInfo(
+            host = value.optString("host"),
+            port = value.optInt("port"),
+            algorithm = value.optString("algorithm"),
+            fingerprint = value.optString("fingerprint"),
+            trusted = false,
+        )
+        runAsync(call) {
+            val pcKey = readKey(pc)
+            val routerKey = router?.let(::readKey)
+            if (!sshClient.validateScannedHostKey(pcKey.host, pcKey.port,
+                    pcKey.algorithm, pcKey.fingerprint) ||
+                (routerKey != null && !sshClient.validateScannedHostKey(routerKey.host,
+                    routerKey.port, routerKey.algorithm, routerKey.fingerprint))) {
+                throw NativeSshException(SshErrorCode.HOST_KEY_MISMATCH,
+                    "온보딩 중 확인한 호스트 키가 현재 스캔과 다릅니다.")
+            }
+            if (vpnId != null && openVpnClient.getProfilesReadOnly().none { it.id == vpnId }) {
+                throw NativeNetworkException(NetworkErrorCode.OPENVPN_PROFILE_NOT_FOUND,
+                    "선택한 OpenVPN 프로필을 찾을 수 없습니다.")
+            }
+            appSettingsStore.commitOnboarding(settings, pcKey, routerKey, vpnId)
+            JSObject().apply { put("settings", appSettingsStore.toJSObject()) }
+        }
     }
 
     @PluginMethod

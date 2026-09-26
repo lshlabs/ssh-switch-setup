@@ -1,0 +1,17 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "PC Control for Windows",
+  "version": "0.1.0",
+  "identifier": "com.pccontrol.windowssetup",
+  "build": {
+    "beforeDevCommand": "pnpm dev",
+    "devUrl": "http://127.0.0.1:1420",
+    "beforeBuildCommand": "pnpm build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [{ "title": "PC Control for Windows", "width": 860, "height": 720, "minWidth": 680, "minHeight": 520 }],
+    "security": { "csp": "default-src 'self'; img-src 'self' data:; style-src 'self' 'unsafe-inline'; connect-src ipc: http://ipc.localhost" }
+  },
+  "bundle": { "active": true, "targets": ["nsis"], "icon": ["icons/icon.png", "icons/icon.ico"] }
+}

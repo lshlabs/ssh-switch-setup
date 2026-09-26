@@ -15,12 +15,14 @@
     "android:test": "./android/gradlew -p android :pc-control-capacitor-pc-control:testDebugUnitTest"
   },
   "dependencies": {
+    "@capacitor-mlkit/barcode-scanning": "8.1.0",
     "@capacitor/android": "8.5.0",
     "@capacitor/app": "8.1.1",
     "@capacitor/core": "8.5.0",
     "@capacitor/keyboard": "8.0.5",
     "@pc-control/capacitor-pc-control": "workspace:*",
     "@pc-control/core": "workspace:*",
+    "@pc-control/pairing-protocol": "workspace:*",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-react": "^1.38.0",

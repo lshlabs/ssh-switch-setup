@@ -17,6 +17,9 @@ class AppSettingsStore(context: Context) {
                 KEY_AUTO_DISCONNECT -> map[key] = prefs.getBoolean(key, false)
                 KEY_REFRESH_INTERVAL -> map[key] = prefs.getInt(key, 20)
                 KEY_ONBOARDING_STEP -> map[key] = prefs.getInt(key, 0)
+                KEY_PC_LAN_PREFIX -> {
+                    if (prefs.contains(key)) map[key] = prefs.getInt(key, 24)
+                }
                 KEY_ONBOARDING_COMPLETED -> {
                     map[key] = if (prefs.contains(KEY_ONBOARDING_COMPLETED)) {
                         prefs.getBoolean(KEY_ONBOARDING_COMPLETED, false)
@@ -39,6 +42,10 @@ class AppSettingsStore(context: Context) {
         val editor = prefs.edit()
         // Validation is done in TS + native before calling, but also guard here
         settings[KEY_PC_NAME]?.let { editor.putString(KEY_PC_NAME, it as String) }
+        settings[KEY_PC_HOST_ID]?.let { editor.putString(KEY_PC_HOST_ID, it as String) }
+        settings[KEY_PC_HOSTNAME]?.let { editor.putString(KEY_PC_HOSTNAME, it as String) }
+        settings[KEY_PC_HOST_FINGERPRINT]?.let { editor.putString(KEY_PC_HOST_FINGERPRINT, it as String) }
+        settings[KEY_PC_LAN_PREFIX]?.let { editor.putInt(KEY_PC_LAN_PREFIX, (it as Number).toInt()) }
         settings[KEY_PC_HOST]?.let { editor.putString(KEY_PC_HOST, it as String) }
         settings[KEY_PC_PORT]?.let { editor.putInt(KEY_PC_PORT, (it as Number).toInt()) }
         settings[KEY_PC_USERNAME]?.let { editor.putString(KEY_PC_USERNAME, it as String) }
@@ -60,6 +67,44 @@ class AppSettingsStore(context: Context) {
         editor.apply()
     }
 
+    /** The V1 wizard's profile, host keys, and VPN selection become visible in one durable commit. */
+    fun commitOnboarding(
+        settings: JSONObject,
+        pcKey: SshHostKeyInfo,
+        routerKey: SshHostKeyInfo?,
+        selectedVpnProfileId: String?,
+    ) {
+        require(settings.optBoolean(KEY_ONBOARDING_COMPLETED, false))
+        require(settings.optString(KEY_PC_HOST).isNotBlank())
+        require(settings.optInt(KEY_PC_PORT) in 1..65535)
+        require(settings.optString(KEY_PC_USERNAME).isNotBlank())
+        require(settings.optString(KEY_PC_HOST_FINGERPRINT) == pcKey.fingerprint)
+        require(settings.optString(KEY_PC_HOST) == pcKey.host)
+        require(settings.optInt(KEY_PC_PORT) == pcKey.port)
+        val editor = prefs.edit()
+        ALL_KEYS.forEach { key ->
+            if (!settings.has(key)) return@forEach
+            when (key) {
+                KEY_AUTO_DISCONNECT, KEY_ONBOARDING_COMPLETED ->
+                    editor.putBoolean(key, settings.optBoolean(key))
+                KEY_PC_PORT, KEY_ROUTER_PORT, KEY_PC_LAN_PREFIX,
+                KEY_REFRESH_INTERVAL, KEY_ONBOARDING_STEP ->
+                    editor.putInt(key, settings.optInt(key))
+                else -> editor.putString(key, settings.optString(key))
+            }
+        }
+        fun writeTrust(key: SshHostKeyInfo) {
+            val base = SshHostTrustStore.preferenceBase(key.host, key.port)
+            editor.putString("$base.algorithm", key.algorithm)
+            editor.putString("$base.fingerprint", key.fingerprint)
+        }
+        writeTrust(pcKey)
+        routerKey?.let(::writeTrust)
+        editor.putString("selected-profile-id", selectedVpnProfileId.orEmpty())
+        editor.remove(KEY_LEGACY_SETUP_COMPLETED)
+        if (!editor.commit()) throw IllegalStateException("온보딩 설정을 저장하지 못했습니다.")
+    }
+
     fun toJSObject(): JSObject {
         val stored = get()
         val obj = JSObject()
@@ -73,6 +118,10 @@ class AppSettingsStore(context: Context) {
     companion object {
         const val PREFS_NAME = "pc-control-app-settings"
         const val KEY_PC_NAME = "pcName"
+        const val KEY_PC_HOST_ID = "pcHostId"
+        const val KEY_PC_HOSTNAME = "pcHostname"
+        const val KEY_PC_HOST_FINGERPRINT = "pcHostFingerprint"
+        const val KEY_PC_LAN_PREFIX = "pcLanPrefix"
         const val KEY_PC_HOST = "pcHost"
         const val KEY_PC_PORT = "pcPort"
         const val KEY_PC_USERNAME = "pcUsername"
@@ -90,7 +139,8 @@ class AppSettingsStore(context: Context) {
         const val KEY_ONBOARDING_COMPLETED = "onboardingCompleted"
         const val KEY_LEGACY_SETUP_COMPLETED = "setupCompleted"
         val ALL_KEYS = listOf(
-            KEY_PC_NAME, KEY_PC_HOST, KEY_PC_PORT, KEY_PC_USERNAME, KEY_PC_MAC,
+            KEY_PC_NAME, KEY_PC_HOST_ID, KEY_PC_HOSTNAME, KEY_PC_HOST_FINGERPRINT,
+            KEY_PC_LAN_PREFIX, KEY_PC_HOST, KEY_PC_PORT, KEY_PC_USERNAME, KEY_PC_MAC,
             KEY_ROUTER_HOST, KEY_ROUTER_PORT, KEY_ROUTER_USERNAME, KEY_WOL_INTERFACE,
             KEY_AUTO_DISCONNECT, KEY_REFRESH_INTERVAL,
             KEY_THEME_PREFERENCE, KEY_LANGUAGE_PREFERENCE, KEY_COPY_MODE,

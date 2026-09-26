@@ -4,6 +4,7 @@ import type {
   AppSettingsResult,
   BridgeStatusResult,
   CheckHostResult,
+  SetupDevice,
   ExecuteSshCommandResult,
   ExecuteEnsuredSshCommandResult,
   NetworkStateResult,
@@ -38,6 +39,34 @@ export class PcControlWeb extends WebPlugin implements PcControlPlugin {
 
   checkHost(): Promise<CheckHostResult> {
     return this.unsupported('checkHost');
+  }
+
+  discoverSetupDevices(): Promise<{ devices: SetupDevice[] }> {
+    return this.unsupported('discoverSetupDevices');
+  }
+
+  getSetupBootstrap(): Promise<never> {
+    return this.unsupported('getSetupBootstrap');
+  }
+
+  startSetupPairing(): Promise<never> {
+    return this.unsupported('startSetupPairing');
+  }
+
+  getSetupPairingStatus(): Promise<never> {
+    return this.unsupported('getSetupPairingStatus');
+  }
+
+  completeSetupPairing(): Promise<never> {
+    return this.unsupported('completeSetupPairing');
+  }
+
+  finalizeSetupPairing(): Promise<never> {
+    return this.unsupported('finalizeSetupPairing');
+  }
+
+  cancelSetupPairing(): Promise<never> {
+    return this.unsupported('cancelSetupPairing');
   }
 
   getSshIdentity(): Promise<SshIdentityResult> {
@@ -102,6 +131,10 @@ export class PcControlWeb extends WebPlugin implements PcControlPlugin {
 
   clearOpenVpnProfileSelection(): Promise<void> {
     return this.unsupported('clearOpenVpnProfileSelection');
+  }
+
+  commitOnboarding(): Promise<AppSettingsResult> {
+    return this.unsupported('commitOnboarding');
   }
 
   connectOpenVpn(): Promise<OpenVpnStatusResult> {

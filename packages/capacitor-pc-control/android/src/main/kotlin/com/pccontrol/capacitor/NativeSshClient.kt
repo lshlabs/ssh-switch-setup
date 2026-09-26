@@ -28,6 +28,12 @@ class NativeSshClient(
     fun getTrustedHostKey(host: String, port: Int): TrustedSshHostKey? =
         trustStore.get(host, port)
 
+    fun validateScannedHostKey(host: String, port: Int, algorithm: String, fingerprint: String): Boolean {
+        val scanned = pendingScans[hostKey(host, port)] ?: return false
+        return scanned.algorithm == algorithm &&
+            SshEncoding.fingerprintsEqual(scanned.fingerprint, fingerprint)
+    }
+
     fun scanHostKey(host: String, port: Int, connectTimeoutMs: Int): SshHostKeyInfo {
         val repository = CapturingHostKeyRepository()
         val jsch = JSch().apply { setHostKeyRepository(repository) }
@@ -102,7 +108,15 @@ class NativeSshClient(
 
     fun execute(request: SshCommandRequest): SshCommandResult {
         validateCommand(request.target, request.command)
-        val trusted = trustStore.get(request.host, request.port)
+        val temporary = request.temporaryHostKey?.also { candidate ->
+            val scanned = pendingScans[hostKey(request.host, request.port)]
+            if (scanned == null || scanned.algorithm != candidate.algorithm ||
+                !SshEncoding.fingerprintsEqual(scanned.fingerprint, candidate.fingerprint)) {
+                throw NativeSshException(SshErrorCode.HOST_KEY_MISMATCH,
+                    "검증 세션의 SSH 호스트 키가 직전 스캔과 다릅니다.")
+            }
+        }
+        val trusted = temporary ?: trustStore.get(request.host, request.port)
             ?: throw NativeSshException(
                 SshErrorCode.HOST_KEY_UNKNOWN,
                 "저장된 SSH 호스트 키가 없습니다. 먼저 지문을 스캔하고 확인하세요.",
@@ -237,6 +251,7 @@ class NativeSshClient(
         }
         if (command in allowed) return
         if (target == "router" && WOL_COMMAND_PATTERN.matches(command)) return
+        if (target == "router" && WOL_READINESS_PATTERN.matches(command)) return
         throw NativeSshException(
             SshErrorCode.COMMAND_FAILED,
             "현재 단계에서 허용되지 않은 SSH 명령입니다.",
@@ -396,6 +411,9 @@ class NativeSshClient(
         )
         private val WOL_COMMAND_PATTERN = Regex(
             """^/usr/sbin/ether-wake -i [a-zA-Z0-9]+ ([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$""",
+        )
+        private val WOL_READINESS_PATTERN = Regex(
+            """^test -x /usr/sbin/ether-wake && ip link show dev [a-zA-Z0-9]+ >/dev/null$""",
         )
     }
 }

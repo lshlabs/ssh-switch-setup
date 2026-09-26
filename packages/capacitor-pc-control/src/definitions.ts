@@ -1,4 +1,5 @@
 import type { PluginListenerHandle } from '@capacitor/core';
+import type { PairingBootstrap, PairingStarted, PairingStatus } from '@pc-control/pairing-protocol';
 
 import type {
   AppSettings,
@@ -72,6 +73,11 @@ export interface CheckHostOptions {
 export interface CheckHostResult {
   latencyMs?: number;
   reachable: boolean;
+}
+
+export interface SetupDevice {
+  name: string;
+  endpoint: string;
 }
 
 export interface PcStatusOptions {
@@ -165,6 +171,9 @@ export interface ExecuteSshCommandOptions {
   commandTimeoutMs?: number;
   connectTimeoutMs?: number;
   expectedHostFingerprint?: string;
+  /** Used only during onboarding after a native host-key scan; does not persist trust. */
+  temporaryHostKeyAlgorithm?: string;
+  temporaryHostKeyFingerprint?: string;
   host: string;
   port?: number;
   target: SshTarget;
@@ -251,6 +260,15 @@ export interface PcControlPlugin {
   /** Planned native API: performs a bounded TCP reachability check. */
   checkHost(options: CheckHostOptions): Promise<CheckHostResult>;
 
+  /** Finds Windows Setup utilities while their pairing screens are open. */
+  discoverSetupDevices(): Promise<{ devices: SetupDevice[] }>;
+  getSetupBootstrap(options: { endpoint: string }): Promise<{ bootstrap: PairingBootstrap }>;
+  startSetupPairing(options: { endpoint: string; oneTimeToken: string; deviceName: string }): Promise<{ started: PairingStarted; requestSecret: string }>;
+  getSetupPairingStatus(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ status: PairingStatus }>;
+  completeSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string; challenge: string }): Promise<{ result: { verified: boolean } }>;
+  finalizeSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ result: { completed: boolean } }>;
+  cancelSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ result: { cancelled: boolean } }>;
+
   /** Checks the Windows SSH endpoint without automatically connecting a VPN. */
   getPcStatus(options: PcStatusOptions): Promise<PcStatusResult>;
 
@@ -303,6 +321,14 @@ export interface PcControlPlugin {
 
   /** Clears the saved external profile selection without changing the OpenVPN app. */
   clearOpenVpnProfileSelection(): Promise<void>;
+
+  /** Persists the verified V1 profile, host keys, and VPN choice together. */
+  commitOnboarding(options: {
+    settings: AppSettings;
+    pcKey: TrustSshHostKeyOptions;
+    routerKey?: TrustSshHostKeyOptions;
+    selectedVpnProfileId?: string;
+  }): Promise<AppSettingsResult>;
 
   /** Planned native API: connects one OpenVPN for Android profile and awaits readiness. */
   connectOpenVpn(options: ConnectOpenVpnOptions): Promise<OpenVpnStatusResult>;

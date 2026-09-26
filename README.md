@@ -4,13 +4,11 @@ PC Control은 Android 휴대폰에서 개인 Windows PC를 안전하게 켜고, 
 
 ## 빠른 시작
 
-1. Android 앱을 설치하고 온보딩을 시작합니다.
-2. Windows PC에서 관리자 PowerShell로 [`scripts/setup-windows-ssh.ps1`](scripts/setup-windows-ssh.ps1)를 실행합니다.
-3. 앱에서 만든 공개키를 스크립트에 붙여 넣어 Windows SSH 인증을 준비합니다.
-4. 앱에서 PC 주소, Windows 사용자 이름, MAC 주소를 입력합니다.
-5. PC를 켤 때 사용할 MAC 주소와 공유기 SSH/WOL 정보를 선택적으로 입력합니다.
-6. 집 밖에서도 사용할 경우 OpenVPN 프로필을 선택합니다.
-7. 온보딩의 연결 테스트를 통과하면 전원 버튼을 사용할 수 있습니다.
+1. Android 앱에서 **PC Control for Windows로 자동 설정** 또는 **설치 없이 수동 설정**을 선택합니다.
+2. 자동 설정은 Windows Setup을 실행하고 휴대폰에서 발견된 PC를 선택하거나 QR을 스캔합니다. 양쪽 확인 코드를 비교한 뒤 PC에서 연결을 허용합니다.
+3. 수동 설정은 아래 PowerShell 스크립트로 공개키를 등록하고 PC 주소·사용자 이름·SSH 포트를 입력합니다.
+4. 필요하면 공유기 SSH/WOL과 OpenVPN 프로필을 설정합니다.
+5. SSH 연결 테스트를 통과하고 최종 저장하면 전원 버튼을 사용할 수 있습니다.
 
 전원 명령은 연결 테스트에서 실행하지 않습니다. 테스트는 주소 확인과 `hostname` 같은 harmless SSH 명령만 사용합니다.
 
@@ -38,7 +36,17 @@ PC Control은 Android 휴대폰에서 개인 Windows PC를 안전하게 켜고, 
 .\scripts\setup-windows-ssh.ps1
 ```
 
-스크립트는 OpenSSH Server 설치 여부를 확인하고, `sshd`를 자동 시작 서비스로 설정하며, `administrators_authorized_keys`에 키를 중복 없이 추가하고, TCP 22 방화벽 규칙을 Private profile의 `LocalSubnet`으로 제한합니다. 기존 키를 지우고 교체하는 동작은 명시적으로 `-ReplaceKey`를 사용할 때만 수행합니다.
+스크립트는 OpenSSH Server 설치 여부를 확인하고, `sshd`를 자동 시작 서비스로 설정하며, 지정한 Windows 계정의 authorized_keys에 키를 중복 없이 추가하고, 설정된 SSH 포트의 방화벽 규칙을 Private profile의 `LocalSubnet`으로 제한합니다. 기존 키를 지우고 교체하는 동작은 명시적으로 `-ReplaceKey`를 사용할 때만 수행합니다.
+
+## Windows Setup 개발
+
+Windows에서 Rust, WebView2, Windows SDK/Build Tools가 준비된 경우 `pnpm install` 후 아래 명령으로 Setup Utility를 빌드할 수 있습니다.
+
+```bash
+pnpm --filter windows-setup tauri:build
+```
+
+Setup Utility는 페어링 중에만 임시 LAN API와 mDNS를 열고, 종료 시 임시 방화벽 규칙을 닫습니다. 등록된 SSH 공개키와 OpenSSH 설정은 유지되므로 Setup Utility를 삭제해도 일상적인 SSH/WOL/OpenVPN 동작에는 필요하지 않습니다. 연결을 취소하려면 페어링 화면의 **이 휴대폰의 등록 취소**를 사용합니다.
 
 ## 공개키와 서버 확인
 
@@ -81,6 +89,6 @@ pnpm android:test
 pnpm android:build
 ```
 
-구조는 `apps/mobile`(React UI), `packages/core`(플랫폼 독립 모델), `packages/capacitor-pc-control`(Android native bridge)로 나뉩니다. React는 UI를 담당하고 SSH, 네트워크, VPN, 전원 orchestration은 native layer가 담당합니다.
+구조는 `apps/mobile`(React UI), `apps/windows-setup`(Tauri Setup Utility), `packages/core`(플랫폼 독립 모델), `packages/pairing-protocol`(페어링 계약), `packages/capacitor-pc-control`(Android native bridge)로 나뉩니다. React는 UI를 담당하고 SSH, 네트워크, VPN, 전원 orchestration은 native layer가 담당합니다.
 
 실제 기기에서의 SSH host-key 등록, VPN 연결, 그리고 Power On/Shutdown/Reboot는 이 저장소의 자동 빌드가 대신 실행하지 않습니다. 변경 후에는 harmless SSH 테스트를 먼저 수행하고, 실제 전원 명령은 기기에서 수동으로 확인하세요.

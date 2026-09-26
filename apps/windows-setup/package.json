@@ -1,0 +1,35 @@
+{
+  "name": "windows-setup",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p tsconfig.json --noEmit && vite build",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build"
+  },
+  "dependencies": {
+    "@pc-control/pairing-protocol": "workspace:*",
+    "@tauri-apps/api": "2.11.1",
+    "qrcode": "1.5.4",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
+  },
+  "devDependencies": {
+    "@pc-control/eslint-config": "workspace:*",
+    "@pc-control/tsconfig": "workspace:*",
+    "@tauri-apps/cli": "2.11.5",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/qrcode": "1.5.6",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.5",
+    "@vitejs/plugin-react": "6.1.1",
+    "eslint": "10.9.1",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.2.2"
+  }
+}

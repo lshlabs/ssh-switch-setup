@@ -287,6 +287,9 @@ export function MainScreen({
         if (!mountedRef.current || requestGeneration !== statusRefreshGenerationRef.current) {
           return undefined;
         }
+        if (pc.resolvedHost && pc.resolvedHost !== settings.pcHost) {
+          await onSave({ ...settings, pcHost: pc.resolvedHost });
+        }
         syncConnectionSnapshot({
           pcStatus: pc.status,
           pcReachable: pc.reachable,
@@ -300,7 +303,9 @@ export function MainScreen({
         setNetworkPath(net.state);
         setNetworkSsid(net.state === 'local' ? net.ssid : undefined);
         setVpnStatus(vpn.status);
-        const pcHostKeyResult = pcKey as { fingerprint?: string; trusted?: boolean };
+        const pcHostKeyResult = (pc.resolvedHost && pc.resolvedHost !== config.pc.host
+          ? await PcControl.getTrustedSshHostKey({ host: pc.resolvedHost, port: config.pc.sshPort })
+          : pcKey) as { fingerprint?: string; trusted?: boolean };
         const routerHostKeyResult = routerKey as { fingerprint?: string };
         setPcHostKey(pcHostKeyResult.fingerprint);
         setRouterHostKey(routerHostKeyResult.fingerprint);
@@ -408,7 +413,9 @@ export function MainScreen({
       config.router.host,
       config.router.sshPort,
       copy,
+      onSave,
       onToast,
+      settings,
       t,
       syncConnectionSnapshot,
       updateStatusSnapshot,
@@ -475,6 +482,9 @@ export function MainScreen({
           : {}),
         routerTimeoutMs: 2000,
       });
+      if (pc.resolvedHost && pc.resolvedHost !== settings.pcHost) {
+        await onSave({ ...settings, pcHost: pc.resolvedHost });
+      }
       if (!mountedRef.current || busyRef.current || requestSession !== latencySessionRef.current) {
         return;
       }
@@ -516,9 +526,11 @@ export function MainScreen({
     config.router.host,
     config.router.sshPort,
     networkPath,
+    onSave,
     observeStatus,
     pcStatus,
     resetLatencySession,
+    settings,
     syncConnectionSnapshot,
     vpnStatus,
   ]);
@@ -610,6 +622,9 @@ export function MainScreen({
             }
           : {}),
       });
+      if (result.resolvedPcHost && result.resolvedPcHost !== settings.pcHost) {
+        await onSave({ ...settings, pcHost: result.resolvedPcHost });
+      }
       if (mountedRef.current) {
         setPcStatus(result.finalStatus);
         setPcReachable(result.finalStatus === 'online');

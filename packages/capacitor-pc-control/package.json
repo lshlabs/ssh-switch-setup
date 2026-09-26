@@ -26,7 +26,8 @@
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\""
   },
   "dependencies": {
-    "@pc-control/core": "workspace:*"
+    "@pc-control/core": "workspace:*",
+    "@pc-control/pairing-protocol": "workspace:*"
   },
   "devDependencies": {
     "@capacitor/android": "8.5.0",

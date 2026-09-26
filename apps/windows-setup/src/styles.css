@@ -1,0 +1,21 @@
+@import 'tailwindcss';
+
+:root {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  color: #17212f;
+  background: #f7f9fc;
+}
+button {
+  cursor: pointer;
+}
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+.action {
+  border-radius: 0.6rem;
+  background: #1478d4;
+  color: white;
+  padding: 0.65rem 1rem;
+  font-weight: 600;
+}

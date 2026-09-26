@@ -8,6 +8,10 @@ import { DEFAULT_PC_CONTROL_CONFIG } from './config';
 
 export interface AppSettings {
   pcName: string;
+  pcHostId: string;
+  pcHostname: string;
+  pcHostFingerprint: string;
+  pcLanPrefix: number;
   pcHost: string;
   pcPort: number;
   pcUsername: string;
@@ -32,6 +36,10 @@ export const REFRESH_INTERVAL_OPTIONS = [0, 10, 15, 20, 30, 60] as const;
 export function defaultAppSettings(): AppSettings {
   return {
     pcName: '내 PC',
+    pcHostId: '',
+    pcHostname: '',
+    pcHostFingerprint: '',
+    pcLanPrefix: 24,
     pcHost: '',
     pcPort: DEFAULT_PC_CONTROL_CONFIG.pc.sshPort,
     pcUsername: '',
@@ -166,6 +174,10 @@ export function isValidSettings(settings: unknown): settings is AppSettings {
   const s = settings as Record<string, unknown>;
   return (
     typeof s.pcName === 'string' &&
+    typeof s.pcHostId === 'string' &&
+    typeof s.pcHostname === 'string' &&
+    typeof s.pcHostFingerprint === 'string' &&
+    typeof s.pcLanPrefix === 'number' &&
     typeof s.pcHost === 'string' &&
     typeof s.pcPort === 'number' &&
     typeof s.pcUsername === 'string' &&

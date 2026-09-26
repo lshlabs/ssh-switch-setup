@@ -5099,3 +5099,24 @@ html[data-keyboard-open='true'] .onboarding-flow--input .onboarding-flow-footer 
 @media (prefers-reduced-motion: reduce) {
   .onboarding-page .onboarding-flow-footer { transition: none; }
 }
+/* V1 setup routes share the app's theme tokens while using compact technical forms. */
+.v1-onboarding { min-height: 100dvh; padding: 1.25rem 1.25rem 3rem; color: var(--foreground, #17212f); }
+.v1-onboarding section { display: grid; gap: 1rem; max-width: 32rem; margin: 3rem auto 0; }
+.v1-onboarding h1 { font-size: 1.6rem; font-weight: 700; line-height: 1.25; }
+.v1-onboarding p { line-height: 1.5; }
+.v1-top { display: flex; justify-content: space-between; }
+.v1-choice { display: grid; gap: .4rem; padding: 1rem; text-align: left; border: 1px solid #a8b9cb; border-radius: 1rem; }
+.v1-choice span { font-size: .875rem; }
+.v1-field { display: grid; gap: .45rem; font-size: .875rem; font-weight: 600; }
+.v1-field input { width: 100%; padding: .75rem; border: 1px solid #a8b9cb; border-radius: .65rem; background: transparent; color: inherit; }
+.v1-toggle { display: flex; align-items: center; gap: .5rem; }
+.v1-profiles { display: grid; gap: .6rem; }
+.v1-profiles label { display: flex; gap: .5rem; }
+.v1-primary { padding: .85rem 1rem; color: white; background: #1177cf; border-radius: .7rem; font-weight: 700; }
+.v1-primary:disabled { opacity: .5; }
+.v1-code { font-size: 2rem; letter-spacing: .2rem; }
+.v1-error { padding: .8rem; background: #fde9e9; color: #8e1111; border-radius: .5rem; }
+.v1-skip-backdrop { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; padding: 1rem; background: #10203399; }
+.v1-skip-dialog { width: min(100%, 25rem); padding: 1.5rem; border-radius: 1rem; background: var(--background, #fff); box-shadow: 0 1rem 3rem #0004; }
+.v1-skip-dialog h2 { margin-bottom: .75rem; font-size: 1.25rem; font-weight: 700; }
+.v1-skip-dialog div { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.5rem; }
