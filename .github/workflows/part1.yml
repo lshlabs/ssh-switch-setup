@@ -1,0 +1,48 @@
+name: Part 1 builds and tests
+on:
+  push:
+    branches: [feature/part1-setup-wizard]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+      - run: dotnet test windows-setup/PCControlSetup.Tests -c Release
+      - run: powershell -NoProfile -File windows-setup/Test-SystemLogic.ps1
+      - run: dotnet publish windows-setup/PCControlSetup -c Release -r win-x64 --self-contained true -p:PublishSingleFile=true -o output/windows
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PCControlSetup-win-x64
+          path: output/windows/PCControlSetup.exe
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10.12.1
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: pnpm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+      - uses: android-actions/setup-android@v3
+      - run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm --filter mobile... typecheck && pnpm test
+      - run: pnpm --filter mobile... build && pnpm --filter mobile cap:sync
+      - run: chmod +x apps/mobile/android/gradlew && apps/mobile/android/gradlew -p apps/mobile/android assembleDebug :pc-control-capacitor-pc-control:testDebugUnitTest
+      - uses: actions/upload-artifact@v4
+        with:
+          name: PCControl-android-debug
+          path: apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk
