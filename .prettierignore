@@ -3,5 +3,11 @@ node_modules
 dist
 pnpm-lock.yaml
 apps/mobile/android
-pc-control_codex_setup_prompt.md
 AGENTS.md
+
+# Local historical references and generated browser artifacts
+docs/archive/
+docs/reference/
+.opencode/
+.playwright-cli/
+output/

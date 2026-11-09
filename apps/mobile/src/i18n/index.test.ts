@@ -40,7 +40,7 @@ describe('i18n', () => {
     );
   });
 
-  it('resolves every mode-aware onboarding field label without fallback copy', () => {
+  it('resolves every mode-aware settings field label without fallback copy', () => {
     const labels = ['settings.pc.username', 'settings.power.mac', 'settings.power.interface'];
     for (const locale of ['ko', 'en'] as const) {
       for (const mode of ['simple', 'technical'] as const) {
@@ -78,15 +78,6 @@ describe('i18n', () => {
     );
     expect(copyText('ko', 'simple', 'diagnostics.security.routerTrustDescription')).toBe(
       '직접 확인한 공유기만 신뢰하세요.',
-    );
-  });
-
-  it('uses neutral pending copy for an unreachable PC', () => {
-    expect(copyText('ko', 'simple', 'onboarding.pcOfflineVerificationPending')).toBe(
-      'PC가 꺼져 있거나 SSH 서버가 응답하지 않습니다. 설정 오류는 아닙니다. PC를 켠 뒤 다시 확인하세요.',
-    );
-    expect(copyText('en', 'technical', 'onboarding.pcOfflineVerificationPending')).toContain(
-      'Power state cannot be concluded',
     );
   });
 

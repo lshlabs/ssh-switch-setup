@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { BarcodeFormat, BarcodeScanner } from '@capacitor-mlkit/barcode-scanning';
-import { PcControl, type OpenVpnProfile, type SetupDevice, type TrustSshHostKeyOptions } from '@pc-control/capacitor-pc-control';
+import {
+  PcControl,
+  type OpenVpnProfile,
+  type SetupDevice,
+  type TrustSshHostKeyOptions,
+} from '@pc-control/capacitor-pc-control';
 import { defaultAppSettings, isPowerOnConfigured, type AppSettings } from '@pc-control/core';
 import {
   confirmationCode as deriveConfirmationCode,
@@ -13,7 +18,7 @@ import { useAppCopy } from '../i18n';
 
 const englishCopy: Record<string, string> = {
   '‹ 뒤로': '‹ Back',
-  '나중에': 'Later',
+  나중에: 'Later',
   '설정 중단 확인': 'Leave setup',
   '진행 상황이 저장되지 않아요': 'Your progress will not be saved',
   '지금 나가면 입력한 내용이 사라져요. 설정 마법사를 다시 시작하면 처음부터 진행해야 해요.':
@@ -30,7 +35,7 @@ const englishCopy: Record<string, string> = {
   'PC를 찾는 중에도 QR 코드를 바로 스캔할 수 있어요.':
     'You can scan the QR code while we look for your PC.',
   'PC를 찾고 있어요…': 'Looking for your PC…',
-  '연결': 'Connect',
+  연결: 'Connect',
   '다시 찾기': 'Search again',
   'PC 화면의 QR 코드 스캔': 'Scan the QR code on your PC',
   'PC에서 연결을 확인해주세요': 'Confirm the connection on your PC',
@@ -39,7 +44,7 @@ const englishCopy: Record<string, string> = {
   'PC 연결 정보를 입력해주세요': 'Enter your PC connection details',
   'SSH로 PC에 연결할 때 사용할 정보예요.': 'These details are used for the SSH connection.',
   'PC 주소': 'PC address',
-  '192.168.0.10 또는 DESKTOP.local': '192.168.0.10 or DESKTOP.local',
+  '192.0.2.10 또는 example-pc.local': '192.0.2.10 or example-pc.local',
   'Windows 사용자 이름': 'Windows username',
   'PC SSH 포트': 'PC SSH port',
   'PC의 authorized_keys에 휴대폰 연결 키를 등록해주세요.':
@@ -50,7 +55,7 @@ const englishCopy: Record<string, string> = {
   'PC 보안 정보 확인': 'Verify PC identity',
   'PC에서 직접 확인한 SSH 지문과 아래 값이 같은지 확인해주세요.':
     'Compare this SSH fingerprint with the one shown on your PC.',
-  '같아요': 'They match',
+  같아요: 'They match',
   'PC 켜기 설정': 'PC power-on setup',
   '공유기 SSH로 Wake-on-LAN을 사용할 경우 설정해요.':
     'Set this up if your router sends Wake-on-LAN over SSH.',
@@ -60,7 +65,7 @@ const englishCopy: Record<string, string> = {
   '네트워크 장비 SSH 사용자 이름': 'Router SSH username',
   '네트워크 장비 SSH 포트': 'Router SSH port',
   'LAN 인터페이스 이름': 'LAN interface name',
-  '계속': 'Continue',
+  계속: 'Continue',
   '공유기 보안 정보 확인': 'Verify router identity',
   '공유기에서 직접 확인한 SSH 지문과 같은지 확인해주세요.':
     'Compare this SSH fingerprint with the one shown by your router.',
@@ -68,24 +73,24 @@ const englishCopy: Record<string, string> = {
   '외부에서도 PC에 연결하려면 OpenVPN 프로필을 선택해주세요.':
     'Choose an OpenVPN profile to connect from outside your home network.',
   '다른 네트워크에서 연결': 'Connect from another network',
-  'OpenVPN for Android에서 프로필을 준비해주세요.':
-    'Add a profile in OpenVPN for Android first.',
+  'OpenVPN for Android에서 프로필을 준비해주세요.': 'Add a profile in OpenVPN for Android first.',
   'OpenVPN 설치·권한·프로필 확인': 'Check OpenVPN app, permission, and profiles',
   '설정 확인': 'Review setup',
   '설정 요약': 'Setup summary',
   'PC 켜기:': 'PC power-on:',
   '외부 연결:': 'Remote connection:',
-  '설정됨': 'Configured',
+  설정됨: 'Configured',
   '프로필 선택됨': 'Profile selected',
   '사용 안 함': 'Off',
-  '저장': 'Save',
+  저장: 'Save',
   'PC 연결이 완료됐어요': 'PC connection is ready',
-  '시작하기': 'Get started',
+  시작하기: 'Get started',
   'OpenVPN for Android를 설치하고 프로필을 추가한 뒤 다시 확인해주세요.':
     'Install OpenVPN for Android, add a profile, then try again.',
   'PC를 찾지 못했어요. PC 화면의 QR 코드를 스캔할 수도 있어요.':
     'We could not find your PC. You can scan the QR code on its screen.',
-  'QR 스캐너를 준비할 수 없어요. 다시 시도해주세요.': 'Could not prepare the QR scanner. Try again.',
+  'QR 스캐너를 준비할 수 없어요. 다시 시도해주세요.':
+    'Could not prepare the QR scanner. Try again.',
   '휴대폰 연결 키를 준비할 수 없어요.': 'Could not prepare the phone connection key.',
   'Android 휴대폰': 'Android phone',
   'PC와 휴대폰의 확인 코드가 달라요. 연결을 중단했어요.':
@@ -97,8 +102,7 @@ const englishCopy: Record<string, string> = {
   'PC에서 연결 키를 등록하지 못했어요.': 'The PC could not register the connection key.',
   'PC 연결 응답을 기다리는 시간이 초과됐어요. 다시 시도해주세요.':
     'Timed out waiting for the PC. Try again.',
-  'PC의 보안 정보가 달라요. 연결을 중단했어요.':
-    'The PC identity changed. Pairing was stopped.',
+  'PC의 보안 정보가 달라요. 연결을 중단했어요.': 'The PC identity changed. Pairing was stopped.',
   '실제 SSH 서버의 보안 정보가 PC 설정 화면과 달라요.':
     'The SSH server fingerprint differs from the PC setup screen.',
   'SSH 인증에 실패했어요.': 'SSH authentication failed.',
@@ -127,7 +131,7 @@ type Screen =
 const TOOL_URL =
   'https://raw.githubusercontent.com/lshlabs/ssh-switch/main/scripts/setup-windows-ssh.ps1';
 
-export function V1OnboardingScreen({
+export function OnboardingScreen({
   settings,
   onCommit,
   onComplete,
@@ -135,14 +139,21 @@ export function V1OnboardingScreen({
   registerBack,
 }: {
   settings: AppSettings;
-  onCommit: (next: AppSettings, pcKey: TrustSshHostKeyOptions,
-    routerKey?: TrustSshHostKeyOptions, selectedVpnProfileId?: string) => Promise<void>;
+  onCommit: (
+    next: AppSettings,
+    pcKey: TrustSshHostKeyOptions,
+    routerKey?: TrustSshHostKeyOptions,
+    selectedVpnProfileId?: string,
+  ) => Promise<void>;
   onComplete: () => void;
   onSkip: () => void;
   registerBack: (handler: (() => boolean) | null) => void;
 }) {
   const { locale } = useAppCopy();
-  const copy = useCallback((ko: string) => locale === 'en' ? englishCopy[ko] ?? ko : ko, [locale]);
+  const copy = useCallback(
+    (ko: string) => (locale === 'en' ? (englishCopy[ko] ?? ko) : ko),
+    [locale],
+  );
   const [screen, setScreen] = useState<Screen>('choice');
   const [draft, setDraft] = useState<AppSettings>(() => ({
     ...defaultAppSettings(),
@@ -169,17 +180,32 @@ export function V1OnboardingScreen({
   const [selectedProfile, setSelectedProfile] = useState('');
   const [showSkip, setShowSkip] = useState(false);
   const runRef = useRef(0);
-  const activePairing = useRef<{ endpoint: string; requestId: string; requestSecret: string;
-    challenge?: string } | null>(null);
-  const pcTrust = useRef<{ host: string; port: number; algorithm: string; fingerprint: string } | null>(null);
-  const routerTrust = useRef<{ host: string; port: number; algorithm: string; fingerprint: string } | null>(null);
+  const activePairing = useRef<{
+    endpoint: string;
+    requestId: string;
+    requestSecret: string;
+    challenge?: string;
+  } | null>(null);
+  const pcTrust = useRef<{
+    host: string;
+    port: number;
+    algorithm: string;
+    fingerprint: string;
+  } | null>(null);
+  const routerTrust = useRef<{
+    host: string;
+    port: number;
+    algorithm: string;
+    fingerprint: string;
+  } | null>(null);
 
   const cancelActivePairing = useCallback(() => {
     const active = activePairing.current;
     activePairing.current = null;
-    if (active) void PcControl.cancelSetupPairing(active).catch(() => {
-      // Windows Setup retains the cleanup record and retries on its next start.
-    });
+    if (active)
+      void PcControl.cancelSetupPairing(active).catch(() => {
+        // Windows Setup retains the cleanup record and retries on its next start.
+      });
   }, []);
 
   const back = useCallback(() => {
@@ -209,10 +235,13 @@ export function V1OnboardingScreen({
     registerBack(back);
     return () => registerBack(null);
   }, [back, registerBack]);
-  useEffect(() => () => {
-    runRef.current += 1;
-    cancelActivePairing();
-  }, [cancelActivePairing]);
+  useEffect(
+    () => () => {
+      runRef.current += 1;
+      cancelActivePairing();
+    },
+    [cancelActivePairing],
+  );
   const search = useCallback(async () => {
     setSearching(true);
     setError('');
@@ -312,8 +341,15 @@ export function V1OnboardingScreen({
         oneTimeToken: bootstrap.oneTimeToken,
         deviceName: copy('Android 휴대폰'),
       });
-      activePairing.current = { endpoint: bootstrap.pairingEndpoint, requestId: started.requestId, requestSecret };
-      if (run !== runRef.current) { cancelActivePairing(); return; }
+      activePairing.current = {
+        endpoint: bootstrap.pairingEndpoint,
+        requestId: started.requestId,
+        requestSecret,
+      };
+      if (run !== runRef.current) {
+        cancelActivePairing();
+        return;
+      }
       const localCode = await deriveConfirmationCode(
         bootstrap.oneTimeToken,
         identity.publicKey,
@@ -510,8 +546,10 @@ export function V1OnboardingScreen({
     setError('');
     try {
       if (!pcTrust.current) throw new Error(copy('PC SSH 검증을 먼저 완료해주세요.'));
-      if (wakeEnabled && !routerTrust.current) throw new Error(copy('공유기 SSH 검증을 먼저 완료해주세요.'));
-      if (remoteEnabled && !selectedProfile) throw new Error(copy('OpenVPN 프로필을 선택해주세요.'));
+      if (wakeEnabled && !routerTrust.current)
+        throw new Error(copy('공유기 SSH 검증을 먼저 완료해주세요.'));
+      if (remoteEnabled && !selectedProfile)
+        throw new Error(copy('OpenVPN 프로필을 선택해주세요.'));
       const pairing = activePairing.current;
       if (pairing) {
         if (!pairing.challenge) throw new Error(copy('PC SSH 검증이 완료되지 않았어요.'));
@@ -522,20 +560,25 @@ export function V1OnboardingScreen({
           challenge: pairing.challenge,
         });
       }
-      await onCommit({
-        ...draft,
-        ...(!wakeEnabled
-          ? { pcMac: '', routerHost: '', routerUsername: '', wolInterface: '', routerPort: 22 }
-          : {}),
-        onboardingStep: 0,
-        onboardingCompleted: true,
-      }, pcTrust.current, wakeEnabled ? routerTrust.current ?? undefined : undefined,
-      remoteEnabled ? selectedProfile : undefined);
-      if (pairing) await PcControl.finalizeSetupPairing({
-        endpoint: pairing.endpoint,
-        requestId: pairing.requestId,
-        requestSecret: pairing.requestSecret,
-      });
+      await onCommit(
+        {
+          ...draft,
+          ...(!wakeEnabled
+            ? { pcMac: '', routerHost: '', routerUsername: '', wolInterface: '', routerPort: 22 }
+            : {}),
+          onboardingStep: 0,
+          onboardingCompleted: true,
+        },
+        pcTrust.current,
+        wakeEnabled ? (routerTrust.current ?? undefined) : undefined,
+        remoteEnabled ? selectedProfile : undefined,
+      );
+      if (pairing)
+        await PcControl.finalizeSetupPairing({
+          endpoint: pairing.endpoint,
+          requestId: pairing.requestId,
+          requestSecret: pairing.requestSecret,
+        });
       activePairing.current = null;
       setScreen('complete');
     } catch (reason) {
@@ -552,7 +595,7 @@ export function V1OnboardingScreen({
     onChange: (value: string) => void,
     placeholder = '',
   ) => (
-    <label className="v1-field">
+    <label className="setup-field">
       {label}
       <input
         value={value}
@@ -563,8 +606,8 @@ export function V1OnboardingScreen({
   );
 
   return (
-    <div className="v1-onboarding">
-      <div className="v1-top">
+    <div className="setup-screen">
+      <div className="setup-top">
         <button type="button" onClick={back} disabled={screen === 'complete'}>
           {copy('‹ 뒤로')}
         </button>
@@ -573,24 +616,32 @@ export function V1OnboardingScreen({
         </button>
       </div>
       {showSkip && (
-        <div className="v1-skip-backdrop">
+        <div className="setup-skip-backdrop">
           <div
-            className="v1-skip-dialog"
+            className="setup-skip-dialog"
             role="dialog"
             aria-modal="true"
             aria-label={copy('설정 중단 확인')}
           >
             <h2>{copy('진행 상황이 저장되지 않아요')}</h2>
-            <p>{copy('지금 나가면 입력한 내용이 사라져요. 설정 마법사를 다시 시작하면 처음부터 진행해야 해요.')}</p>
+            <p>
+              {copy(
+                '지금 나가면 입력한 내용이 사라져요. 설정 마법사를 다시 시작하면 처음부터 진행해야 해요.',
+              )}
+            </p>
             <div>
               <button type="button" onClick={() => setShowSkip(false)}>
                 {copy('계속 설정')}
               </button>
-              <button type="button" className="v1-primary" onClick={() => {
-                runRef.current += 1;
-                cancelActivePairing();
-                onSkip();
-              }}>
+              <button
+                type="button"
+                className="setup-primary"
+                onClick={() => {
+                  runRef.current += 1;
+                  cancelActivePairing();
+                  onSkip();
+                }}
+              >
                 {copy('나중에')}
               </button>
             </div>
@@ -598,7 +649,7 @@ export function V1OnboardingScreen({
         </div>
       )}
       {error && (
-        <p role="alert" className="v1-error">
+        <p role="alert" className="setup-error">
           {error}
         </p>
       )}
@@ -606,11 +657,11 @@ export function V1OnboardingScreen({
         <section>
           <h1>{copy('PC를 어떻게 설정할까요?')}</h1>
           <p>{copy('환경에 맞는 설정 방법을 선택해주세요.')}</p>
-          <button type="button" className="v1-choice" onClick={() => setScreen('discover')}>
+          <button type="button" className="setup-choice" onClick={() => setScreen('discover')}>
             <strong>{copy('추천 · PC Control for Windows로 자동 설정')}</strong>
             <span>{copy('PC에 프로그램을 설치하면 연결에 필요한 설정을 자동으로 준비해요.')}</span>
           </button>
-          <button type="button" className="v1-choice" onClick={() => setScreen('manual-pc')}>
+          <button type="button" className="setup-choice" onClick={() => setScreen('manual-pc')}>
             <strong>{copy('설치 없이 수동 설정')}</strong>
             <span>{copy('연결 정보를 직접 설정하려는 경우 사용해요.')}</span>
           </button>
@@ -625,11 +676,13 @@ export function V1OnboardingScreen({
             <button
               key={device.endpoint}
               type="button"
-              className="v1-choice"
+              className="setup-choice"
               onClick={() => void selectDevice(device)}
             >
               <strong>{device.name}</strong>
-              <span>{device.endpoint} · {copy('연결')}</span>
+              <span>
+                {device.endpoint} · {copy('연결')}
+              </span>
             </button>
           ))}
           <button type="button" onClick={() => void search()}>
@@ -637,7 +690,7 @@ export function V1OnboardingScreen({
           </button>
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void scanQr()}
           >
@@ -648,8 +701,11 @@ export function V1OnboardingScreen({
       {screen === 'approval' && (
         <section>
           <h1>{copy('PC에서 연결을 확인해주세요')}</h1>
-          <p>{selectedBootstrap?.displayName} {copy('화면에 같은 코드가 표시되면 연결을 허용해주세요.')}</p>
-          <strong className="v1-code">{confirmationCode}</strong>
+          <p>
+            {selectedBootstrap?.displayName}{' '}
+            {copy('화면에 같은 코드가 표시되면 연결을 허용해주세요.')}
+          </p>
+          <strong className="setup-code">{confirmationCode}</strong>
         </section>
       )}
       {screen === 'manual-pc' && (
@@ -660,10 +716,15 @@ export function V1OnboardingScreen({
             copy('PC 주소'),
             draft.pcHost,
             (v) => field('pcHost', v),
-            copy('192.168.0.10 또는 DESKTOP.local'),
+            copy('192.0.2.10 또는 example-pc.local'),
           )}
           {input(copy('Windows 사용자 이름'), draft.pcUsername, (v) => field('pcUsername', v))}
-          {input(copy('PC SSH 포트'), String(draft.pcPort), (v) => field('pcPort', Number(v)), '22')}
+          {input(
+            copy('PC SSH 포트'),
+            String(draft.pcPort),
+            (v) => field('pcPort', Number(v)),
+            '22',
+          )}
           <p>
             {copy('PC의 authorized_keys에 휴대폰 연결 키를 등록해주세요.')}{' '}
             <a href={TOOL_URL}>{copy('Windows 설정 스크립트')}</a>
@@ -680,7 +741,7 @@ export function V1OnboardingScreen({
           </button>
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void verifyManualPc()}
           >
@@ -695,7 +756,7 @@ export function V1OnboardingScreen({
           <code>{pendingFingerprint?.fingerprint}</code>
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void trustManualPc()}
           >
@@ -707,7 +768,7 @@ export function V1OnboardingScreen({
         <section>
           <h1>{copy('PC 켜기 설정')}</h1>
           <p>{copy('공유기 SSH로 Wake-on-LAN을 사용할 경우 설정해요.')}</p>
-          <label className="v1-toggle">
+          <label className="setup-toggle">
             <input
               type="checkbox"
               checked={wakeEnabled}
@@ -725,12 +786,14 @@ export function V1OnboardingScreen({
               {input(copy('네트워크 장비 SSH 포트'), String(draft.routerPort), (v) =>
                 field('routerPort', Number(v)),
               )}
-              {input(copy('LAN 인터페이스 이름'), draft.wolInterface, (v) => field('wolInterface', v))}
+              {input(copy('LAN 인터페이스 이름'), draft.wolInterface, (v) =>
+                field('wolInterface', v),
+              )}
             </>
           )}
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void continueWake()}
           >
@@ -745,7 +808,7 @@ export function V1OnboardingScreen({
           <code>{pendingFingerprint?.fingerprint}</code>
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void trustRouter()}
           >
@@ -757,7 +820,7 @@ export function V1OnboardingScreen({
         <section>
           <h1>{copy('다른 네트워크 연결')}</h1>
           <p>{copy('외부에서도 PC에 연결하려면 OpenVPN 프로필을 선택해주세요.')}</p>
-          <label className="v1-toggle">
+          <label className="setup-toggle">
             <input
               type="checkbox"
               checked={remoteEnabled}
@@ -766,7 +829,7 @@ export function V1OnboardingScreen({
             {copy('다른 네트워크에서 연결')}
           </label>
           {remoteEnabled && (
-            <div className="v1-profiles">
+            <div className="setup-profiles">
               {profiles.length ? (
                 profiles.map((profile) => (
                   <label key={profile.id}>
@@ -787,7 +850,7 @@ export function V1OnboardingScreen({
               </button>
             </div>
           )}
-          <button type="button" className="v1-primary" onClick={() => setScreen('summary')}>
+          <button type="button" className="setup-primary" onClick={() => setScreen('summary')}>
             {copy('설정 확인')}
           </button>
         </section>
@@ -798,11 +861,15 @@ export function V1OnboardingScreen({
           <p>
             PC: {draft.pcName} · {draft.pcHost}
           </p>
-          <p>{copy('PC 켜기:')} {wakeEnabled ? copy('설정됨') : copy('사용 안 함')}</p>
-          <p>{copy('외부 연결:')} {remoteEnabled ? copy('프로필 선택됨') : copy('사용 안 함')}</p>
+          <p>
+            {copy('PC 켜기:')} {wakeEnabled ? copy('설정됨') : copy('사용 안 함')}
+          </p>
+          <p>
+            {copy('외부 연결:')} {remoteEnabled ? copy('프로필 선택됨') : copy('사용 안 함')}
+          </p>
           <button
             type="button"
-            className="v1-primary"
+            className="setup-primary"
             disabled={busy}
             onClick={() => void finish()}
           >
@@ -813,7 +880,7 @@ export function V1OnboardingScreen({
       {screen === 'complete' && (
         <section>
           <h1>{copy('PC 연결이 완료됐어요')}</h1>
-          <button type="button" className="v1-primary" onClick={onComplete}>
+          <button type="button" className="setup-primary" onClick={onComplete}>
             {copy('시작하기')}
           </button>
         </section>

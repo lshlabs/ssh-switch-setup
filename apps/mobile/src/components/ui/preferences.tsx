@@ -1,5 +1,5 @@
 import { useRef, useState, type PointerEvent, type ReactNode, type Ref } from 'react';
-import { settingsIcons, type SettingsIconName } from '../SettingsIcons';
+import { settingsIcons, type SettingsIconName } from './settings-icons';
 
 type RippleState = {
   id: number;
@@ -9,7 +9,7 @@ type RippleState = {
   isReleasing: boolean;
 };
 
-export function PreferenceIcon({ name }: { name: SettingsIconName }) {
+function PreferenceIcon({ name }: { name: SettingsIconName }) {
   const icon = settingsIcons[name];
 
   return (
@@ -22,7 +22,7 @@ export function PreferenceIcon({ name }: { name: SettingsIconName }) {
   );
 }
 
-export function useRipple() {
+function useRipple() {
   const [ripple, setRipple] = useState<RippleState | null>(null);
   const rippleId = useRef(0);
 
@@ -54,7 +54,7 @@ export function useRipple() {
   return { ripple, handlePointerDown, releaseRipple, clearRipple };
 }
 
-export function Ripple({
+function Ripple({
   ripple,
   onReleaseEnd,
 }: {

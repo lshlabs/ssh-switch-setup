@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 
 /** Instrumented test that verifies the application package context. */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class AppContextInstrumentedTest {
 
     @Test
     public void useAppContext() {

@@ -1,6 +1,5 @@
 import {
   AlertCircle,
-  ChevronRight,
   Monitor,
   Pencil,
   Power,
@@ -12,20 +11,15 @@ import {
   Smartphone,
   Wifi,
   WifiOff,
-  History,
-  LoaderCircle,
   type LucideIcon,
 } from 'lucide-react';
-import { Area, AreaChart, CartesianGrid, ReferenceLine, XAxis, YAxis } from 'recharts';
+import { lazy, Suspense } from 'react';
 import type { NetworkState, PcStatus } from '@pc-control/core';
-import type { HomeRecentAction as HomeRecentActionData } from '../hooks/useHomeSession';
-import { ACTION_ICON, actionHistoryDescriptionKey, actionHistoryTone } from '../lib/actionHistory';
 import { Badge } from './ui/badge';
-import { ChartContainer, type ChartConfig } from './ui/chart';
 import { useAppCopy } from '../i18n';
 import type { Translate } from '../i18n';
 
-const LATENCY_WINDOW_SIZE = 30;
+const LatencySparkline = lazy(() => import('./LatencySparkline'));
 
 export function HomeStatusCard({
   pcStatus,
@@ -141,7 +135,9 @@ function OnlineStatus({ latencyHistory }: { latencyHistory: number[] }) {
       {/* <div className="home-latency-heading">
         <h2>최근 응답 시간</h2>
       </div> */}
-      <LatencySparkline values={latencyHistory} />
+      <Suspense fallback={<div className="home-latency-chart" aria-busy="true" />}>
+        <LatencySparkline values={latencyHistory} />
+      </Suspense>
     </div>
   );
 }
@@ -240,96 +236,6 @@ function StaticMessage({
         >
           {actionLabel}
         </button>
-      )}
-    </div>
-  );
-}
-
-function LatencySparkline({ values }: { values: number[] }) {
-  const { t } = useAppCopy();
-  const recentValues = values.slice(-LATENCY_WINDOW_SIZE);
-  const emptyCount = LATENCY_WINDOW_SIZE - recentValues.length;
-  const data = Array.from({ length: LATENCY_WINDOW_SIZE }, (_, slot) => {
-    const valueIndex = slot - emptyCount;
-
-    return {
-      slot,
-      latency: valueIndex >= 0 ? recentValues[valueIndex] : null,
-    };
-  });
-  const max = Math.max(30, ...recentValues);
-
-  return (
-    <div
-      className="home-latency-chart"
-      role="img"
-      aria-label={
-        values.length
-          ? t('home.onlineLatencyTrend', { count: values.length })
-          : t('home.latencyAfterCheck')
-      }
-    >
-      {values.length ? (
-        <ChartContainer
-          config={
-            {
-              latency: { label: t('home.currentLatency'), color: 'var(--app-primary)' },
-            } satisfies ChartConfig
-          }
-          className="home-latency-chart-inner"
-        >
-          <AreaChart
-            accessibilityLayer={false}
-            data={data}
-            margin={{ top: 8, right: 0, bottom: 0, left: 0 }}
-          >
-            <CartesianGrid
-              vertical
-              horizontal
-              verticalCoordinatesGenerator={({ offset }) =>
-                Array.from(
-                  { length: 5 },
-                  (_, index) => offset.left + (offset.width * (index + 1)) / 6,
-                )
-              }
-              stroke="var(--app-border)"
-              strokeDasharray="1 5"
-              strokeLinecap="round"
-              strokeOpacity={0.48}
-            />
-
-            <YAxis
-              axisLine={false}
-              allowDecimals={false}
-              domain={[0, max]}
-              tick={{ fill: 'var(--app-muted)', fontSize: 10 }}
-              tickLine={false}
-              ticks={[0, Math.round(max / 2), max]}
-              width={26}
-            />
-
-            <XAxis dataKey="slot" hide />
-
-            <Area
-              activeDot={false}
-              baseValue={0}
-              dataKey="latency"
-              fill="var(--color-latency)"
-              fillOpacity={0.14}
-              isAnimationActive={false}
-              stroke="var(--color-latency)"
-              strokeWidth={2.2}
-              type="monotone"
-              dot={false}
-              connectNulls={false}
-            />
-            <ReferenceLine y={0} stroke="var(--app-border)" strokeWidth={1} />
-          </AreaChart>
-        </ChartContainer>
-      ) : (
-        <span className="home-latency-empty" aria-hidden="true">
-          <LoaderCircle className="home-latency-loader" size={24} strokeWidth={2.25} />
-        </span>
       )}
     </div>
   );
@@ -439,14 +345,6 @@ function statusLabel(status: PcStatus, t: (key: string) => string) {
               : t('home.statusUnknown');
 }
 
-function actionLabel(action: HomeRecentActionData['action'], t: (key: string) => string) {
-  return action === 'power-on'
-    ? t('home.powerOn')
-    : action === 'shutdown'
-      ? t('home.shutdown')
-      : t('home.reboot');
-}
-
 function HomeMetric({
   label,
   value,
@@ -464,60 +362,5 @@ function HomeMetric({
         {suffix && <small>{suffix}</small>}
       </strong>
     </div>
-  );
-}
-
-export function HomeRecentAction({
-  action,
-  relativeTime,
-  onOpenHistory,
-}: {
-  action: HomeRecentActionData | undefined;
-  relativeTime: string;
-  onOpenHistory: () => void;
-}) {
-  const { t } = useAppCopy();
-  const ActionIcon = action ? ACTION_ICON[action.action] : undefined;
-  const actionTone = action ? actionHistoryTone(action.action, action.finalStatus) : 'empty';
-
-  return (
-    <section className="home-recent-block" aria-label={t('history.recent')}>
-      <h2 className="home-recent-title">{t('history.recent')}</h2>
-
-      <button
-        type="button"
-        className="home-recent-row"
-        onClick={onOpenHistory}
-        aria-label={action ? t('history.openRecent') : t('home.historyOpen')}
-      >
-        <span className={`home-recent-icon home-recent-icon--${actionTone}`} aria-hidden="true">
-          {ActionIcon ? <ActionIcon size={22} /> : <History size={22} />}
-        </span>
-
-        <div className="home-recent-copy">
-          <div className="home-recent-heading">
-            <strong>
-              {action
-                ? `${actionLabel(action.action, t)} ${t('history.doneSuffix')}`
-                : t('history.noCompletedActions')}
-            </strong>
-
-            {action && <time>{relativeTime}</time>}
-          </div>
-
-          <small>
-            {action
-              ? t(actionHistoryDescriptionKey(action.action, action.finalStatus))
-              : t('history.completedActionsHint')}
-          </small>
-        </div>
-
-        <ChevronRight
-          className={`home-recent-chevron ${!action ? 'home-recent-chevron--hidden' : ''}`}
-          size={20}
-          aria-hidden="true"
-        />
-      </button>
-    </section>
   );
 }

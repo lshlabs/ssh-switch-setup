@@ -16,8 +16,17 @@ type PairingView = {
   pending?: PendingRequest;
   paired?: string;
   completed: boolean;
-  phase: 'pending' | 'registering' | 'verifying' | 'verified' | 'completed' | 'cancelling' |
-    'cancelled' | 'rejected' | 'expired' | 'failed';
+  phase:
+    | 'pending'
+    | 'registering'
+    | 'verifying'
+    | 'verified'
+    | 'completed'
+    | 'cancelling'
+    | 'cancelled'
+    | 'rejected'
+    | 'expired'
+    | 'failed';
 };
 
 export default function App() {
@@ -46,8 +55,12 @@ export default function App() {
       void invoke<PairingView>('get_pairing_state')
         .then((value) => {
           if (value.completed && completedAt.current === null) completedAt.current = Date.now();
-          if (value.completed && completedAt.current !== null &&
-              Date.now() - completedAt.current >= 10_000 && !closingRef.current) {
+          if (
+            value.completed &&
+            completedAt.current !== null &&
+            Date.now() - completedAt.current >= 10_000 &&
+            !closingRef.current
+          ) {
             closingRef.current = true;
             void invoke('stop_pairing')
               .then(() => {
@@ -248,10 +261,14 @@ export default function App() {
                   </div>
                 )}
                 {pairing.phase === 'registering' && (
-                  <p className="mt-5" role="status">Windows 관리자 승인과 SSH 키 등록을 기다리고 있어요.</p>
+                  <p className="mt-5" role="status">
+                    Windows 관리자 승인과 SSH 키 등록을 기다리고 있어요.
+                  </p>
                 )}
                 {pairing.phase === 'cancelling' && (
-                  <p className="mt-5" role="status">등록한 연결 키를 취소하고 있어요.</p>
+                  <p className="mt-5" role="status">
+                    등록한 연결 키를 취소하고 있어요.
+                  </p>
                 )}
                 {pairing.phase === 'failed' && (
                   <div className="mt-5" role="alert">
@@ -264,7 +281,8 @@ export default function App() {
                 {pairing.paired && (
                   <div className="mt-5 rounded-xl bg-green-50 p-4">
                     <p>
-                      {pairing.paired}의 연결 키를 등록했어요. 휴대폰에서 연결 확인과 저장을 완료하세요.
+                      {pairing.paired}의 연결 키를 등록했어요. 휴대폰에서 연결 확인과 저장을
+                      완료하세요.
                     </p>
                     <button
                       type="button"

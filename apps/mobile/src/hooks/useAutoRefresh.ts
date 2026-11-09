@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
-
 import { App as CapApp } from '@capacitor/app';
+import { Capacitor, type PluginListenerHandle } from '@capacitor/core';
 
 export function useAutoRefresh(
   enabled: boolean,
@@ -8,7 +8,6 @@ export function useAutoRefresh(
   onRefresh: () => void,
   isBusy: boolean,
 ) {
-  const timerRef = useRef<number | null>(null);
   const callbackRef = useRef(onRefresh);
 
   useEffect(() => {
@@ -16,37 +15,32 @@ export function useAutoRefresh(
   }, [onRefresh]);
 
   useEffect(() => {
-    if (!enabled || intervalSec <= 0 || isBusy) {
-      if (timerRef.current) {
-        window.clearInterval(timerRef.current);
-        timerRef.current = null;
-      }
-      return;
+    if (!enabled || intervalSec <= 0 || isBusy) return;
+
+    let disposed = false;
+    const refresh = () => {
+      if (!disposed && !document.hidden) callbackRef.current();
+    };
+    const timer = window.setInterval(refresh, intervalSec * 1000);
+    document.addEventListener('visibilitychange', refresh);
+
+    let listener: PluginListenerHandle | undefined;
+    if (Capacitor.isNativePlatform()) {
+      void CapApp.addListener('appStateChange', ({ isActive }) => {
+        if (isActive) refresh();
+      })
+        .then((handle) => {
+          if (disposed) void handle.remove().catch(() => {});
+          else listener = handle;
+        })
+        .catch(() => {});
     }
 
-    const id = window.setInterval(() => {
-      if (document.hidden) return;
-      callbackRef.current();
-    }, intervalSec * 1000);
-    timerRef.current = id;
-
-    const onVisibility = () => {
-      if (!document.hidden) callbackRef.current();
-    };
-    document.addEventListener('visibilitychange', onVisibility);
-
-    let capListener: { remove: () => void } | null = null;
-    void CapApp.addListener('appStateChange', ({ isActive }) => {
-      if (isActive) callbackRef.current();
-    }).then((l) => {
-      capListener = l;
-    });
-
     return () => {
-      window.clearInterval(id);
-      timerRef.current = null;
-      document.removeEventListener('visibilitychange', onVisibility);
-      if (capListener) void capListener.remove();
+      disposed = true;
+      window.clearInterval(timer);
+      document.removeEventListener('visibilitychange', refresh);
+      if (listener) void listener.remove().catch(() => {});
     };
   }, [enabled, intervalSec, isBusy]);
 }

@@ -39,14 +39,13 @@ keystore.properties
 .DS_Store
 .opencode
 opencode.jsonc
-test/
-docs/
+docs/*
+!docs/maintenance/
 .playwright-cli/
+output/
 scripts/*
 !scripts/setup-windows-ssh.ps1
-output/
 AGENTS.md
-AGENTS.md.backup
-home-mockup.png
-home-refactoring-guide.md
-AGENTS.md
+
+# Rust / Tauri build output
+**/src-tauri/target/

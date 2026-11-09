@@ -22,7 +22,8 @@ function normalizeSettings(stored: LegacyStoredSettings): AppSettings {
   if (typeof merged.pcName !== 'string') merged.pcName = defaults.pcName;
   if (typeof merged.pcHostId !== 'string') merged.pcHostId = defaults.pcHostId;
   if (typeof merged.pcHostname !== 'string') merged.pcHostname = defaults.pcHostname;
-  if (typeof merged.pcHostFingerprint !== 'string') merged.pcHostFingerprint = defaults.pcHostFingerprint;
+  if (typeof merged.pcHostFingerprint !== 'string')
+    merged.pcHostFingerprint = defaults.pcHostFingerprint;
   if (typeof merged.pcLanPrefix !== 'number' || merged.pcLanPrefix < 0 || merged.pcLanPrefix > 32)
     merged.pcLanPrefix = defaults.pcLanPrefix;
   if (typeof merged.pcHost !== 'string') merged.pcHost = defaults.pcHost;

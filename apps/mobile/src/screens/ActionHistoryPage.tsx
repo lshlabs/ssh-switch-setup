@@ -10,7 +10,7 @@ import {
 } from '../lib/actionHistory';
 import { useAppCopy } from '../i18n';
 import type { Translate } from '../i18n';
-import { PreferenceToolbar } from './ui/preferences';
+import { PreferenceToolbar } from '../components/ui/preferences';
 
 type BackHandler = () => boolean;
 
@@ -42,7 +42,7 @@ export function ActionHistoryPage({
       />
       <div className="action-history-content">
         {history.length ? (
-        <ActionHistoryList history={history} t={t} locale={locale} />
+          <ActionHistoryList history={history} t={t} locale={locale} />
         ) : (
           <div className="action-history-empty-layout">
             <section className="action-history-empty" aria-live="polite">

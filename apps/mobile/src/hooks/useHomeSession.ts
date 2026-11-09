@@ -14,8 +14,6 @@ export type PowerActionHistoryItem = {
   durationMs?: number;
 };
 
-export type HomeRecentAction = PowerActionHistoryItem;
-
 export type HomeStatusSnapshot = {
   pcStatus: PcStatus;
   pcReachable?: boolean;
@@ -105,7 +103,6 @@ export function useHomeSession(sessionKey: string) {
     lastOnlineAt,
     statusSnapshot,
     actionHistory,
-    recentAction: actionHistory[0],
     hasUnreadActionHistory,
     observeStatus,
     recordAction,

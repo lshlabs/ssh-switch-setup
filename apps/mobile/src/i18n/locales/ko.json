@@ -89,7 +89,7 @@
       "section": "PC 연결 정보",
       "name": "표시 이름",
       "host": "PC 주소 또는 호스트 이름",
-      "hostPlaceholder": "예: 192.168.1.100",
+      "hostPlaceholder": "예: 192.0.2.10",
       "username": {
         "simple": "Windows 사용자 이름",
         "technical": "SSH Username"
@@ -139,7 +139,7 @@
         "simple": "PC MAC 주소",
         "technical": "MAC Address"
       },
-      "macPlaceholder": "예: AA:BB:CC:DD:EE:FF",
+      "macPlaceholder": "예: 02:00:00:00:00:01",
       "routerInfo": "공유기 연결 정보",
       "routerHost": "공유기 주소",
       "routerUsername": {
@@ -970,11 +970,6 @@
   },
   "history": {
     "title": "작업 기록",
-    "recent": "최근 작업",
-    "openRecent": "최근 작업 내역 열기",
-    "doneSuffix": "완료",
-    "noCompletedActions": "아직 완료된 작업이 없습니다.",
-    "completedActionsHint": "완료된 전원 작업이 여기에 표시됩니다.",
     "emptyTitle": "아직 작업 기록이 없습니다.",
     "justNow": "방금 전",
     "secondsAgo": "{value}초 전",
@@ -989,28 +984,6 @@
     "pending": "확인 필요"
   },
   "onboarding": {
-    "steps": {
-      "welcome": "시작하기",
-      "pc": "PC 준비",
-      "identity": "휴대폰 등록",
-      "power": "켜기 방식",
-      "remote": "원격 접속",
-      "test": "연결 확인"
-    },
-    "header": {
-      "brandLabel": "PC Control",
-      "skip": "나중에 계속",
-      "progress": "진행 단계 {current} / {total}",
-      "stepLabel": "{current} / {total} · {title}"
-    },
-    "stepDescriptions": {
-      "welcome": "PC를 켜고 PC 앞에서 설정을 준비하세요.",
-      "pc": "PC에 연결할 주소와 계정을 입력하세요.",
-      "identity": "이 휴대폰을 PC에 등록하세요.",
-      "power": "PC를 어떻게 켤지 선택하세요.",
-      "remote": "다른 네트워크에서 사용할 연결을 준비하세요.",
-      "test": "설정한 연결이 정상적으로 동작하는지 확인합니다."
-    },
     "navigation": {
       "previous": "이전",
       "continue": "계속",
@@ -1023,352 +996,6 @@
       "skipDescription": "지금 나가면 입력한 내용이 사라져요. 설정 마법사를 다시 시작하면 처음부터 진행해야 해요.",
       "continueSetup": "계속 설정하기",
       "skip": "나중에 하기"
-    },
-    "welcome": {
-      "eyebrow": "네트워크에 관계없이 PC를 관리하세요",
-      "title": "PC 앞에서 진행하세요",
-      "description": "연결할 PC를 켜고 이 휴대폰과 함께 준비하세요. 설정 중 PC에서 몇 가지 작업이 필요합니다.",
-      "prepareTitle": "시작하기 전에",
-      "prepareDescription": "PC 주소와 Windows 사용자 이름을 확인할 수 있도록 준비하세요.",
-      "pcOn": "연결할 PC를 켜 두세요.",
-      "admin": "Windows 관리자 권한이 필요합니다.",
-      "sameNetwork": "처음에는 PC와 휴대폰을 같은 네트워크에 연결하는 것을 권장합니다."
-    },
-    "pc": {
-      "title": "PC 준비",
-      "description": "PC 연결 정보를 입력하세요. 고급 설정은 기본값을 바꾼 경우에만 수정하면 됩니다.",
-      "hostLabel": "PC IP 주소",
-      "hostHint": "PC에 연결할 때 사용할 IPv4 주소 또는 hostname입니다.",
-      "macHint": "전원 켜기에 필요합니다. 콜론(:)으로 구분해 입력하세요.",
-      "helpLabel": "PC에서 확인하는 방법",
-      "advancedHint": "SSH 포트를 변경한 경우에만 수정하세요.",
-      "help": "PC 주소는 Windows 설정 > 네트워크 및 인터넷 > 속성의 IPv4 주소에서 확인하세요. 사용자 이름은 PowerShell에서 whoami를 실행해 확인할 수 있습니다. 관리자 PowerShell에서 Get-Service sshd를 실행했을 때 서비스를 찾을 수 없거나 실행 중이 아니라면 Windows 선택적 기능에서 OpenSSH 서버를 설치하고 Start-Service sshd를 실행하세요."
-    },
-    "key": {
-      "title": "PC에 이 휴대폰 등록",
-      "description": "이 휴대폰을 PC에 등록해야 안전하게 연결할 수 있습니다.",
-      "readyTitle": "연결 키가 준비되었습니다",
-      "readyDescription": "PC에 등록할 연결 키를 사용할 수 있습니다.",
-      "missingDescription": "아직 준비되지 않았습니다.",
-      "preparingDescription": "연결 키를 준비하고 있습니다.",
-      "details": "세부 정보",
-      "publicKeyLabel": "연결 키",
-      "copy": "공개키 복사",
-      "prepare": "연결 키 준비",
-      "preparing": "준비 중…",
-      "registrationTitle": "PC에서 등록하기",
-      "scriptHelp": "PC 설정 도구가 Windows 연결 준비와 키 등록을 안내합니다.",
-      "stepDownloadTitle": "설정 도구 받기",
-      "stepDownload": "PC에서 설정 도구를 내려받으세요.",
-      "stepRunTitle": "설정 도구 실행",
-      "stepRun": "관리자 PowerShell에서 설정 도구를 실행하세요.",
-      "stepPasteTitle": "공개키 등록",
-      "stepPaste": "요청되면 이 휴대폰의 공개키를 붙여 넣으세요.",
-      "copyDownloadUrl": "다운로드 주소 복사",
-      "downloadUrlCopied": "PC 설정 도구의 다운로드 주소를 복사했습니다.",
-      "downloadUrlCopyFailed": "다운로드 주소를 복사하지 못했습니다.",
-      "openSetupTool": "PC 설정 도구 열기",
-      "resetNotice": "앱을 삭제하거나 데이터를 초기화하면 새 공개키를 다시 등록해야 합니다.",
-      "helpLabel": "공개키 등록이 필요한 이유",
-      "help": "공개키는 비밀번호가 아닙니다. 이 휴대폰이 PC에 접속할 수 있도록 Windows의 authorized_keys에 공개키 한 줄을 추가하세요. 개인키는 Android 기기 밖으로 내보내지지 않습니다."
-    },
-    "wake": {
-      "title": "PC 켜기 (선택)",
-      "description": "PC를 켤 때 사용할 MAC 주소와 공유기 정보를 입력하세요.",
-      "optionalDescription": "선택 사항입니다. 입력하지 않아도 PC 종료와 재부팅은 사용할 수 있습니다.",
-      "routerChoice": "공유기에서 깨우기",
-      "routerChoiceDescription": "SSH와 WOL을 지원하는 네트워크 장비를 사용합니다.",
-      "localChoice": "같은 네트워크에서만 사용",
-      "localChoiceDescription": "PC와 같은 네트워크에 연결되어 있을 때만 PC를 켭니다.",
-      "unsupportedChoice": "PC 켜기 사용 안 함",
-      "unsupportedChoiceDescription": "Shutdown과 Reboot만 사용합니다.",
-      "disabledChoice": "PC 켜기 사용 안 함",
-      "disabledChoiceDescription": "종료와 재부팅만 사용합니다.",
-      "helpLabel": "공유기 호환성 안내",
-      "help": "같은 네트워크에서는 네트워크 장비가 PC에 WOL 신호를 전달해야 합니다. SSH와 LAN WOL 도구 지원 여부를 확인하세요. WOL을 지원하지 않는 환경에서는 PC 켜기를 사용할 수 없으며 종료와 재부팅만 사용할 수 있습니다."
-    },
-    "remote": {
-      "title": "원격 연결 설정",
-      "description": "다른 네트워크에서 PC를 제어하려면 휴대폰이 대상 네트워크에 안전하게 연결되어야 합니다. PC Control은 OpenVPN for Android의 기존 프로필을 사용합니다.",
-      "optional": "선택 사항",
-      "install": "다른 네트워크에서 연결하려면 OpenVPN for Android가 필요합니다.",
-      "appRequired": "OpenVPN 앱이 필요합니다",
-      "installAction": "OpenVPN 설치하기",
-      "checkingTitle": "OpenVPN 상태 확인",
-      "checkingDescription": "설치 여부를 확인하고 있습니다.",
-      "selectTitle": "원격 연결 프로필",
-      "profileEmptyTitle": "OpenVPN 프로필이 없습니다",
-      "profileEmptyDescription": "OpenVPN 앱에서 프로필을 먼저 가져오세요.",
-      "importProfile": "OpenVPN 프로필을 가져옵니다.",
-      "selectProfile": "설정 화면에서 프로필을 선택하고 연결 테스트를 진행합니다."
-    },
-    "connection": {
-      "title": "연결 확인",
-      "description": "PC와 연결할 준비가 되었는지 한 번에 확인합니다. 사용자 확인이 필요한 항목만 안내합니다.",
-      "pcSsh": "PC 연결",
-      "test": "연결 확인 시작",
-      "powerOnTitle": "PC를 켠 뒤 검증 계속",
-      "powerOnDescription": "공유기 SSH와 WOL로 PC를 켠 뒤 Host Key와 SSH 인증을 이어서 확인합니다.",
-      "powerOn": "PC 켜고 다시 확인",
-      "powerOnDetails": "방법 보기",
-      "trustTitle": "PC 보안 확인",
-      "trustDescription": "처음 연결할 때 표시되는 지문을 별도 신뢰 경로와 비교한 뒤 저장하세요.",
-      "scan": "서버 지문 보기",
-      "reviewFingerprint": "지문 확인",
-      "scanBusy": "확인 중…",
-      "actionRequired": "확인이 필요합니다",
-      "pcRecovery": "PC 주소와 로그인 정보를 확인하세요.",
-      "authRecovery": "이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인하세요.",
-      "editPc": "PC 연결 정보 수정",
-      "editKey": "공개키 등록 방법",
-      "editRouter": "공유기 정보 수정",
-      "securityBlocked": "PC 연결 후 확인할 수 있습니다.",
-      "securityPending": "보안 정보 확인이 필요합니다.",
-      "securityVerified": "보안 정보를 확인했습니다.",
-      "routerBlocked": "PC 연결 후 확인할 수 있습니다.",
-      "routerPending": "아직 확인하지 않았습니다.",
-      "routerVerified": "정상적으로 연결되었습니다.",
-      "routerFailed": "공유기에 연결할 수 없습니다.",
-      "pcState": {
-        "idle": "아직 확인하지 않았습니다.",
-        "checking": "연결 상태를 확인하고 있습니다.",
-        "offline": "PC에 연결할 수 없습니다.",
-        "host-key-unverified": "PC의 보안 정보를 확인해야 합니다.",
-        "auth-failed": "PC에 로그인할 수 없습니다.",
-        "verified": "정상적으로 연결되었습니다.",
-        "error": "연결을 확인하지 못했습니다."
-      }
-    },
-    "pcOfflineVerificationPending": {
-      "simple": "PC가 꺼져 있거나 SSH 서버가 응답하지 않습니다. 설정 오류는 아닙니다. PC를 켠 뒤 다시 확인하세요.",
-      "technical": "PC reachability failed. Power state cannot be concluded from TCP/SSH non-response alone."
-    },
-    "hostKeyVerificationPending": {
-      "simple": "PC는 온라인이지만 보안 정보(Host Key)를 아직 확인하지 않았습니다. 먼저 지문을 확인하고 신뢰하세요.",
-      "technical": "PC reachability succeeded, but SSH Host Key is not trusted yet."
-    },
-    "pcAndRouterTestSuccess": "PC SSH 인증과 공유기 연결을 확인했습니다.",
-    "pcTestSuccess": "PC 주소, SSH 포트, 공개키 인증을 확인했습니다.",
-    "comparePcFingerprint": "표시된 서버 지문을 신뢰할 수 있는 경로와 비교하세요.",
-    "pcFingerprintFailed": "PC 서버 지문을 가져오지 못했습니다. PC 주소와 네트워크를 확인하세요.",
-    "pcTrusted": "PC 서버를 확인했습니다.",
-    "trustSaveFailed": "서버 확인 정보를 저장하지 못했습니다.",
-    "compareRouterFingerprint": "공유기 지문을 신뢰할 수 있는 경로와 비교하세요.",
-    "routerFingerprintFailed": "공유기 서버 지문을 가져오지 못했습니다. 주소와 네트워크를 확인하세요.",
-    "routerTrusted": "공유기 서버를 확인했습니다.",
-    "setupComplete": "설정이 완료되었습니다.",
-    "setupCompletePending": {
-      "simple": "설정을 저장했습니다. PC를 켠 뒤 연결 검증을 이어서 진행하세요.",
-      "technical": "Required setup saved. PC SSH verification remains pending."
-    },
-    "identityReady": "앱 공개키를 준비했습니다.",
-    "identityFailed": "앱 공개키를 준비하지 못했습니다. Android 앱에서 다시 시도하세요.",
-    "publicKeyCopied": "공개키를 클립보드에 복사했습니다.",
-    "publicKeyCopyFailed": "공개키를 복사하지 못했습니다. 먼저 키를 준비하세요.",
-    "testSuccess": "연결 테스트 성공",
-    "back": "이전 단계",
-    "flow": {
-      "later": "나중에",
-      "progress": "설정 진행률",
-      "yes": "네",
-      "no": "아니요",
-      "confirmYes": "예",
-      "how": "확인하는 방법",
-      "welcome": {
-        "title": "앱을 사용할 수 있도록 설정을 도와드릴게요",
-        "description": "PC나 서버를 연결하고 제어하는 데 필요한 설정을 하나씩 진행할게요.",
-        "action": "시작하기"
-      },
-      "prepare": {
-        "title": "제어할 PC를 켜주세요",
-        "description": "설정 중 PC에서 직접 해야 하는 작업이 있어요. 가능하면 PC 앞에서 함께 진행해주세요.",
-        "note": "Windows 관리자 권한이 필요할 수 있어요.",
-        "action": "준비됐어요"
-      },
-      "wakeIntent": {
-        "title": "앱에서 PC를 켜는 기능도 사용하시겠어요?",
-        "description": "PC 끄기와 재부팅은 이 기능 없이도 사용할 수 있어요.",
-        "yes": "네, 사용할게요"
-      },
-      "wolSupport": {
-        "title": "PC와 네트워크 장비가 WOL을 지원하나요?",
-        "description": "둘 다 WOL(Wake on LAN)을 지원해야 앱에서 PC를 켤 수 있어요.",
-        "yes": "네, 둘 다 지원해요",
-        "unknown": "잘 모르겠어요"
-      },
-      "wolGuide": {
-        "title": "WOL 지원 여부를 확인해볼게요",
-        "description": "컴퓨터와 네트워크 장비에서 각각 확인해야 해요.",
-        "pc": "컴퓨터에서 확인하기",
-        "pcDescription": "BIOS/UEFI와 네트워크 어댑터를 확인해요.",
-        "pcHelp": "BIOS/UEFI에서 Wake on LAN 또는 PCI-E 깨우기를 켜고, Windows 네트워크 어댑터의 전원 관리에서 이 장치가 컴퓨터의 대기 모드를 종료할 수 있도록 허용하세요.",
-        "network": "네트워크 장비에서 확인하기",
-        "networkDescription": "WOL 패킷을 전달할 수 있는지 확인해요.",
-        "networkHelp": "네트워크 장비의 관리 화면이나 설명서에서 WOL, Wake on LAN 또는 매직 패킷 전달 기능을 확인하세요.",
-        "supported": "둘 다 지원해요",
-        "unsupported": "하나라도 지원하지 않아요",
-        "later": "나중에 확인할게요",
-        "laterDialogTitle": "PC 켜기는 나중에 설정할까요?",
-        "laterDialogDescription": "지금 넘어가면 PC 켜기 기능을 사용할 수 없어요. 나중에 설정에서 WOL 정보를 직접 추가하면 사용할 수 있어요.",
-        "unsupportedDialogTitle": "PC 켜기 없이 계속할까요?",
-        "unsupportedDialogDescription": "PC나 네트워크 장비가 WOL을 지원하지 않으면 앱에서 PC를 켤 수 없어요. PC 끄기와 재부팅 설정은 계속할 수 있어요."
-      },
-      "pcInfo": {
-        "title": "PC의 IP 주소를 입력해주세요",
-        "description": "휴대폰에서 PC에 연결할 때 사용할 IPv4 주소예요.",
-        "portNote": "변경한 적이 없다면 기본값 22를 사용하세요.",
-        "usernameTitle": "Windows 사용자 이름을 입력해주세요",
-        "usernameDescription": "PC에 SSH로 접속할 때 사용할 계정이에요.",
-        "portTitle": "PC의 SSH 포트를 변경한 적이 있나요?",
-        "portDescription": "변경하지 않았다면 기본값 22를 사용할게요.",
-        "useDefaultPort": "22를 사용할게요",
-        "useOtherPort": "다른 포트 사용",
-        "customPortTitle": "PC의 SSH 포트를 입력해주세요",
-        "customPortDescription": "PC의 SSH 서버에 설정된 포트 번호예요."
-      },
-      "phone": {
-        "title": "이 휴대폰을 PC에 등록할게요",
-        "description": "비밀번호 대신 이 휴대폰에서 만든 연결 키를 사용해 안전하게 연결해요.",
-        "action": "등록 시작하기",
-        "retry": "다시 시도",
-        "errorDescription": "연결 키를 준비할 수 없어요. Android 앱에서 다시 시도해주세요."
-      },
-      "tool": {
-        "title": "PC에서 설정 도구를 받아주세요",
-        "description": "PC의 브라우저에서 아래 주소를 열어주세요.",
-        "copy": "주소 복사",
-        "qr": "QR 코드 보기",
-        "action": "PC에서 열었어요"
-      },
-      "run": {
-        "title": "관리자 PowerShell에서 실행해주세요",
-        "description": "PC에서 방금 받은 설정 도구를 관리자 권한으로 실행해주세요.",
-        "help": "실행하는 방법",
-        "helpText": "다운로드한 setup-windows-ssh.ps1 파일을 찾은 뒤 관리자 권한으로 PowerShell을 열고 해당 파일을 실행하세요.",
-        "action": "실행했어요"
-      },
-      "paste": {
-        "title": "연결 키를 PC에 붙여 넣어주세요",
-        "description": "설정 도구가 연결 키를 요청하면 아래 버튼으로 복사해서 PC에 붙여 넣어주세요.",
-        "copy": "연결 키 복사",
-        "copied": "연결 키를 복사했어요",
-        "action": "PC에 붙여 넣었어요"
-      },
-      "wakeMethod": {
-        "title": "PC를 어떻게 켤까요?",
-        "router": "네트워크 장비를 통해 켜기",
-        "routerDescription": "다른 네트워크에서도 사용할 수 있어요.",
-        "local": "같은 네트워크에서만 켜기",
-        "disable": "PC 켜기 사용 안 함"
-      },
-      "wakeInfo": {
-        "title": "PC의 MAC 주소를 입력해주세요",
-        "description": "PC 켜기 신호를 보낼 네트워크 어댑터의 주소예요.",
-        "routerHostTitle": "공유기 주소를 입력해주세요",
-        "routerHostDescription": "WOL 명령을 실행할 공유기의 SSH 접속 주소예요.",
-        "routerUsernameTitle": "공유기의 SSH 사용자 이름을 입력해주세요",
-        "routerUsernameDescription": "공유기에 SSH로 접속할 때 사용할 계정이에요.",
-        "interfaceTitle": "WOL을 보낼 LAN 인터페이스를 입력해주세요",
-        "interfaceDescription": "공유기에서 PC가 연결된 LAN의 인터페이스 이름이에요.",
-        "networkHost": "네트워크 장비(공유기) 주소",
-        "username": "네트워크 장비 SSH 사용자 이름",
-        "networkPort": "네트워크 장비 SSH 포트",
-        "advanced": "고급 설정"
-      },
-      "fieldHelp": {
-        "pcHost": "1. PC에서 설정을 여세요.\n2. 네트워크 및 인터넷에서 현재 연결의 속성을 여세요.\n3. IPv4 주소를 찾아 앱에 입력하세요.\n\n예: 192.168.0.10",
-        "pcUsername": "1. PC에서 PowerShell을 여세요.\n2. whoami를 입력하고 실행하세요.\n3. 역슬래시(\\) 뒤에 표시된 이름을 입력하세요.\n\n예: PC-NAME\\admin이라면 admin",
-        "pcPort": "1. PC에서 관리자 PowerShell을 여세요.\n2. Get-ItemProperty HKLM:\\SOFTWARE\\OpenSSH를 실행하세요.\n3. 별도 포트를 설정하지 않았다면 기본값 22를 사용하세요.",
-        "pcMac": "1. PC에서 설정을 여세요.\n2. 네트워크 어댑터의 하드웨어 속성을 여세요.\n3. 물리적 주소(MAC)를 찾아 입력하세요.\n\n예: 2C:F0:5D:83:5B:07",
-        "routerHost": "1. PC에서 현재 네트워크의 기본 게이트웨이를 확인하세요.\n2. 표시된 IPv4 주소를 입력하세요.\n\n예: 192.168.0.1",
-        "routerUsername": "1. 네트워크 장비(공유기)의 관리 화면을 여세요.\n2. SSH 접속에 사용하는 사용자 이름을 확인하세요.\n3. 관리 화면 로그인 이름과 다를 수 있으니 SSH 설정을 기준으로 입력하세요.",
-        "routerPort": "1. 네트워크 장비(공유기)의 SSH 설정을 여세요.\n2. SSH 서비스가 사용하는 포트를 확인하세요.\n3. 변경하지 않았다면 기본값 22를 사용하세요.",
-        "wolInterface": "1. 네트워크 장비(공유기)에 SSH로 접속하세요.\n2. ip link 명령을 실행하세요.\n3. PC가 연결된 LAN 인터페이스 이름을 입력하세요.\n\n예: br0 또는 lan0"
-      },
-      "fieldHelpSummary": {
-        "pcHost": "현재 연결의 IPv4 주소를 확인해요.",
-        "pcUsername": "Windows에 로그인한 사용자 이름을 확인해요.",
-        "pcPort": "PC의 SSH 설정에서 포트를 확인해요.",
-        "pcMac": "네트워크 어댑터의 물리적 주소를 확인해요.",
-        "routerHost": "현재 네트워크의 기본 게이트웨이를 확인해요.",
-        "routerUsername": "SSH 접속에 사용하는 이름을 확인해요.",
-        "routerPort": "SSH 서비스가 사용하는 포트를 확인해요.",
-        "wolInterface": "PC가 연결된 LAN 인터페이스를 확인해요."
-      },
-      "feedback": {
-        "errorTitle": "진행할 수 없어요"
-      },
-      "remoteIntent": {
-        "title": "PC와 다른 네트워크에서도 연결하시겠어요?",
-        "description": "휴대폰과 제어할 컴퓨터가 서로 다른 네트워크에 있어도 연결할 수 있어요."
-      },
-      "vpn": {
-        "checking": "OpenVPN 상태를 확인하고 있어요",
-        "installTitle": "OpenVPN 앱을 설치해주세요",
-        "installDescription": "서로 다른 네트워크에서 안전하게 연결할 때 사용해요.",
-        "install": "OpenVPN 설치하기",
-        "later": "원격 연결은 나중에 설정",
-        "profileTitle": "OpenVPN 프로필이 필요해요",
-        "profileDescription": "OpenVPN 앱에서 사용할 프로필을 먼저 가져와주세요.",
-        "open": "OpenVPN 앱 열기",
-        "recheck": "다시 확인",
-        "selectTitle": "사용할 VPN 프로필을 선택해주세요"
-      },
-      "verifyStart": {
-        "title": "이제 연결을 확인해볼게요",
-        "description": "입력한 정보와 연결 상태를 자동으로 확인할게요.",
-        "action": "확인 시작"
-      },
-      "verifying": {
-        "title": "연결을 확인하고 있어요",
-        "pc": "PC 연결",
-        "key": "연결 키",
-        "security": "PC 보안",
-        "network": "네트워크 장비",
-        "vpn": "VPN",
-        "checking": "확인 중…",
-        "done": "완료",
-        "waiting": "대기 중"
-      },
-      "trust": {
-        "title": "연결하려는 PC가 맞는지 확인해주세요",
-        "description": "PC 화면에 표시된 보안 정보와 아래 정보가 같은지 확인해주세요.",
-        "same": "같아요",
-        "different": "달라요"
-      },
-      "complete": {
-        "title": "설정이 끝났어요",
-        "description": "이제 연결한 컴퓨터의 상태를 확인하고 제어할 수 있어요.",
-        "action": "PC Control 시작하기"
-      },
-      "failure": {
-        "retry": "다시 시도",
-        "pc": {
-          "title": "PC에 연결할 수 없어요",
-          "description": "PC 주소와 Windows 사용자 이름을 다시 확인해주세요.",
-          "action": "PC 정보 확인하기"
-        },
-        "auth": {
-          "title": "PC에 로그인할 수 없어요",
-          "description": "이 휴대폰의 연결 키가 PC에 등록되어 있는지 확인해주세요.",
-          "action": "휴대폰 등록 다시 보기"
-        },
-        "wol": {
-          "title": "PC를 켤 수 없어요",
-          "description": "MAC 주소와 PC 켜기 설정을 다시 확인해주세요.",
-          "action": "PC 켜기 설정 확인"
-        },
-        "vpn": {
-          "title": "다른 네트워크에서 연결할 수 없어요",
-          "description": "OpenVPN 앱과 프로필 설정을 다시 확인해주세요.",
-          "action": "원격 연결 설정 확인"
-        },
-        "security": {
-          "title": "보안 정보가 일치하지 않아요",
-          "description": "연결 대상과 네트워크를 다시 확인해주세요.",
-          "action": "PC 정보 확인하기"
-        }
-      }
     },
     "master": {
       "continue": "계속",
@@ -1385,6 +1012,14 @@
       "identityError": "연결 키를 준비할 수 없어요. 다시 시도해주세요.",
       "identityBusy": "연결 키 준비 중…",
       "identityPrepare": "연결 키 다시 준비하기",
+      "preview": {
+        "banner": "미리보기 모드 · 연결 결과는 예시이며 설정을 저장하지 않아요.",
+        "demoVpnProfile": "미리보기 VPN 프로필",
+        "keyDescription": "미리보기용 샘플 키를 복사해 흐름을 확인해보세요. 실제 PC 연결에는 사용할 수 없어요.",
+        "mockKeyTitle": "미리보기 샘플 키 복사",
+        "mockKeyBody": "복사 동작 확인용 샘플이에요. 실제 PC에는 붙여 넣지 마세요.",
+        "mockKeyCopied": "미리보기용 샘플 키를 복사했어요."
+      },
       "copyUrl": "다운로드 주소 복사",
       "copyKey": "연결 키 복사",
       "urlCopied": "다운로드 주소를 복사했어요.",
@@ -1408,6 +1043,7 @@
         "title": "PC의 IP 주소를 입력해주세요",
         "description": "휴대폰에서 PC에 연결할 때 사용할 IPv4 주소예요.",
         "label": "PC IP 주소",
+        "example": "예: 192.168.0.10",
         "helpSummary": "현재 연결의 IPv4 주소를 확인해요.",
         "help": "1. PC에서 설정을 여세요.\n2. 네트워크 및 인터넷에서 현재 연결의 속성을 여세요.\n3. IPv4 주소를 찾아 앱에 입력하세요.\n\n예: 192.168.0.10",
         "error": "올바른 PC IP 주소를 입력해주세요."
@@ -1416,8 +1052,9 @@
         "title": "Windows 사용자 이름을 입력해주세요",
         "description": "PC에 SSH로 접속할 때 사용할 계정이에요.",
         "label": "Windows 사용자 이름",
+        "example": "예: windows-user",
         "helpSummary": "Windows에 로그인한 사용자 이름을 확인해요.",
-        "help": "1. PC에서 PowerShell을 여세요.\n2. whoami를 입력하고 실행하세요.\n3. 역슬래시(\\) 뒤에 표시된 이름을 입력하세요.\n\n예: PC-NAME\\admin이라면 admin"
+        "help": "1. PC에서 PowerShell을 여세요.\n2. whoami를 입력하고 실행하세요.\n3. 역슬래시(\\) 뒤에 표시된 이름을 입력하세요.\n\n예: EXAMPLE-PC\\windows-user라면 windows-user"
       },
       "pcPortChoice": {
         "title": "PC의 SSH 포트를 변경한 적이 있나요?",
@@ -1433,6 +1070,10 @@
       "pcPrepare": {
         "title": "PC에서 연결 준비를 해주세요",
         "description": "설정 도구를 실행하면 이 휴대폰을 PC에 등록할 수 있어요.",
+        "shareTitle": "설정 도구 받기",
+        "shareDescription": "PC에서 열 수 있도록 설정 도구 주소를 공유하거나 복사하세요.",
+        "copyAction": "주소 복사",
+        "closeAction": "닫기",
         "task1": "설정 도구 받기",
         "task1Body": "PC의 브라우저에서 설정 도구 주소를 열어주세요.",
         "task2": "관리자 PowerShell에서 실행",
@@ -1441,8 +1082,9 @@
       },
       "pcKey": {
         "title": "연결 키를 PC에 붙여 넣어주세요",
-        "description": "설정 도구가 연결 키를 요청하면 아래 키를 복사해서 PC에 붙여 넣어주세요.",
-        "keyReady": "연결 키 · 사용할 준비가 되었어요.",
+        "description": "설정 도구가 연결 키를 요청하면 아래 항목을 눌러 복사한 뒤 PC에 붙여 넣어주세요.",
+        "copyTitle": "연결 키 복사",
+        "copyBody": "복사한 공개 키를 PC 설정 도구에 붙여 넣어주세요.",
         "action": "PC에 붙여 넣었어요"
       },
       "pcVerify": {
@@ -1502,20 +1144,23 @@
         "title": "PC의 MAC 주소를 입력해주세요",
         "description": "PC 켜기 신호를 보낼 유선 네트워크 어댑터의 주소예요.",
         "label": "PC MAC 주소",
+        "example": "예: 02:00:00:00:00:01",
         "helpSummary": "네트워크 어댑터의 물리적 주소를 확인해요.",
-        "help": "1. PC에서 네트워크 설정을 여세요.\n2. 사용하는 유선 네트워크 어댑터의 하드웨어 속성을 여세요.\n3. 물리적 주소(MAC)를 찾아 입력하세요.\n\n예: 2C:F0:5D:83:5B:07"
+        "help": "1. PC에서 네트워크 설정을 여세요.\n2. 사용하는 유선 네트워크 어댑터의 하드웨어 속성을 여세요.\n3. 물리적 주소(MAC)를 찾아 입력하세요.\n\n예시값: 02:00:00:00:00:01"
       },
       "routerHost": {
         "title": "네트워크 장비의 주소를 입력해주세요",
         "description": "PC 켜기 명령을 실행할 네트워크 장비(공유기)의 SSH 접속 주소예요.",
         "label": "네트워크 장비(공유기) 주소",
+        "example": "예: 192.0.2.1",
         "helpSummary": "현재 네트워크의 기본 게이트웨이를 확인해요.",
-        "help": "1. PC에서 현재 네트워크 정보를 여세요.\n2. 기본 게이트웨이의 IPv4 주소를 확인하세요.\n3. 해당 주소가 SSH 접속 대상과 같은지 확인한 뒤 입력하세요.\n\n예: 192.168.0.1"
+        "help": "1. PC에서 현재 네트워크 정보를 여세요.\n2. 기본 게이트웨이의 IPv4 주소를 확인하세요.\n3. 해당 주소가 SSH 접속 대상과 같은지 확인한 뒤 입력하세요.\n\n예시 주소: 192.0.2.1 (문서용 주소이며 실제 공유기 주소가 아니에요.)"
       },
       "routerUsername": {
         "title": "네트워크 장비의 SSH 사용자 이름을 입력해주세요",
         "description": "네트워크 장비에 SSH로 접속할 때 사용하는 계정이에요.",
         "label": "SSH 사용자 이름",
+        "example": "예: router-user",
         "helpSummary": "SSH 접속에 사용하는 사용자 이름을 확인해요.",
         "help": "1. 네트워크 장비(공유기)의 관리 화면을 여세요.\n2. SSH 접속 설정을 확인하세요.\n3. SSH에 사용하는 사용자 이름을 입력하세요.\n\n관리 화면 로그인 이름과 다를 수 있어요."
       },
@@ -1523,6 +1168,7 @@
         "title": "PC가 연결된 LAN 인터페이스를 입력해주세요",
         "description": "네트워크 장비에서 WOL 신호를 보낼 인터페이스 이름이에요.",
         "label": "LAN 인터페이스 이름",
+        "example": "예: lan0",
         "helpSummary": "PC가 연결된 LAN 인터페이스를 확인해요.",
         "help": "1. 네트워크 장비(공유기)에 SSH로 접속하세요.\n2. ip link 명령으로 인터페이스 목록을 확인하세요.\n3. PC가 연결된 LAN의 인터페이스 이름을 입력하세요.\n\n예: br0 또는 lan0"
       },

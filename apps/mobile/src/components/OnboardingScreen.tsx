@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useId, useLayoutEffect, useRef, useState, type ReactNode } from 'react';
 import { App as CapApp } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
-import { Check, ChevronRight, Copy, LoaderCircle, Monitor, Network, Power, ShieldCheck, Smartphone, TriangleAlert } from 'lucide-react';
+import { Share } from '@capacitor/share';
+import { Check, ChevronRight, Copy, LoaderCircle, Monitor, Network, Power, ShieldCheck, TriangleAlert } from 'lucide-react';
 import { PcControl, type OpenVpnProfile } from '@pc-control/capacitor-pc-control';
-import { type AppSettings, validateSettingField } from '@pc-control/core';
+import { defaultAppSettings, type AppSettings, validateSettingField } from '@pc-control/core';
 import { useAppCopy } from '../i18n';
+import { onboardingPreviewEnabled } from '../lib/onboardingPreview';
 import { createOnboardingSession } from './onboardingSession';
 import { PreferenceDialog } from './ui/preference-dialog';
 
@@ -22,6 +24,7 @@ type ReturnTo = 'pc-verification' | 'wake-verification' | 'summary';
 type FieldName = 'pcHost' | 'pcUsername' | 'pcPort' | 'pcMac' | 'routerHost' | 'routerUsername' | 'wolInterface' | 'routerPort';
 type BackHandler = () => boolean;
 const TOOL_URL = 'https://raw.githubusercontent.com/lshlabs/ssh-switch/main/scripts/setup-windows-ssh.ps1';
+const PREVIEW_PUBLIC_KEY = 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCR/YJodCN0+Xg3YJuaF+bMcy5BUvvD0vUR0IqJL6Sg4l/LPdgnAXYyuL6A2CkwVdlg1X5eM1M6S78z/7eTjLrU+bi16E/hR5vyRV+kiGPJp/fDaPLnXKJlO5ez+fzwsWSJyLZIgwpSvqCWv8j89lFrWVMudw56NLOaKI/v0lytogZRf0coCfw+nXa4YOdFDil4hfZdg6oh3zszSk4UrfdGllFhItEkA0X0Zaxz+Lc1N2Zzp8PPk/3MykrfZv9UgBbWjrVygNttB1V/MoaC4UvbAzTAOaxznrw3iKsG1bptjQ7fmNdbD9ZT29NOOaZqBF2X0OqxIdP5H+4wv6a5mkN9 pc-control-preview-only';
 const PC_STAGES = ['pc', 'security', 'key'] as const;
 const WAKE_STAGES = ['router', 'security', 'settings'] as const;
 const WAIT_STAGE_MS = 450;
@@ -34,21 +37,25 @@ function stageFor(screen: Screen): Stage {
   return 'remote';
 }
 
-export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registerBack }: {
+export function OnboardingScreen({ settings, onSave, onComplete, onSkip, onToast, registerBack }: {
   settings: AppSettings;
   onSave: (next: AppSettings) => Promise<void>;
   onComplete: () => void;
   onSkip: () => void;
+  onToast: (message: string) => void;
   registerBack: (handler: BackHandler | null) => void;
 }) {
   const { t } = useAppCopy();
   const m = useCallback((key: string) => t(`onboarding.master.${key}`), [t]);
   const [screen, setScreen] = useState<Screen>('welcome');
   const [history, setHistory] = useState<Screen[]>([]);
-  const [draft, setDraft] = useState(() => createOnboardingSession(settings));
+  const [draft, setDraft] = useState(() => createOnboardingSession(
+    onboardingPreviewEnabled ? defaultAppSettings() : settings,
+  ));
   const [errors, setErrors] = useState<Partial<Record<FieldName, string>>>({});
   const [inlineError, setInlineError] = useState<string>();
   const [identityReady, setIdentityReady] = useState(false);
+  const [identityPublicKey, setIdentityPublicKey] = useState<string>();
   const [identityBusy, setIdentityBusy] = useState(false);
   const [pcVerified, setPcVerified] = useState(false);
   const [wakeConfigured, setWakeConfigured] = useState(false);
@@ -64,22 +71,34 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
   const [processStage, setProcessStage] = useState<string>('pc');
   const [busy, setBusy] = useState(false);
   const [showSkipDialog, setShowSkipDialog] = useState(false);
+  const [showToolShareDialog, setShowToolShareDialog] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string>();
   const [openWolHelp, setOpenWolHelp] = useState<'pc' | 'router' | null>(null);
   const [returnTo, setReturnTo] = useState<ReturnTo>();
   const returnFromRef = useRef<Screen | undefined>(undefined);
   const editHistoryStartRef = useRef<number | undefined>(undefined);
   const editTerminalRef = useRef<Screen | undefined>(undefined);
   const dialogCloseRef = useRef<(() => void) | null>(null);
+  const toolShareDialogCloseRef = useRef<(() => void) | null>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
   const pcStartedRef = useRef(0);
   const wakeStartedRef = useRef(0);
   const pcRunRef = useRef(0);
   const wakeRunRef = useRef(0);
   const copiedTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const identityAttemptedRef = useRef(false);
   const contentRef = useRef<HTMLElement | null>(null);
   const focusNextRef = useRef(false);
   const [copied, setCopied] = useState<'url' | 'key'>();
+
+  const showOnboardingToast = useCallback((message: string) => {
+    onToast(message);
+    if (Capacitor.isNativePlatform()) return;
+    setToastMessage(message);
+    clearTimeout(toastTimerRef.current);
+    toastTimerRef.current = setTimeout(() => setToastMessage(undefined), 2800);
+  }, [onToast]);
 
   function go(next: Screen) {
     setInlineError(undefined);
@@ -169,13 +188,25 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
   useEffect(() => {
     if (screen !== 'pc-prepare' || identityReady || identityBusy || identityAttemptedRef.current) return;
     identityAttemptedRef.current = true;
+    if (onboardingPreviewEnabled) {
+      setIdentityPublicKey(PREVIEW_PUBLIC_KEY);
+      setIdentityReady(true);
+      return;
+    }
     setIdentityBusy(true);
     void PcControl.ensureSshIdentity()
-      .then(() => setIdentityReady(true))
-      .catch(() => setInlineError(m('identityError')))
+      .then((identity) => {
+        if (!identity.available || !identity.publicKey) throw new Error('SSH public key unavailable');
+        setIdentityPublicKey(identity.publicKey);
+        setIdentityReady(true);
+      })
+      .catch(() => showOnboardingToast(m('identityError')))
       .finally(() => setIdentityBusy(false));
-  }, [screen, identityReady, identityBusy, m]);
-  useEffect(() => () => clearTimeout(copiedTimerRef.current), []);
+  }, [screen, identityReady, identityBusy, m, showOnboardingToast]);
+  useEffect(() => () => {
+    clearTimeout(copiedTimerRef.current);
+    clearTimeout(toastTimerRef.current);
+  }, []);
 
   async function timedStage<T>(stage: string, operation: () => Promise<T>): Promise<T> {
     setProcessStage(stage);
@@ -190,6 +221,11 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     setScreen('pc-ready');
   }
   async function checkPcKey(fingerprint: string, port = draft.pcPort, run = pcRunRef.current) {
+    if (onboardingPreviewEnabled) {
+      await timedStage('key', async () => undefined);
+      if (run === pcRunRef.current) await pcSuccess(run);
+      return;
+    }
     try {
       const result = await timedStage('key', () => PcControl.executeSshCommand({
         host: draft.pcHost, port, username: draft.pcUsername, target: 'windows',
@@ -206,6 +242,19 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     pcStartedRef.current = performance.now();
     setProcessStage('pc');
     go('pc-verifying');
+    if (onboardingPreviewEnabled) {
+      await timedStage('pc', async () => undefined);
+      await timedStage('security', async () => undefined);
+      if (run !== pcRunRef.current) return;
+      setHostKey({
+        host: draft.pcHost,
+        port,
+        algorithm: 'ssh-rsa',
+        fingerprint: 'SHA256:PCControlPreviewOnly',
+      });
+      setScreen('pc-trust');
+      return;
+    }
     try {
       const reachable = await timedStage('pc', () => PcControl.checkHost({ host: draft.pcHost, port, timeoutMs: 5000 }));
       if (run !== pcRunRef.current) return;
@@ -229,6 +278,11 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     setScreen('wake-ready');
   }
   async function checkRouterSettings(fingerprint: string, port = draft.routerPort, run = wakeRunRef.current) {
+    if (onboardingPreviewEnabled) {
+      await timedStage('settings', async () => undefined);
+      if (run === wakeRunRef.current) await wakeSuccess(run);
+      return;
+    }
     try {
       const result = await timedStage('settings', () => PcControl.executeSshCommand({
         target: 'router', host: draft.routerHost, port,
@@ -246,6 +300,19 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     wakeStartedRef.current = performance.now();
     setProcessStage('router');
     go('wake-verifying');
+    if (onboardingPreviewEnabled) {
+      await timedStage('router', async () => undefined);
+      await timedStage('security', async () => undefined);
+      if (run !== wakeRunRef.current) return;
+      setHostKey({
+        host: draft.routerHost,
+        port,
+        algorithm: 'ssh-rsa',
+        fingerprint: 'SHA256:RouterPreviewOnly',
+      });
+      setScreen('router-trust');
+      return;
+    }
     try {
       const reachable = await timedStage('router', () => PcControl.checkHost({ host: draft.routerHost, port, timeoutMs: 5000 }));
       if (run !== wakeRunRef.current) return;
@@ -267,7 +334,7 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     const run = target === 'pc' ? pcRunRef.current : wakeRunRef.current;
     setBusy(true);
     try {
-      await PcControl.trustSshHostKey(hostKey);
+      if (!onboardingPreviewEnabled) await PcControl.trustSshHostKey(hostKey);
       if (run !== (target === 'pc' ? pcRunRef.current : wakeRunRef.current)) return;
       if (target === 'pc') { setScreen('pc-verifying'); await checkPcKey(hostKey.fingerprint, hostKey.port, run); }
       else { setScreen('wake-verifying'); await checkRouterSettings(hostKey.fingerprint, hostKey.port, run); }
@@ -280,12 +347,63 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
   }
   async function prepareIdentity() {
     setIdentityBusy(true); setInlineError(undefined);
-    try { await PcControl.ensureSshIdentity(); setIdentityReady(true); }
-    catch { setInlineError(m('identityError')); }
+    if (onboardingPreviewEnabled) {
+      setIdentityPublicKey(PREVIEW_PUBLIC_KEY);
+      setIdentityReady(true);
+      setIdentityBusy(false);
+      return;
+    }
+    try {
+      const identity = await PcControl.ensureSshIdentity();
+      if (!identity.available || !identity.publicKey) throw new Error('SSH public key unavailable');
+      setIdentityPublicKey(identity.publicKey);
+      setIdentityReady(true);
+    }
+    catch { showOnboardingToast(m('identityError')); }
     finally { setIdentityBusy(false); }
+  }
+  function openToolShare() {
+    if (Capacitor.isNativePlatform()) {
+      void Share.share({
+        title: m('pcPrepare.shareTitle'),
+        url: TOOL_URL,
+        dialogTitle: m('pcPrepare.shareTitle'),
+      }).catch(() => setShowToolShareDialog(true));
+      return;
+    }
+    if (typeof navigator.share !== 'function') {
+      setShowToolShareDialog(true);
+      return;
+    }
+    void navigator.share({ title: m('pcPrepare.shareTitle'), url: TOOL_URL }).catch((error: unknown) => {
+      if (error instanceof Error && error.name === 'AbortError') return;
+      setShowToolShareDialog(true);
+    });
+  }
+  async function copyToolUrl() {
+    try {
+      await navigator.clipboard.writeText(TOOL_URL);
+      setCopied('url');
+      clearTimeout(copiedTimerRef.current);
+      copiedTimerRef.current = setTimeout(() => setCopied(undefined), 950);
+      showOnboardingToast(m('urlCopied'));
+      toolShareDialogCloseRef.current?.();
+    } catch {
+      showOnboardingToast(m('urlCopyError'));
+    }
   }
   async function copyValue(kind: 'url' | 'key') {
     setInlineError(undefined);
+    if (onboardingPreviewEnabled && kind === 'key') {
+      try {
+        await navigator.clipboard.writeText(PREVIEW_PUBLIC_KEY);
+        setCopied('key');
+        clearTimeout(copiedTimerRef.current);
+        copiedTimerRef.current = setTimeout(() => setCopied(undefined), 950);
+        showOnboardingToast(m('preview.mockKeyCopied'));
+      } catch { showOnboardingToast(m('keyCopyError')); }
+      return;
+    }
     try {
       if (kind === 'url') await navigator.clipboard.writeText(TOOL_URL);
       else await PcControl.copySshPublicKey();
@@ -296,6 +414,13 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
     } catch { setInlineError(m(kind === 'url' ? 'urlCopyError' : 'keyCopyError')); }
   }
   async function refreshVpn() {
+    if (onboardingPreviewEnabled) {
+      setVpnStatusError(false);
+      setVpnInstalled(true);
+      setVpnProfiles([{ id: 'preview-vpn', name: m('preview.demoVpnProfile') }]);
+      setVpnSelected(undefined);
+      return;
+    }
     setVpnBusy(true);
     setVpnStatusError(false);
     try {
@@ -315,6 +440,11 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
   }
   async function save() {
     setBusy(true); setInlineError(undefined);
+    if (onboardingPreviewEnabled) {
+      setScreen('complete');
+      setBusy(false);
+      return;
+    }
     let previousProfile: string | undefined;
     let profileChanged = false;
     try {
@@ -364,12 +494,13 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
 
   return (
     <div className="preferences-page onboarding-page">
-      <div className="onboarding-layout" inert={showSkipDialog} onClickCapture={(event) => { returnFocusRef.current = (event.target as HTMLElement).closest('button'); }}>
+      <div className="onboarding-layout" inert={showSkipDialog || showToolShareDialog} onClickCapture={(event) => { returnFocusRef.current = (event.target as HTMLElement).closest('button'); }}>
         <header className="onboarding-flow-toolbar">
           <button type="button" className="onboarding-back" aria-label={t('onboarding.navigation.previous')}
             disabled={screen === 'welcome' || screen === 'complete'} onClick={back}><span aria-hidden="true">‹</span></button>
           {screen !== 'complete' && <button type="button" className="onboarding-skip" onClick={() => setShowSkipDialog(true)}>{m('later')}</button>}
         </header>
+        {onboardingPreviewEnabled && <p className="onboarding-preview-banner">{m('preview.banner')}</p>}
         {screen !== 'welcome' && screen !== 'complete' && <StageIndicator current={stage} labels={[m('stage.pc'), m('stage.wake'), m('stage.remote')]} ariaPrefix={m('stage.ariaPrefix')} />}
         <main className="onboarding-flow-content" ref={contentRef} key={screen}>
           {screen === 'welcome' && <Flow title={m('welcome.title')} description={m('welcome.description')} visual="pc">
@@ -379,8 +510,8 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
             <p className="onboarding-supporting">{m('prepare.note')}</p>
             {fullFooter(m('prepare.action'), () => go('pc-host'))}
           </Flow>}
-          {screen === 'pc-host' && input({ title: m('pcHost.title'), description: m('pcHost.description'), field: 'pcHost', label: m('pcHost.label'), placeholder: '192.168.0.10', helpSummary: m('pcHost.helpSummary'), help: m('pcHost.help'), next: 'pc-username' })}
-          {screen === 'pc-username' && input({ title: m('pcUsername.title'), description: m('pcUsername.description'), field: 'pcUsername', label: m('pcUsername.label'), placeholder: 'admin', helpSummary: m('pcUsername.helpSummary'), help: m('pcUsername.help'), next: 'pc-port-choice' })}
+          {screen === 'pc-host' && input({ title: m('pcHost.title'), description: m('pcHost.description'), field: 'pcHost', label: m('pcHost.label'), placeholder: m('pcHost.example'), helpSummary: m('pcHost.helpSummary'), help: m('pcHost.help'), next: 'pc-username' })}
+          {screen === 'pc-username' && input({ title: m('pcUsername.title'), description: m('pcUsername.description'), field: 'pcUsername', label: m('pcUsername.label'), placeholder: m('pcUsername.example'), helpSummary: m('pcUsername.helpSummary'), help: m('pcUsername.help'), next: 'pc-port-choice' })}
           {screen === 'pc-port-choice' && <Flow title={m('pcPortChoice.title')} description={m('pcPortChoice.description')}>
             <Choices>
               <Choice onClick={() => { setField('pcPort', 22); advance('pc-prepare'); }}>{m('defaultPort')}</Choice>
@@ -388,23 +519,31 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
             </Choices>
           </Flow>}
           {screen === 'pc-port-custom' && input({ title: m('pcPort.title'), description: m('pcPort.description'), field: 'pcPort', label: m('pcPort.label'), placeholder: '22', helpSummary: m('pcPort.helpSummary'), help: m('pcPort.help'), next: 'pc-prepare', numeric: true, transform: Number, final: true })}
-          {screen === 'pc-prepare' && <Flow title={m('pcPrepare.title')} description={m('pcPrepare.description')} visual="phone">
+          {screen === 'pc-prepare' && <Flow title={m('pcPrepare.title')} description={m('pcPrepare.description')}>
             <div className="onboarding-task-list">
-              <section className="onboarding-task"><strong>{m('pcPrepare.task1')}</strong><p>{m('pcPrepare.task1Body')}</p>
-                <div className="onboarding-url"><span>{TOOL_URL}</span><button type="button" className="onboarding-copy-button" aria-label={m('copyUrl')} onClick={() => void copyValue('url')}>{copied === 'url' ? <Check size={19} /> : <Copy size={19} />}</button></div>
+              <section className="onboarding-task">
+                <button type="button" className="onboarding-help-row onboarding-tool-share-row" aria-haspopup="dialog" onClick={openToolShare}>
+                  <span><strong>1. {m('pcPrepare.task1')}</strong><small>{m('pcPrepare.task1Body')}</small></span>
+                  <ChevronRight size={20} aria-hidden="true" />
+                </button>
               </section>
-              <section className="onboarding-task"><strong>{m('pcPrepare.task2')}</strong><p>{m('pcPrepare.task2Body')}</p>
+              <section className="onboarding-task"><strong>2. {m('pcPrepare.task2')}</strong><p>{m('pcPrepare.task2Body')}</p>
                 <Disclosure label={m('runHelpTitle')} detail={m('runHelp')} />
               </section>
             </div>
-            {inlineError && <InlineError message={inlineError} />}
             {!identityReady && <SecondaryAction disabled={identityBusy} onClick={() => void prepareIdentity()}>{identityBusy ? m('identityBusy') : m('identityPrepare')}</SecondaryAction>}
             {fullFooter(m('pcPrepare.action'), () => advance('pc-key'), !identityReady || identityBusy)}
           </Flow>}
-          {screen === 'pc-key' && <Flow title={m('pcKey.title')} description={m('pcKey.description')} visual="key">
-            <div className="onboarding-url"><span>{m('pcKey.keyReady')}</span><button type="button" className="onboarding-copy-button" aria-label={m('copyKey')} onClick={() => void copyValue('key')}>{copied === 'key' ? <Check size={19} /> : <Copy size={19} />}</button></div>
+          {screen === 'pc-key' && <Flow title={m('pcKey.title')} description={onboardingPreviewEnabled ? m('preview.keyDescription') : m('pcKey.description')} visual="key">
+            <button type="button" className="onboarding-help-row onboarding-key-copy-row" disabled={!onboardingPreviewEnabled && !identityPublicKey} onClick={() => void copyValue('key')}>
+              <span>
+                <strong>{onboardingPreviewEnabled ? m('preview.mockKeyTitle') : m('pcKey.copyTitle')}</strong>
+                <small>{onboardingPreviewEnabled ? m('preview.mockKeyBody') : m('pcKey.copyBody')}</small>
+              </span>
+              {copied === 'key' ? <Check size={20} aria-hidden="true" /> : <Copy size={20} aria-hidden="true" />}
+            </button>
             {inlineError && <InlineError message={inlineError} />}
-            {fullFooter(m('pcKey.action'), () => { if (returnTo) finishEdit(); else void verifyPc(); })}
+            {fullFooter(m('pcKey.action'), () => { if (returnTo) finishEdit(); else void verifyPc(); }, !onboardingPreviewEnabled && !identityPublicKey)}
           </Flow>}
           {screen === 'pc-verifying' && <Flow title={m('pcVerify.title')} visual="process">
             <StatusRows rows={PC_STAGES.map((key) => m(`pcVerify.${key}`))} keys={PC_STAGES} current={processStage} checking={m('checking')} done={m('done')} waiting={m('waiting')} />
@@ -433,10 +572,10 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
             </div>
             <Choices><Choice onClick={() => go('mac')}>{m('wakeHelp.canSetup')}</Choice><Choice onClick={skipWake}>{m('skipNow')}</Choice></Choices>
           </Flow>}
-          {screen === 'mac' && input({ title: m('mac.title'), description: m('mac.description'), field: 'pcMac', label: m('mac.label'), placeholder: '2C:F0:5D:83:5B:07', helpSummary: m('mac.helpSummary'), help: m('mac.help'), next: 'router-host', transform: (value) => value.toUpperCase() })}
-          {screen === 'router-host' && input({ title: m('routerHost.title'), description: m('routerHost.description'), field: 'routerHost', label: m('routerHost.label'), placeholder: '192.168.0.1', helpSummary: m('routerHost.helpSummary'), help: m('routerHost.help'), next: 'router-username' })}
-          {screen === 'router-username' && input({ title: m('routerUsername.title'), description: m('routerUsername.description'), field: 'routerUsername', label: m('routerUsername.label'), placeholder: 'username', helpSummary: m('routerUsername.helpSummary'), help: m('routerUsername.help'), next: 'interface' })}
-          {screen === 'interface' && input({ title: m('interface.title'), description: m('interface.description'), field: 'wolInterface', label: m('interface.label'), placeholder: 'br0', helpSummary: m('interface.helpSummary'), help: m('interface.help'), next: 'router-port-choice' })}
+          {screen === 'mac' && input({ title: m('mac.title'), description: m('mac.description'), field: 'pcMac', label: m('mac.label'), placeholder: m('mac.example'), helpSummary: m('mac.helpSummary'), help: m('mac.help'), next: 'router-host', transform: (value) => value.toUpperCase() })}
+          {screen === 'router-host' && input({ title: m('routerHost.title'), description: m('routerHost.description'), field: 'routerHost', label: m('routerHost.label'), placeholder: m('routerHost.example'), helpSummary: m('routerHost.helpSummary'), help: m('routerHost.help'), next: 'router-username' })}
+          {screen === 'router-username' && input({ title: m('routerUsername.title'), description: m('routerUsername.description'), field: 'routerUsername', label: m('routerUsername.label'), placeholder: m('routerUsername.example'), helpSummary: m('routerUsername.helpSummary'), help: m('routerUsername.help'), next: 'interface' })}
+          {screen === 'interface' && input({ title: m('interface.title'), description: m('interface.description'), field: 'wolInterface', label: m('interface.label'), placeholder: m('interface.example'), helpSummary: m('interface.helpSummary'), help: m('interface.help'), next: 'router-port-choice' })}
           {screen === 'router-port-choice' && <Flow title={m('routerPortChoice.title')} description={m('routerPortChoice.description')}>
             <Choices><Choice onClick={() => { setField('routerPort', 22); if (returnTo) finishEdit(22); else void verifyWake(22); }}>{m('defaultPort')}</Choice>
               <Choice onClick={() => { if (draft.routerPort === 22) setField('routerPort', 0); go('router-port-custom'); }}>{m('otherPort')}</Choice></Choices>
@@ -497,13 +636,28 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, registe
         </main>
       </div>
       {showSkipDialog && <PreferenceDialog variant="confirm" title={t('onboarding.dialog.skipTitle')} closeRef={dialogCloseRef} returnFocusRef={returnFocusRef} onClose={() => setShowSkipDialog(false)} actions={[{ label: t('onboarding.dialog.continueSetup'), close: true }, { label: t('onboarding.dialog.skip'), close: true, onClick: onSkip }]}><p>{t('onboarding.dialog.skipDescription')}</p></PreferenceDialog>}
+      {showToolShareDialog && <PreferenceDialog
+        title={m('pcPrepare.shareTitle')}
+        className="onboarding-dialog onboarding-share-dialog"
+        closeRef={toolShareDialogCloseRef}
+        returnFocusRef={returnFocusRef}
+        onClose={() => setShowToolShareDialog(false)}
+        actions={[
+          { label: m('pcPrepare.copyAction'), onClick: () => void copyToolUrl() },
+          { label: m('pcPrepare.closeAction'), close: true },
+        ]}
+      >
+        <p>{m('pcPrepare.shareDescription')}</p>
+        <code className="onboarding-share-url">{TOOL_URL}</code>
+      </PreferenceDialog>}
+      {toastMessage && <div className="onboarding-toast" role="status" aria-live="polite">{toastMessage}</div>}
     </div>
   );
 }
 
-type Visual = 'pc' | 'phone' | 'key' | 'process' | 'shield' | 'success' | 'power' | 'network' | 'error';
+type Visual = 'pc' | 'key' | 'process' | 'shield' | 'success' | 'power' | 'network' | 'error';
 function Flow({ title, description, visual, variant, children }: { title: string; description?: string; visual?: Visual; variant?: 'input'; children?: ReactNode }) {
-  const icons = { pc: Monitor, phone: Smartphone, key: ShieldCheck, process: LoaderCircle, shield: ShieldCheck, success: Check, power: Power, network: Network, error: TriangleAlert };
+  const icons = { pc: Monitor, key: ShieldCheck, process: LoaderCircle, shield: ShieldCheck, success: Check, power: Power, network: Network, error: TriangleAlert };
   const Icon = visual ? icons[visual] : undefined;
   return <section className={`onboarding-flow ${variant ? `onboarding-flow--${variant}` : ''}`}>
     {Icon && <div className={`onboarding-visual onboarding-visual--${visual}`} aria-hidden="true"><Icon size={30} strokeWidth={1.8} /></div>}
@@ -523,7 +677,7 @@ function TextAction({ children, onClick }: { children: ReactNode; onClick: () =>
 }
 function Choices({ children }: { children: ReactNode }) { return <div className="onboarding-choices" role="group">{children}</div>; }
 function Choice({ children, onClick, disabled }: { children: ReactNode; onClick: () => void; disabled?: boolean }) {
-  return <button type="button" className="onboarding-choice" onClick={onClick} disabled={disabled}><span><strong>{children}</strong></span><span className="onboarding-choice-radio" aria-hidden="true" /></button>;
+  return <button type="button" className="onboarding-choice" onClick={onClick} disabled={disabled}><span><strong>{children}</strong></span><ChevronRight size={20} aria-hidden="true" /></button>;
 }
 function Disclosure({ label, summary, detail, expanded, onExpandedChange }: { label: string; summary?: string; detail: string; expanded?: boolean; onExpandedChange?: () => void }) {
   const [localOpen, setLocalOpen] = useState(false);

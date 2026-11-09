@@ -1,4 +1,4 @@
-export type ErrorParams = Record<string, string | number>;
+type ErrorParams = Record<string, string | number>;
 
 export type UserError = {
   key: string;

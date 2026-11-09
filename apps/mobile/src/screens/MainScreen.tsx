@@ -11,9 +11,9 @@ import type {
   VpnStatus,
 } from '@pc-control/core';
 import { isPcConnectionConfigured, isPowerOnConfigured } from '@pc-control/core';
-import { HomeStatusCard } from './HomeStatusCard';
-import { Button } from './ui/button';
-import { PreferenceDialog } from './ui/preference-dialog';
+import { HomeStatusCard } from '../components/HomeStatusCard';
+import { Button } from '../components/ui/button';
+import { PreferenceDialog } from '../components/ui/preference-dialog';
 import { useAutoRefresh } from '../hooks/useAutoRefresh';
 import type { HomeSession, HomeStatusSnapshot } from '../hooks/useHomeSession';
 import { describeError } from '../lib/errorMapping';
@@ -303,9 +303,14 @@ export function MainScreen({
         setNetworkPath(net.state);
         setNetworkSsid(net.state === 'local' ? net.ssid : undefined);
         setVpnStatus(vpn.status);
-        const pcHostKeyResult = (pc.resolvedHost && pc.resolvedHost !== config.pc.host
-          ? await PcControl.getTrustedSshHostKey({ host: pc.resolvedHost, port: config.pc.sshPort })
-          : pcKey) as { fingerprint?: string; trusted?: boolean };
+        const pcHostKeyResult = (
+          pc.resolvedHost && pc.resolvedHost !== config.pc.host
+            ? await PcControl.getTrustedSshHostKey({
+                host: pc.resolvedHost,
+                port: config.pc.sshPort,
+              })
+            : pcKey
+        ) as { fingerprint?: string; trusted?: boolean };
         const routerHostKeyResult = routerKey as { fingerprint?: string };
         setPcHostKey(pcHostKeyResult.fingerprint);
         setRouterHostKey(routerHostKeyResult.fingerprint);

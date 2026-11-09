@@ -10,10 +10,10 @@ import {
   validateSettingField,
 } from '@pc-control/core';
 import { DiagnosticsScreen } from './DiagnosticsScreen';
-import { PageStack } from './ui/page-stack';
+import { PageStack } from '../components/ui/page-stack';
 import { usePageStack } from '../hooks/usePageStack';
 import type { PcControlConfig } from '@pc-control/core';
-import { PreferenceDialog } from './ui/preference-dialog';
+import { PreferenceDialog } from '../components/ui/preference-dialog';
 import { useAppCopy } from '../i18n';
 import {
   PreferenceActionRow,
@@ -23,7 +23,7 @@ import {
   PreferenceToggleRow,
   PreferenceToolbar,
   PreferenceValueRow as SettingsValueRow,
-} from './ui/preferences';
+} from '../components/ui/preferences';
 
 type BackHandler = () => boolean;
 type SettingsPage =
@@ -61,7 +61,6 @@ export function SettingsScreen({
   onSave,
   onThemePreview,
   onOpenOnboarding,
-  // onOpenSettingsSample,
   config,
   onBack,
   onToast,
@@ -71,7 +70,6 @@ export function SettingsScreen({
   onSave: (next: AppSettings) => Promise<void>;
   onThemePreview: (theme: ThemePreference) => void;
   onOpenOnboarding: () => void;
-  onOpenSettingsSample: () => void;
   config: PcControlConfig;
   onBack: () => void;
   onToast: (message: string) => void;

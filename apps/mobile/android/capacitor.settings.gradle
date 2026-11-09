@@ -11,5 +11,8 @@ project(':capacitor-app').projectDir = new File('../../../node_modules/.pnpm/@ca
 include ':capacitor-keyboard'
 project(':capacitor-keyboard').projectDir = new File('../../../node_modules/.pnpm/@capacitor+keyboard@8.0.5_@capacitor+core@8.5.0/node_modules/@capacitor/keyboard/android')
 
+include ':capacitor-share'
+project(':capacitor-share').projectDir = new File('../../../node_modules/.pnpm/@capacitor+share@8.0.3_@capacitor+core@8.5.0/node_modules/@capacitor/share/android')
+
 include ':pc-control-capacitor-pc-control'
 project(':pc-control-capacitor-pc-control').projectDir = new File('../node_modules/@pc-control/capacitor-pc-control/android')

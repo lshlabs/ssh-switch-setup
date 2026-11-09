@@ -1,9 +1,4 @@
-import type {
-  CopyMode,
-  LanguagePreference,
-  PcControlConfig,
-  ThemePreference,
-} from './types';
+import type { CopyMode, LanguagePreference, PcControlConfig, ThemePreference } from './types';
 import { DEFAULT_PC_CONTROL_CONFIG } from './config';
 
 export interface AppSettings {
@@ -138,9 +133,7 @@ export function isPowerOnConfigured(settings: AppSettings): boolean {
 }
 
 export function isRefreshIntervalValid(value: number): boolean {
-  return REFRESH_INTERVAL_OPTIONS.includes(
-    value as (typeof REFRESH_INTERVAL_OPTIONS)[number],
-  );
+  return REFRESH_INTERVAL_OPTIONS.includes(value as (typeof REFRESH_INTERVAL_OPTIONS)[number]);
 }
 
 export function validateSettingField(
@@ -150,7 +143,13 @@ export function validateSettingField(
   if (field === 'pcHost' || field === 'pcPort' || field === 'pcUsername') {
     return validatePcConnectionSettings(settings).filter((error) => error.field === field);
   }
-  if (field === 'pcMac' || field === 'routerHost' || field === 'routerPort' || field === 'routerUsername' || field === 'wolInterface') {
+  if (
+    field === 'pcMac' ||
+    field === 'routerHost' ||
+    field === 'routerPort' ||
+    field === 'routerUsername' ||
+    field === 'wolInterface'
+  ) {
     return validatePowerOnSettings(settings).filter((error) => error.field === field);
   }
   if (field === 'refreshIntervalSec' && !isRefreshIntervalValid(settings.refreshIntervalSec)) {

@@ -83,6 +83,7 @@ ASUS가 아닌 공유기도 SSH와 LAN-side WOL 유틸리티를 제공하면 호
 pnpm install
 pnpm lint
 pnpm typecheck
+pnpm check:unused
 pnpm test
 pnpm build
 pnpm android:test
@@ -92,3 +93,7 @@ pnpm android:build
 구조는 `apps/mobile`(React UI), `apps/windows-setup`(Tauri Setup Utility), `packages/core`(플랫폼 독립 모델), `packages/pairing-protocol`(페어링 계약), `packages/capacitor-pc-control`(Android native bridge)로 나뉩니다. React는 UI를 담당하고 SSH, 네트워크, VPN, 전원 orchestration은 native layer가 담당합니다.
 
 실제 기기에서의 SSH host-key 등록, VPN 연결, 그리고 Power On/Shutdown/Reboot는 이 저장소의 자동 빌드가 대신 실행하지 않습니다. 변경 후에는 harmless SSH 테스트를 먼저 수행하고, 실제 전원 명령은 기기에서 수동으로 확인하세요.
+
+모바일 소스는 `src/screens`(전체 화면), `src/components`(재사용 컴포넌트), `src/components/ui`(UI 기본 요소), `src/hooks`, `src/lib`, `src/i18n`, `src/styles`로 구분합니다. CSS 진입점은 `src/styles.css`이며 import 순서를 유지합니다. 지연 시간 차트는 필요할 때 별도 청크로 로드합니다.
+
+과거 작업 지시서와 디자인 분석 자료는 `docs`에 보관합니다. 기존 `test` 폴더의 펌웨어 분석 자료는 `docs/reference/oneui8`, 스크린샷은 `docs/reference/screenshots`, 루트의 백업 파일은 `docs/archive`로 이동했습니다. 실행 테스트는 소스 옆의 `*.test.ts`와 Android `src/test`에 있습니다. 정리 내역은 `docs/maintenance/optimization-2026-10-05.md`에 기록합니다.

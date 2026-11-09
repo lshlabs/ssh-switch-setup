@@ -1,0 +1,306 @@
+@layer base {
+  :root {
+    color-scheme: light;
+    font-family:
+      Inter,
+      ui-sans-serif,
+      system-ui,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      sans-serif;
+    --app-background: #f7f8fc;
+    --app-surface: #ffffff;
+    --app-surface-muted: #eef1f7;
+    --app-foreground: #172033;
+    --app-muted: #68748b;
+    --app-border: #dce2ec;
+    --app-primary: #3157d5;
+    --app-primary-strong: #2344b4;
+    --app-primary-soft: #e6ebff;
+    --app-success: #16835b;
+    --app-success-soft: #ddf7ec;
+    --app-warning: #a65e0a;
+    --app-warning-soft: #fff0d7;
+    --app-danger: #c33c4e;
+    --app-danger-soft: #ffe4e8;
+    --power-on: #16a36a;
+    --power-on-hover: #12885a;
+    --power-off: #d14352;
+    --power-off-hover: #b93645;
+    --power-reboot: #d98200;
+    --power-reboot-hover: #b86e00;
+
+    /* One UI 8 Sample Light semantic color roles. */
+    --oui-window: #f1f1f3;
+    --oui-surface: #fcfcff;
+    --oui-text-primary: #010102;
+    --oui-text-secondary: #848487;
+    --oui-text-inactive: #858585;
+    --oui-divider: #e4e4e7;
+    --oui-control-active: #387aff;
+    --oui-accent-text: #376fde;
+    --oui-control-inactive: #99999e;
+    --oui-radio-inactive: #acacb1;
+    --oui-control-thumb: #fcfcff;
+    --oui-control-focus: var(--oui-control-inactive);
+    --oui-disabled-alpha: 0.4;
+    --oui-state-pressed: rgb(0 0 0 / 10.2%);
+    --oui-state-highlight: rgb(0 0 0 / 10.2%);
+    --oui-on-color: #ffffff;
+    --oui-input-text: var(--oui-text-primary);
+    --oui-dialog-action-divider: rgb(132 132 135 / 50%);
+    --oui-dialog-backdrop: rgb(0 0 0 / 65%);
+    --oui-dialog-shadow: 0 8px 24px rgb(0 0 0 / 38%);
+
+    /* Settings category palette; these are component colors, not One UI
+       surface/text/primary roles. */
+    --settings-icon-connections: #5aa6fc;
+    --settings-icon-multi-devices: #4ed4d1;
+    --settings-icon-modes: #5b7be3;
+    --settings-icon-display: #a4d925;
+    --settings-icon-security: #7b84ff;
+    --settings-icon-tips: #ffac51;
+
+    /* One UI 8 / Samsung Settings activity transition.
+       Forward: incoming +100% -> 0, outgoing 0 -> -120px, 450ms.
+       Back: underlying -120px -> 0, current 0 -> +100%, 400ms.
+       No alpha animation on the page surfaces. */
+    --page-forward-duration: 450ms;
+    --page-forward-easing: cubic-bezier(0.22, 0.5, 0, 1);
+    --page-back-duration: 400ms;
+    --page-back-easing: cubic-bezier(0.22, 0.25, 0, 1);
+
+    --page-forward-enter-from: 100%;
+    --page-forward-background-to: -120px;
+    --page-back-underlying-from: -120px;
+    --page-back-exit-to: 100%;
+  }
+
+  html[data-theme='dark'] {
+    color-scheme: dark;
+    --app-background: #10141e;
+    --app-surface: #191f2d;
+    --app-surface-muted: #242c3d;
+    --app-foreground: #f2f4fa;
+    --app-muted: #aeb7ca;
+    --app-border: #354057;
+    --app-primary: #8da7ff;
+    --app-primary-strong: #b7c6ff;
+    --app-primary-soft: #28365f;
+    --app-success: #5ed6a8;
+    --app-success-soft: #173d34;
+    --app-warning: #f5b866;
+    --app-warning-soft: #493718;
+    --app-danger: #ff8d9c;
+    --app-danger-soft: #4a252f;
+    --power-on: #42c98a;
+    --power-on-hover: #31b678;
+    --power-off: #f06f7d;
+    --power-off-hover: #da5968;
+    --power-reboot: #f0a43a;
+    --power-reboot-hover: #d98b20;
+
+    /* One UI 8 Sample Dark semantic color roles. */
+    --oui-window: #010102;
+    --oui-surface: #17171a;
+    --oui-text-primary: #fafaff;
+    --oui-text-secondary: #99999e;
+    --oui-text-inactive: #a8a9a9;
+    --oui-divider: #3a3a3d;
+    --oui-control-active: #387aff;
+    --oui-accent-text: #598fff;
+    --oui-control-inactive: #636368;
+    --oui-radio-inactive: #7f7f83;
+    --oui-control-thumb: #fcfcff;
+    --oui-control-focus: var(--oui-control-inactive);
+    --oui-disabled-alpha: 0.4;
+    --oui-state-pressed: rgb(255 255 255 / 20%);
+    --oui-state-highlight: rgb(255 255 255 / 20%);
+    --oui-on-color: #ffffff;
+    --oui-input-text: var(--oui-text-primary);
+    --oui-dialog-action-divider: rgb(132 132 135 / 50%);
+    --oui-dialog-backdrop: rgb(0 0 0 / 65%);
+    --oui-dialog-shadow: 0 8px 24px rgb(0 0 0 / 38%);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    min-width: 320px;
+    overflow-x: hidden;
+    background: var(--app-background);
+    color: var(--app-foreground);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+  }
+
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input,
+  select,
+  textarea,
+  [contenteditable='true'] {
+    -webkit-user-select: text;
+    user-select: text;
+  }
+
+  button:focus,
+  input:focus,
+  select:focus,
+  textarea:focus {
+    outline: none;
+  }
+
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible {
+    outline: 2px solid var(--app-primary);
+    outline-offset: 3px;
+  }
+}
+
+.app-shell {
+  min-height: 100dvh;
+  background: var(--app-background);
+  color: var(--app-foreground);
+}
+
+.app-shell,
+.app-shell * {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.app-shell input,
+.app-shell select,
+.app-shell textarea,
+.app-shell [contenteditable='true'] {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.home-shell {
+  height: 100dvh;
+  min-height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: contain;
+}
+
+.page-shell {
+  height: 100dvh;
+  overflow: hidden;
+}
+
+.home-content,
+.page-content {
+  width: min(100%, 40rem);
+  margin: 0 auto;
+}
+
+.home-content {
+  height: 100%;
+  min-height: 0;
+  background: var(--preferences-window);
+  padding: max(0.75rem, env(safe-area-inset-top)) 1.25rem max(0.75rem, env(safe-area-inset-bottom));
+}
+
+.page-content {
+  position: relative;
+  height: 100dvh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: max(0.5rem, env(safe-area-inset-top)) 1.25rem max(2rem, env(safe-area-inset-bottom));
+  scrollbar-width: thin;
+}
+
+.settings-overview-page {
+  margin-inline: -1.25rem;
+}
+
+.home-layout {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.6vh, 1rem);
+}
+
+.home-topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.brand-lockup {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  font-size: 0.9rem;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.brand-icon {
+  display: inline-grid;
+  place-items: center;
+  color: var(--app-primary);
+}
+
+.home-topline .size-11 {
+  color: var(--app-muted);
+}
+
+.status-dot {
+  position: relative;
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: currentColor;
+  box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.status-dot--pulse::after {
+  position: absolute;
+  inset: -1px;
+  border-radius: 50%;
+  background: currentColor;
+  content: '';
+  animation: status-dot-pulse 2s ease-out infinite;
+}
+
+@keyframes status-dot-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.4;
+  }
+
+  75%,
+  100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}

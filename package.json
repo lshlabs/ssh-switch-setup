@@ -20,9 +20,11 @@
     "android:sync": "pnpm build && pnpm --filter mobile run cap:sync",
     "android:open": "pnpm --filter mobile run cap:open",
     "android:build": "pnpm android:sync && pnpm --filter mobile run android:build",
-    "android:test": "pnpm --filter mobile run android:test"
+    "android:test": "pnpm --filter mobile run android:test",
+    "check:unused": "knip --no-progress"
   },
   "devDependencies": {
+    "knip": "6.39.0",
     "prettier": "3.9.6",
     "turbo": "2.10.12",
     "vitest": "3.2.4"

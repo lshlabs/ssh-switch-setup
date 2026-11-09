@@ -6,19 +6,20 @@ import { Capacitor } from '@capacitor/core';
 import { Keyboard } from '@capacitor/keyboard';
 import { PcControl } from '@pc-control/capacitor-pc-control';
 import { useAppSettings } from './hooks/useAppSettings';
-import { ActionHistoryPage } from './components/ActionHistoryPage';
-import { MainScreen } from './components/MainScreen';
-import { V1OnboardingScreen } from './components/V1OnboardingScreen';
-import { SettingsScreen } from './components/SettingsScreen';
+import { ActionHistoryPage } from './screens/ActionHistoryPage';
+import { MainScreen } from './screens/MainScreen';
+import { OnboardingScreen } from './components/OnboardingScreen';
+import { SettingsScreen } from './screens/SettingsScreen';
 import { useHomeSession } from './hooks/useHomeSession';
+import { onboardingPreviewEnabled } from './lib/onboardingPreview';
 import type { ThemePreference } from '@pc-control/core';
 import { I18nProvider, useAppCopy } from './i18n';
 
-type Screen = 'main' | 'settings' | 'settings-sample' | 'history' | 'onboarding';
+type Screen = 'main' | 'settings' | 'history' | 'onboarding';
 type BackHandler = () => boolean;
 
 export default function App() {
-  const { settings, config, loaded, save, reload } = useAppSettings();
+  const { settings, config, loaded, save } = useAppSettings();
   const homeSession = useHomeSession(config.pc.host);
   const [screen, setScreen] = useState<Screen>('main');
   const [onboardingDismissed, setOnboardingDismissed] = useState(false);
@@ -40,6 +41,10 @@ export default function App() {
 
   useEffect(() => {
     if (!loaded) return;
+    if (onboardingPreviewEnabled && !onboardingDismissed) {
+      setScreen('onboarding');
+      return;
+    }
     if (!settings.onboardingCompleted && !onboardingDismissed) {
       setScreen('onboarding');
     }
@@ -100,10 +105,6 @@ export default function App() {
         setScreen('main');
         return;
       }
-      if (screenRef.current === 'settings-sample') {
-        setScreen('settings');
-        return;
-      }
       if (screenRef.current === 'onboarding') {
         setOnboardingDismissed(true);
         setScreen('main');
@@ -148,44 +149,29 @@ export default function App() {
   const content =
     screen === 'onboarding' ? (
       <main className="app-shell">
-        <V1OnboardingScreen
+        <OnboardingScreen
           settings={settings}
-          onCommit={async (next, pcKey, routerKey, selectedVpnProfileId) => {
-            if (Capacitor.isNativePlatform()) {
-              await PcControl.commitOnboarding({
-                settings: next,
-                pcKey,
-                ...(routerKey ? { routerKey } : {}),
-                ...(selectedVpnProfileId ? { selectedVpnProfileId } : {}),
-              });
-              await reload();
-            } else {
-              await save(next);
-            }
-          }}
+          onSave={save}
           onComplete={() => setScreen('main')}
           onSkip={() => {
             setOnboardingDismissed(true);
             setScreen('main');
           }}
+          onToast={showToast}
           registerBack={registerBack}
         />
       </main>
     ) : (
       <main
         className={`app-shell ${screen === 'main' ? 'home-shell' : 'page-shell'}${
-          screen === 'settings'
-            ? ' page-shell-settings'
-            : screen === 'settings-sample'
-              ? ' page-shell-settings-sample'
-              : ''
+          screen === 'settings' ? ' page-shell-settings' : ''
         }`}
       >
         <div
           className={
             screen === 'main'
               ? 'home-content'
-              : `page-content${screen === 'settings' ? ' page-content-settings' : screen === 'settings-sample' ? ' page-content-settings-sample' : ''}`
+              : `page-content${screen === 'settings' ? ' page-content-settings' : ''}`
           }
         >
           {screen === 'main' && (
@@ -211,7 +197,6 @@ export default function App() {
                 setOnboardingDismissed(false);
                 setScreen('onboarding');
               }}
-              onOpenSettingsSample={() => setScreen('settings-sample')}
               onBack={() => setScreen('main')}
               config={config}
               onToast={showToast}

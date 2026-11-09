@@ -1,4 +1,4 @@
-import { PageStack } from './ui/page-stack';
+import { PageStack } from '../components/ui/page-stack';
 import { usePageStack } from '../hooks/usePageStack';
 import { useEffect, useRef, useState } from 'react';
 import {
@@ -34,7 +34,7 @@ import {
   PreferenceSection,
   PreferenceStatusRow,
   PreferenceToolbar,
-} from './ui/preferences';
+} from '../components/ui/preferences';
 import { describeError } from '../lib/errorMapping';
 import {
   isPcUnavailableError,
@@ -121,11 +121,15 @@ export function DiagnosticsScreen({
   const [routerLoginCheck, setRouterLoginCheck] = useState<RouterLoginCheck>(
     () => cachedState?.routerLoginCheck ?? 'idle',
   );
-  const [vpnInstalled, setVpnInstalled] = useState<boolean | undefined>(() => cachedState?.vpnInstalled);
+  const [vpnInstalled, setVpnInstalled] = useState<boolean | undefined>(
+    () => cachedState?.vpnInstalled,
+  );
   const [vpnSelectedProfile, setVpnSelectedProfile] = useState<string | undefined>(
     () => cachedState?.vpnSelectedProfile,
   );
-  const [vpnPermission, setVpnPermission] = useState<Check>(() => cachedState?.vpnPermission ?? 'idle');
+  const [vpnPermission, setVpnPermission] = useState<Check>(
+    () => cachedState?.vpnPermission ?? 'idle',
+  );
   const [vpnStatus, setVpnStatus] = useState<OpenVpnStatusResult>(
     () => cachedState?.vpnStatus ?? { status: 'disconnected', vpnWasStartedByApp: false },
   );
@@ -585,9 +589,7 @@ export function DiagnosticsScreen({
               label={copy('diagnostics.labels.routerConnection')}
               description={routerCheckSummary(config.router.host, routerCheck, copy)}
               descriptionTone={config.router.host ? checkTone(routerCheck) : 'warning'}
-              disabled={
-                quickDiagnosticRunning || !config.router.host || routerCheck === 'checking'
-              }
+              disabled={quickDiagnosticRunning || !config.router.host || routerCheck === 'checking'}
               onClick={() => void checkRouter()}
             />
             <PreferenceActionRow
@@ -852,17 +854,14 @@ function vpnPermissionSummary(
         : copy('diagnostics.statusSummary.notChecked');
 }
 
-function routerLoginLabel(
-  check: RouterLoginCheck,
-  copy: (key: string) => string,
-) {
+function routerLoginLabel(check: RouterLoginCheck, copy: (key: string) => string) {
   return check === 'checking'
     ? copy('diagnostics.statusSummary.checking')
     : check === 'ok'
       ? copy('diagnostics.statusSummary.routerLoginSucceeded')
-    : check === 'auth-failed'
-      ? copy('diagnostics.statusSummary.routerLoginFailed')
-      : check === 'pending'
+      : check === 'auth-failed'
+        ? copy('diagnostics.statusSummary.routerLoginFailed')
+        : check === 'pending'
           ? copy('diagnostics.statusSummary.securityPending')
           : check === 'error'
             ? copy('diagnostics.statusSummary.routerLoginFailed')
@@ -1010,7 +1009,7 @@ function hostKeyCheckSummary(
     ? copy('diagnostics.statusSummary.unavailable')
     : key?.trusted
       ? copy('diagnostics.security.securityInfoChecked')
-    : scanState === 'checking'
+      : scanState === 'checking'
         ? copy('diagnostics.security.checkingSecurityInfo')
         : scanState === 'pending'
           ? copy('diagnostics.statusSummary.securityPending')
@@ -1081,17 +1080,22 @@ function HostKeyRow({
   const { copy } = useAppCopy();
   const cacheKey = `${kind}:${host}:${port}`;
   const cachedState = hostKeyStateCache.get(cacheKey);
-  const [key, setKey] = useState<{
-    algorithm?: string;
-    fingerprint?: string;
-    trusted: boolean;
-  } | undefined>(() => cachedState?.key);
+  const [key, setKey] = useState<
+    | {
+        algorithm?: string;
+        fingerprint?: string;
+        trusted: boolean;
+      }
+    | undefined
+  >(() => cachedState?.key);
   const keyRef = useRef<typeof key>(undefined);
   useEffect(() => {
     keyRef.current = key;
   }, [key]);
   const [busy, setBusy] = useState(false);
-  const [scanState, setScanState] = useState<HostKeyScanState>(() => cachedState?.scanState ?? 'idle');
+  const [scanState, setScanState] = useState<HostKeyScanState>(
+    () => cachedState?.scanState ?? 'idle',
+  );
   useEffect(() => {
     hostKeyStateCache.set(cacheKey, { key, scanState });
   }, [cacheKey, key, scanState]);
@@ -1185,14 +1189,20 @@ function HostKeyRow({
   return (
     <PreferenceSection className="diagnostics-section">
       <div className="diagnostics-host-key-target">
-        <p className="diagnostics-host-key-detail-label">{copy('diagnostics.labels.connectionTarget')}</p>
+        <p className="diagnostics-host-key-detail-label">
+          {copy('diagnostics.labels.connectionTarget')}
+        </p>
         <p className="diagnostics-host-key-detail-value diagnostics-host-key-target-value">
           {host ? `${host}:${port}` : copy('diagnostics.statusSummary.unavailable')}
         </p>
       </div>
       <PreferenceActionRow
         label={copy('diagnostics.labels.securityCheck')}
-        description={busy ? copy('diagnostics.security.checkingSecurityInfo') : hostKeyCheckSummary(host, key, scanState, copy)}
+        description={
+          busy
+            ? copy('diagnostics.security.checkingSecurityInfo')
+            : hostKeyCheckSummary(host, key, scanState, copy)
+        }
         descriptionTone={busy ? 'neutral' : hostKeyTone(host, key, scanState)}
         disabled={!host || busy}
         onClick={() => void scan()}

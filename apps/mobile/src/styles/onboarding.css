@@ -1,0 +1,109 @@
+/* Setup routes share the app's theme tokens while using compact technical forms. */
+.setup-screen {
+  min-height: 100dvh;
+  padding: 1.25rem 1.25rem 3rem;
+  color: var(--foreground, #17212f);
+}
+.setup-screen section {
+  display: grid;
+  gap: 1rem;
+  max-width: 32rem;
+  margin: 3rem auto 0;
+}
+.setup-screen h1 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.setup-screen p {
+  line-height: 1.5;
+}
+.setup-top {
+  display: flex;
+  justify-content: space-between;
+}
+.setup-choice {
+  display: grid;
+  gap: 0.4rem;
+  padding: 1rem;
+  text-align: left;
+  border: 1px solid #a8b9cb;
+  border-radius: 1rem;
+}
+.setup-choice span {
+  font-size: 0.875rem;
+}
+.setup-field {
+  display: grid;
+  gap: 0.45rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.setup-field input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #a8b9cb;
+  border-radius: 0.65rem;
+  background: transparent;
+  color: inherit;
+}
+.setup-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.setup-profiles {
+  display: grid;
+  gap: 0.6rem;
+}
+.setup-profiles label {
+  display: flex;
+  gap: 0.5rem;
+}
+.setup-primary {
+  padding: 0.85rem 1rem;
+  color: white;
+  background: #1177cf;
+  border-radius: 0.7rem;
+  font-weight: 700;
+}
+.setup-primary:disabled {
+  opacity: 0.5;
+}
+.setup-code {
+  font-size: 2rem;
+  letter-spacing: 0.2rem;
+}
+.setup-error {
+  padding: 0.8rem;
+  background: #fde9e9;
+  color: #8e1111;
+  border-radius: 0.5rem;
+}
+.setup-skip-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: #10203399;
+}
+.setup-skip-dialog {
+  width: min(100%, 25rem);
+  padding: 1.5rem;
+  border-radius: 1rem;
+  background: var(--background, #fff);
+  box-shadow: 0 1rem 3rem #0004;
+}
+.setup-skip-dialog h2 {
+  margin-bottom: 0.75rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+.setup-skip-dialog div {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}

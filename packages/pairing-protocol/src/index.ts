@@ -109,7 +109,12 @@ export function parsePairingStatus(value: unknown): PairingStatus {
   if (!object(value) || !nonempty(value.requestId))
     throw new Error('페어링 응답 형식이 올바르지 않습니다.');
   if (value.state === 'verifying' && nonempty(value.challenge)) {
-    return { state: 'verifying', requestId: value.requestId, pc: parsePairedPcInfo(value.pc), challenge: value.challenge };
+    return {
+      state: 'verifying',
+      requestId: value.requestId,
+      pc: parsePairedPcInfo(value.pc),
+      challenge: value.challenge,
+    };
   }
   if (value.state === 'pending' && nonempty(value.confirmationCode)) {
     return {
@@ -121,9 +126,17 @@ export function parsePairingStatus(value: unknown): PairingStatus {
   if (value.state === 'registering' || value.state === 'cancelling') {
     return { state: value.state, requestId: value.requestId };
   }
-  if (value.state === 'failed' || value.state === 'cancelled' || value.state === 'verified' || value.state === 'completed') {
-    return { state: value.state, requestId: value.requestId,
-      ...(typeof value.error === 'string' ? { error: value.error } : {}) };
+  if (
+    value.state === 'failed' ||
+    value.state === 'cancelled' ||
+    value.state === 'verified' ||
+    value.state === 'completed'
+  ) {
+    return {
+      state: value.state,
+      requestId: value.requestId,
+      ...(typeof value.error === 'string' ? { error: value.error } : {}),
+    };
   }
   if (value.state === 'rejected' || value.state === 'expired') {
     return { state: value.state, requestId: value.requestId };

@@ -1,0 +1,1552 @@
+/* One UI preference system
+ * Base primitives own geometry and typography.
+ * Page adapters only control placement; variants only add their unique UI.
+ */
+.page-content.page-content-settings,
+.diagnostics-screen-page,
+.preferences-page,
+.home-content,
+.preferences-dialog-backdrop {
+  /* Legacy aliases. Color source of truth is the --oui-* layer above. */
+  --preferences-ripple-release-duration: 320ms;
+  --preferences-dialog-translate-duration: 300ms;
+
+  --preferences-window: var(--oui-window);
+  --preferences-surface: var(--oui-surface);
+  --preferences-font-family:
+    'sec', 'SamsungOne', 'Noto Sans KR', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --preferences-text-primary: var(--oui-text-primary);
+  --preferences-text-secondary: var(--oui-text-secondary);
+  --preferences-text-inactive: var(--oui-text-inactive);
+  /* Settings overview is the single source of truth for row separators. */
+  --preferences-divider-color: var(--oui-divider);
+  --preferences-divider-opacity: 1;
+  --preferences-divider-thickness: 1px;
+  --preferences-divider: var(--preferences-divider-color);
+  --preferences-card-inset: 10px;
+  --preferences-card-radius: 26px;
+  --preferences-row-min-height: 56px;
+
+  --preferences-row-padding-start: 18px;
+  --preferences-row-padding-end: 18px;
+
+  --preferences-divider-inset: 16px;
+
+  --preferences-option-title-color: var(--oui-text-primary);
+  --preferences-option-summary-color: var(--oui-accent-text);
+  --preferences-accent-text: var(--oui-accent-text);
+  /* Calibrated settings row geometry. */
+  --preferences-option-row-padding-block: 14.2px;
+  --preferences-option-first-row-padding-top: 15.64px;
+  --preferences-option-first-row-padding-bottom: 14px;
+
+  --preferences-switch-track-on: var(--oui-control-active);
+  --preferences-switch-track-off: var(--oui-control-inactive);
+  --preferences-switch-thumb: var(--oui-control-thumb);
+  --preferences-control-active: var(--oui-control-active);
+  --preferences-radio-inactive: var(--oui-radio-inactive);
+  --preferences-switch-track-width: 35px;
+  --preferences-switch-track-height: 20px;
+
+  /* Icon and text geometry for the settings list. */
+  --preferences-overview-row-padding-start: 20px;
+  --preferences-overview-row-padding-end: 20px;
+  --preferences-overview-icon-frame-width: 44px;
+  --preferences-overview-icon-size: 28px;
+  --preferences-overview-group-gap: 20px;
+
+  --preferences-toolbar-height: 64px;
+  --preferences-toolbar-title-size: 21px;
+  --preferences-title-size: 17px;
+  --preferences-summary-size: 14px;
+
+  --preferences-dialog-surface: var(--oui-surface);
+  --preferences-dialog-content-inset: 24px;
+  --preferences-dialog-action-size: 18px;
+  --preferences-control-outline: var(--oui-control-focus);
+  --preferences-control-selected: var(--oui-control-active);
+  --preferences-control-highlight: var(--oui-state-highlight);
+  --preferences-input-text: var(--oui-input-text);
+
+  --preferences-dialog-edge-gap: 19px;
+
+  --preferences-dialog-keyboard-offset: 51px;
+}
+
+.preferences-page {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--preferences-window);
+  color: var(--preferences-text-primary);
+  font-family: var(--preferences-font-family);
+}
+
+.preferences-toolbar {
+  display: flex;
+  min-height: var(--preferences-toolbar-height);
+  align-items: center;
+  padding-inline: 18px;
+}
+
+.preferences-toolbar-back {
+  display: flex;
+  width: 48px;
+  min-width: 48px;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.preferences-toolbar-back-button {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.preferences-toolbar-back-button:focus-visible {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: 2px;
+}
+
+.preferences-toolbar-back-icon {
+  width: 28px;
+  height: 28px;
+  color: var(--preferences-text-primary);
+}
+
+.preferences-toolbar-title {
+  min-width: 0;
+  margin: 0;
+  color: var(--preferences-text-primary);
+  font-size: var(--preferences-toolbar-title-size);
+  font-weight: 700;
+  line-height: 1;
+}
+
+.preferences-toolbar-action {
+  display: flex;
+  margin-left: auto;
+}
+
+.preferences-toolbar-help {
+  display: inline-flex;
+  width: 48px;
+  height: 48px;
+  align-items: center;
+  justify-content: flex-end;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  cursor: pointer;
+}
+
+.preferences-toolbar-help:focus-visible {
+  border-radius: 50%;
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -8px;
+}
+
+.preferences-list {
+  display: grid;
+  width: 100%;
+  gap: var(--preferences-overview-group-gap);
+  padding-bottom: 0;
+}
+
+.preferences-group,
+.preference-section-card {
+  overflow: hidden;
+  border-radius: var(--preferences-card-radius);
+  background: var(--preferences-surface);
+}
+
+.preferences-group,
+.preference-section-card {
+  width: calc(100% - (var(--preferences-card-inset) * 2));
+  margin-inline: var(--preferences-card-inset);
+}
+
+.preference-section-card > :first-child {
+  padding-top: var(--preferences-option-first-row-padding-top);
+  padding-bottom: var(--preferences-option-first-row-padding-bottom);
+}
+
+.preferences-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: var(--preferences-row-min-height);
+  align-items: center;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  padding: var(--preferences-option-row-padding-block) var(--preferences-overview-row-padding-end)
+    var(--preferences-option-row-padding-block) var(--preferences-overview-row-padding-start);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.preferences-group > .preferences-row:first-child {
+  padding-top: var(--preferences-option-first-row-padding-top);
+  padding-bottom: var(--preferences-option-first-row-padding-bottom);
+}
+
+.preferences-row:last-child .preferences-divider {
+  display: none;
+}
+
+.preferences-row:focus-visible {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preferences-ripple {
+  position: absolute;
+  z-index: 0;
+  border-radius: 50%;
+  background: var(--oui-state-highlight);
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0);
+  transform-origin: center;
+  animation: preferences-ripple-press 220ms cubic-bezier(0.2, 0, 0, 1) forwards;
+}
+
+.preferences-ripple.is-releasing {
+  animation: preferences-ripple-release var(--preferences-ripple-release-duration) ease-out forwards;
+}
+
+.preferences-icon-frame {
+  display: flex;
+  width: var(--preferences-overview-icon-frame-width);
+  min-width: var(--preferences-overview-icon-frame-width);
+  position: relative;
+  z-index: 1;
+  align-items: center;
+  justify-content: flex-start;
+  padding-inline-end: 16px;
+}
+
+.preferences-icon {
+  display: block;
+  width: var(--preferences-overview-icon-size);
+  height: var(--preferences-overview-icon-size);
+  flex: 0 0 var(--preferences-overview-icon-size);
+}
+
+.preferences-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  position: relative;
+  z-index: 1;
+  justify-content: center;
+}
+
+.preferences-title {
+  overflow: hidden;
+  color: var(--preferences-option-title-color);
+  font-size: var(--preferences-title-size);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.1px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preferences-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--preferences-text-secondary);
+  font-size: var(--preferences-summary-size);
+  font-weight: 400;
+  line-height: 1.35;
+  -webkit-box-orient: vertical;
+  line-clamp: 4;
+  -webkit-line-clamp: 4;
+}
+
+.preferences-divider {
+  position: absolute;
+  z-index: 2;
+  right: var(--preferences-divider-inset);
+  bottom: 0;
+  left: var(--preferences-divider-inset);
+  height: var(--preferences-divider-thickness);
+  background: var(--preferences-divider);
+  opacity: var(--preferences-divider-opacity);
+}
+
+.preferences-group > .preferences-row > .preferences-divider {
+  left: calc(
+    var(--preferences-overview-row-padding-start) + var(--preferences-overview-icon-frame-width)
+  );
+}
+
+@keyframes preferences-ripple-press {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes preferences-ripple-release {
+  from {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1.05);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preferences-ripple,
+  .preferences-ripple.is-releasing {
+    animation-duration: 1ms;
+  }
+}
+
+.preferences-option-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: var(--preferences-row-min-height);
+  align-items: center;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  padding: var(--preferences-option-row-padding-block) var(--preferences-row-padding-end)
+    var(--preferences-option-row-padding-block) var(--preferences-row-padding-start);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.preferences-group > .preferences-option-row:first-child {
+  padding-top: var(--preferences-option-first-row-padding-top);
+  padding-bottom: var(--preferences-option-first-row-padding-bottom);
+}
+
+.preferences-option-row:not(:last-child)::after,
+.preferences-toggle-row:not(:last-child)::after {
+  position: absolute;
+  right: var(--preferences-divider-inset);
+  bottom: 0;
+  left: var(--preferences-divider-inset);
+  height: var(--preferences-divider-thickness);
+  background: var(--preferences-divider);
+  opacity: var(--preferences-divider-opacity);
+  content: '';
+}
+
+.preferences-option-row-copy,
+.preferences-toggle-copy {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.preferences-option-row-title,
+.preferences-option-row-summary {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preferences-option-row-title {
+  color: var(--preferences-option-title-color);
+  font-size: var(--preferences-title-size);
+  font-weight: 400;
+  line-height: 1.35;
+
+  letter-spacing: 0.1px;
+}
+
+.preferences-option-row-summary {
+  position: relative;
+  top: -0.4px;
+  left: -0.4px;
+  color: var(--preferences-option-summary-color);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.preferences-toggle-copy .preferences-option-row-summary {
+  color: var(--preferences-text-secondary);
+}
+
+.preferences-group > .preferences-option-row:first-child .preferences-option-row-summary {
+  top: 0.4px;
+}
+
+.preferences-option-row:focus-visible,
+.preferences-toggle-row:focus-visible {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preferences-toggle-row {
+  position: relative;
+  display: flex;
+  width: 100%;
+  min-height: var(--preferences-row-min-height);
+  align-items: center;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  padding: var(--preferences-option-row-padding-block) var(--preferences-row-padding-end)
+    var(--preferences-option-row-padding-block) var(--preferences-row-padding-start);
+  font: inherit;
+  text-align: start;
+  cursor: pointer;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.preferences-toggle-control {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  min-width: 32px;
+  min-height: 44px;
+  flex: 0 0 auto;
+  place-items: center;
+
+  padding: 12px 0px 12px 6px;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .preferences-toggle-control:hover .preferences-switch-highlight {
+    opacity: 1;
+  }
+}
+
+.preferences-toggle-control:active .preferences-switch-highlight {
+  opacity: 0.8;
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+.preferences-switch {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: var(--preferences-switch-track-width);
+  height: var(--preferences-switch-track-height);
+  border-radius: 10px;
+  background: transparent;
+}
+
+.preferences-switch::before,
+.preferences-switch::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  content: '';
+  pointer-events: none;
+  transition: opacity 300ms cubic-bezier(0.22, 0.25, 0, 1);
+}
+
+.preferences-switch::before {
+  background: var(--preferences-switch-track-off);
+  opacity: 1;
+}
+
+.preferences-switch::after {
+  background: var(--preferences-switch-track-on);
+  opacity: 0;
+}
+
+.preferences-switch.is-on::before {
+  opacity: 0;
+}
+
+.preferences-switch.is-on::after {
+  opacity: 1;
+}
+
+.preferences-switch-thumb {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  display: block;
+  width: 20px;
+  height: 20px;
+  pointer-events: none;
+  transform: translateX(0);
+  transition: transform 300ms cubic-bezier(0.22, 0.25, 0, 1);
+}
+
+.preferences-switch-highlight {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 0;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+
+  background: var(--preferences-control-highlight);
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  transform-origin: center;
+  transition: opacity 350ms cubic-bezier(0.17, 0.17, 0.67, 1);
+}
+
+.preferences-switch-thumb-fill {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 1;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--preferences-switch-thumb);
+  transform: scale(1);
+  transform-origin: center;
+  transition: transform 200ms cubic-bezier(0.4, 0, 0.6, 1);
+}
+
+.preferences-switch.is-on .preferences-switch-thumb {
+  transform: translateX(15px);
+}
+
+.preferences-toggle-control:active .preferences-switch-thumb-fill {
+  transform: scale(0.8);
+}
+
+.preferences-dialog-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+
+  display: grid;
+  place-items: end center;
+
+  background: var(--oui-dialog-backdrop);
+
+  padding: 16px 10px;
+
+  /* Keep the dialog above the keyboard, accounting for the viewport offset. */
+  padding-bottom: calc(
+    var(--preferences-dialog-edge-gap) +
+      max(0px, calc(var(--keyboard-height, 0px) - var(--preferences-dialog-keyboard-offset))) +
+      env(safe-area-inset-bottom)
+  );
+
+  animation: preferences-dialog-backdrop-enter 150ms linear both;
+
+  transition: padding-bottom 280ms cubic-bezier(0.22, 0.25, 0, 1);
+}
+
+.preferences-dialog-backdrop.is-closing {
+  animation: preferences-dialog-backdrop-exit 100ms linear both;
+}
+
+.preferences-dialog {
+  display: flex;
+  width: 100%;
+  max-height: calc(100dvh - var(--keyboard-height, 0px) - 32px - env(safe-area-inset-bottom));
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--preferences-card-radius);
+  background: var(--preferences-dialog-surface);
+  color: var(--preferences-text-primary);
+  font-family: var(--preferences-font-family);
+  box-shadow: var(--oui-dialog-shadow);
+  animation:
+    preferences-dialog-enter-translate var(--preferences-dialog-translate-duration)
+      cubic-bezier(0.17, 0.17, 0.2, 1) both,
+    preferences-dialog-enter-alpha 150ms cubic-bezier(0.17, 0.17, 0.2, 1) both;
+}
+
+.preferences-dialog.is-closing {
+  animation:
+    preferences-dialog-exit-translate var(--preferences-dialog-translate-duration)
+      cubic-bezier(0.17, 0.17, 0.2, 1) both,
+    preferences-dialog-exit-alpha 100ms linear both;
+}
+
+.preferences-dialog.preferences-dialog-edit {
+  width: 340px;
+  max-width: 100%;
+}
+
+.preferences-dialog-title-area {
+  flex: 0 0 auto;
+
+  padding: 27px var(--preferences-dialog-content-inset) 12px;
+}
+
+.preferences-dialog-title-area h2 {
+  margin: 0;
+  overflow: hidden;
+  font-family: 'sec-roboto-light', 'sec', 'SamsungOne', 'Noto Sans KR', system-ui, sans-serif;
+  font-size: var(--preferences-title-size);
+  font-weight: 700;
+  line-height: normal;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.preferences-dialog-content {
+  min-height: 0;
+  overflow: auto;
+  padding: 0 20px 16px;
+}
+
+.preferences-dialog-edit-content {
+  min-height: 48px;
+  overflow: hidden;
+  padding: 0;
+}
+
+.preferences-dialog-edit-scroll {
+  overflow: auto;
+
+  padding: 9px var(--preferences-dialog-content-inset) 32px;
+  overscroll-behavior: contain;
+}
+
+.preferences-dialog-edit-container {
+  display: block;
+  padding: 18px 0 8px;
+}
+
+.preferences-dialog-choice-content {
+  padding: 0 14px 18px;
+}
+
+.preferences-dialog-options {
+  display: grid;
+  margin: 0;
+}
+
+.preferences-dialog-choice-row {
+  position: relative;
+  display: flex;
+  min-height: 54px;
+  align-items: center;
+  justify-content: flex-start;
+
+  gap: 18px;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  padding: 12px 4px;
+  font: inherit;
+  font-size: var(--preferences-title-size);
+  line-height: 1.25;
+  text-align: start;
+  cursor: pointer;
+  isolation: isolate;
+  transform-origin: center;
+  transition: transform 350ms cubic-bezier(0.22, 0.25, 0, 1);
+}
+
+.preferences-dialog-choice-row.is-selected {
+  color: var(--preferences-accent-text);
+}
+
+.preferences-dialog-choice-row::before {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  background: var(--preferences-control-highlight);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 350ms cubic-bezier(0.22, 0.25, 0, 1);
+}
+
+.preferences-dialog-choice-row > * {
+  position: relative;
+  z-index: 1;
+}
+
+.preferences-dialog-choice-row:active {
+  transform: scale(0.98);
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+.preferences-dialog-choice-row:active::before {
+  opacity: 0.8;
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+.preferences-dialog-choice-row:focus-visible {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preferences-dialog-choice-row:focus-visible::before {
+  opacity: 0.6;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .preferences-dialog-choice-row:hover::before {
+    opacity: 1;
+    transition-duration: 100ms;
+    transition-timing-function: linear;
+  }
+}
+
+.preferences-dialog-choice-indicator {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  border: 0;
+  border-radius: 0;
+}
+
+.preferences-dialog-choice-indicator::before {
+  position: absolute;
+  inset: 6px;
+  border: 2px solid var(--preferences-radio-inactive);
+  border-radius: 50%;
+  content: '';
+}
+
+.preferences-dialog-choice-row.is-selected .preferences-dialog-choice-indicator::before {
+  border-color: var(--preferences-control-active);
+  background: var(--preferences-control-active);
+  box-shadow: inset 0 0 0 4px var(--preferences-dialog-surface);
+}
+
+.preferences-dialog-actions {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  padding: 0 var(--preferences-dialog-content-inset) 20px;
+}
+
+.preferences-dialog-action {
+  position: relative;
+  z-index: 0;
+  min-width: 42px;
+  min-height: 36px;
+  flex: 1 1 0;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  padding: 4px 18px;
+  font: inherit;
+  font-size: var(--preferences-dialog-action-size);
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  isolation: isolate;
+  transform-origin: center;
+  transition:
+    transform 350ms cubic-bezier(0.22, 0.25, 0, 1),
+    opacity 100ms linear;
+}
+
+.preferences-dialog-action::before {
+  position: absolute;
+  z-index: -1;
+  inset: 0 4px;
+  border-radius: var(--preferences-card-radius);
+  background: var(--preferences-control-highlight);
+  content: '';
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 350ms cubic-bezier(0.17, 0.17, 0.67, 1);
+}
+
+.preferences-dialog-action:active {
+  transform: scale(0.96);
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+.preferences-dialog-action:active::before {
+  opacity: 1;
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+.preferences-dialog-action:focus-visible::before {
+  opacity: 0.6;
+}
+
+.preferences-dialog-action:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preferences-dialog-action-divider {
+  width: 1px;
+  height: 16px;
+  flex: 0 0 1px;
+  background: var(--oui-dialog-action-divider);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .preferences-dialog-action:hover::before {
+    opacity: 1;
+    transition-duration: 100ms;
+    transition-timing-function: linear;
+  }
+}
+
+.preferences-dialog-input {
+  display: block;
+  width: 100%;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  outline: 0;
+  background: linear-gradient(
+      var(--preferences-control-outline),
+      var(--preferences-control-outline)
+    )
+    4px 100% / calc(100% - 8px) 1px no-repeat;
+  color: var(--preferences-input-text);
+  caret-color: var(--preferences-input-text);
+  padding: 10px 4px 7px;
+  font: inherit;
+  font-size: var(--preferences-title-size);
+  line-height: normal;
+}
+
+.preferences-dialog-input:focus {
+  background: linear-gradient(var(--preferences-input-text), var(--preferences-input-text)) 4px
+    100% / calc(100% - 8px) 1.5px no-repeat;
+}
+
+.preferences-dialog.preferences-dialog-choice .preferences-dialog-title-area {
+  padding: 27px var(--preferences-dialog-content-inset) 14px;
+}
+
+.preferences-dialog.preferences-dialog-choice .preferences-dialog-actions {
+  padding: 0 var(--preferences-dialog-content-inset) 19px;
+}
+
+@keyframes preferences-dialog-backdrop-enter {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes preferences-dialog-backdrop-exit {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes preferences-dialog-enter-translate {
+  from {
+    transform: translateY(100px);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes preferences-dialog-exit-translate {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(100px);
+  }
+}
+
+@keyframes preferences-dialog-enter-alpha {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes preferences-dialog-exit-alpha {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preferences-dialog-backdrop,
+  .preferences-dialog-backdrop.is-closing,
+  .preferences-dialog,
+  .preferences-dialog.is-closing {
+    animation-duration: 1ms;
+  }
+}
+
+/* One UI preference page adapters and variants.
+ *
+ * Component geometry belongs to the .preferences-* primitives above.
+ * The rules below only place those primitives on a page or describe the
+ * parts that are genuinely different (diagnostic status/action content).
+ */
+.preferences-dialog .settings-input-dialog-error.is-empty {
+  display: none;
+}
+
+.preferences-dialog-choice-row:has(.settings-native-radio:focus-visible) {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preferences-dialog-choice-row:has(.settings-native-radio:focus-visible)::before {
+  opacity: 0.6;
+}
+
+.preferences-dialog-action:disabled {
+  cursor: default;
+}
+
+/* Settings pages only decide page placement; cards/rows own all card geometry and visuals. */
+.page-shell.page-shell-settings:has(.preferences-page),
+.page-content.page-content-settings:has(.preferences-page) {
+  background: var(--preferences-window, var(--oui-window));
+  color: var(--preferences-text-primary, var(--oui-text-primary));
+}
+
+.page-shell:has(.action-history-page),
+.page-content:has(.action-history-page) {
+  background: var(--preferences-window, var(--oui-window));
+  color: var(--preferences-text-primary, var(--oui-text-primary));
+}
+
+.page-content:has(.action-history-page) {
+  overflow-y: hidden;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+
+/* Diagnostics uses the same card system with status/action trailing content. */
+.page-shell.page-shell:has(.diagnostics-screen-page),
+.page-content.page-content:has(.diagnostics-screen-page) {
+  background: var(--preferences-window, var(--oui-window));
+}
+
+.page-content.page-content:has(.diagnostics-screen-page) {
+  width: min(100%, 40rem);
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+}
+
+.diagnostics-screen-page.preferences-page {
+  padding: 0 0 32px;
+  background: transparent;
+}
+
+.diagnostics-section {
+  margin: var(--preferences-overview-group-gap) var(--preferences-card-inset) 0;
+  border: 0;
+}
+
+.diagnostics-section .preference-section-card {
+  width: 100%;
+  margin-inline: 0;
+}
+
+.diagnostics-screen-page > .diagnostics-section:first-of-type {
+  margin-top: 0;
+}
+
+.diagnostics-section .preference-section-card > * {
+  position: relative;
+}
+
+.preference-status-row,
+.preference-action-row {
+  position: relative;
+  min-height: var(--preferences-row-min-height);
+  padding: var(--preferences-option-row-padding-block) var(--preferences-row-padding-end)
+    var(--preferences-option-row-padding-block) var(--preferences-row-padding-start);
+}
+
+.preference-section-card > .preference-status-row + .preference-status-row::before,
+.preference-section-card > .preference-status-row + .preference-action-row::before,
+.preference-section-card > .preference-action-row + .preference-action-row::before {
+  position: absolute;
+  top: 0;
+  right: var(--preferences-divider-inset);
+  left: var(--preferences-divider-inset);
+  height: var(--preferences-divider-thickness);
+  background: var(--preferences-divider);
+  opacity: var(--preferences-divider-opacity);
+  content: '';
+}
+
+.diagnostics-section .preference-section-card > * + *::before {
+  position: absolute;
+  top: 0;
+  right: var(--preferences-divider-inset);
+  left: var(--preferences-divider-inset);
+  height: var(--preferences-divider-thickness);
+  background: var(--preferences-divider);
+  opacity: var(--preferences-divider-opacity);
+  content: '';
+}
+
+.preference-status-layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+}
+
+.preference-row-copy,
+.preference-action-copy {
+  display: flex;
+  min-width: 0;
+  flex: 1 1 auto;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.preference-row-label,
+.preference-row-description,
+.preference-row-value {
+  margin: 0;
+}
+
+.preference-row-label {
+  color: var(--preferences-option-title-color);
+  font-size: var(--preferences-title-size);
+  font-weight: 400;
+  line-height: 1.35;
+  letter-spacing: 0.1px;
+}
+
+.preference-row-description {
+  margin-top: 0;
+  overflow-wrap: anywhere;
+  color: var(--preferences-text-secondary);
+  font-size: var(--preferences-summary-size);
+  font-weight: 400;
+  line-height: 1.35;
+}
+
+.preference-row-description--success {
+  color: var(--app-success);
+}
+
+.preference-row-description--accent {
+  color: var(--oui-accent-text);
+}
+
+.preference-row-description--warning {
+  color: var(--app-warning);
+}
+
+.preference-row-description--danger {
+  color: var(--app-danger);
+}
+
+.preference-row-value,
+.preference-action-value {
+  min-width: 0;
+  max-width: 6rem;
+  flex: 0 0 auto;
+  overflow-wrap: anywhere;
+  font-size: 0.7rem;
+  font-weight: 700;
+  line-height: 1.3;
+  text-align: right;
+}
+
+.preference-action-row {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  gap: 0.8rem;
+  overflow: hidden;
+  border: 0;
+  background: transparent;
+  color: var(--preferences-text-primary);
+  font: inherit;
+  text-align: left;
+  isolation: isolate;
+  touch-action: pan-y;
+}
+
+.preference-action-row:active {
+  background: transparent;
+}
+
+.preference-action-row:focus-visible {
+  outline: 2px solid var(--preferences-text-primary);
+  outline-offset: -2px;
+}
+
+.preference-action-row:disabled {
+  cursor: not-allowed;
+}
+
+.preference-action-row:disabled .preference-action-copy {
+  opacity: var(--oui-disabled-alpha);
+}
+
+.preference-action-copy,
+.preference-action-value {
+  position: relative;
+  z-index: 1;
+}
+
+.preference-action-value {
+  color: var(--oui-accent-text);
+  text-overflow: clip;
+  white-space: normal;
+}
+
+.preference-row-value.status-success,
+.preference-action-value.status-success {
+  color: var(--app-success);
+}
+
+.preference-row-value.status-warning,
+.preference-action-value.status-warning {
+  color: var(--app-warning);
+}
+
+.preference-row-value.status-danger,
+.preference-action-value.status-danger {
+  color: var(--app-danger);
+}
+
+.preference-row-value.text-muted,
+.preference-action-value.text-muted {
+  color: var(--oui-text-inactive);
+}
+
+.diagnostics-screen-page .preferences-row:disabled {
+  cursor: wait;
+}
+
+.diagnostics-screen-page .preferences-row:disabled > :not(.preferences-divider) {
+  opacity: var(--oui-disabled-alpha);
+}
+
+/* Quick-check rows are status display rows, not navigation rows. */
+.diagnostics-quick-check-panel .preferences-row {
+  cursor: default;
+}
+/* Settings layout and action overrides. */
+
+.page-shell.page-shell-settings,
+.page-content.page-content-settings {
+  --settings-motion-basic: cubic-bezier(0.22, 0.25, 0, 1);
+  --settings-motion-linear: linear;
+  --settings-background: var(--oui-window);
+  --settings-surface: var(--oui-surface);
+  --settings-dialog-surface: var(--oui-surface);
+  --settings-text-primary: var(--oui-text-primary);
+  --settings-text-secondary: var(--oui-text-secondary);
+  --settings-secondary: var(--settings-text-secondary);
+  --settings-accent-text: var(--oui-accent-text);
+  --settings-row-pressed: var(--oui-state-pressed);
+  --settings-release-easing: cubic-bezier(0.22, 0.25, 0, 1);
+  --settings-dialog-easing: cubic-bezier(0.17, 0.17, 0.2, 1);
+  background: var(--settings-background);
+  color: var(--settings-text-primary);
+}
+
+.page-content.page-content-settings {
+  width: min(100%, 40rem);
+  overflow: hidden;
+  padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom);
+  overscroll-behavior-y: contain;
+  scrollbar-width: thin;
+  font-family: var(--preferences-font-family);
+}
+
+.page-content.page-content-settings .settings-detail-page .oneui-button {
+  box-shadow: none;
+}
+
+.page-content.page-content-settings .settings-detail-page > .oneui-button--wide {
+  width: calc(100% - var(--preferences-card-inset) - var(--preferences-card-inset));
+  margin-inline: var(--preferences-card-inset);
+}
+.page-content.page-content-settings .settings-overview-page > .dialog-backdrop {
+  place-items: end center;
+  background: var(--oui-dialog-backdrop);
+  padding: 16px 10px;
+  padding-bottom: calc(16px + var(--keyboard-height, 0px) + env(safe-area-inset-bottom));
+  animation: settings-dialog-dim-in 150ms linear both;
+}
+
+.page-content.page-content-settings
+  .settings-overview-page
+  > .dialog-backdrop.dialog-backdrop-closing {
+  animation: settings-dialog-dim-out 150ms linear both;
+}
+
+.page-content.page-content-settings .settings-overview-page > .dialog-backdrop > .dialog {
+  width: min(340px, calc(100vw - 20px));
+  max-height: 80dvh;
+  overflow: auto;
+  border: 0;
+  border-radius: 26px;
+  background: var(--settings-dialog-surface);
+  color: var(--settings-text-primary);
+  box-shadow: var(--oui-dialog-shadow);
+  padding: 0;
+  animation:
+    settings-dialog-translate-in 300ms var(--settings-dialog-easing) both,
+    settings-dialog-alpha-in 150ms var(--settings-dialog-easing) both;
+  will-change: transform, opacity;
+}
+
+.page-content.page-content-settings
+  .settings-overview-page
+  > .dialog-backdrop
+  > .dialog.dialog-closing {
+  animation:
+    settings-dialog-translate-out 300ms var(--settings-dialog-easing) both,
+    settings-dialog-alpha-out 100ms ease-in-out both;
+}
+
+.page-content.page-content-settings .settings-overview-page > .dialog-backdrop > .dialog h2 {
+  margin: 0;
+  overflow: hidden;
+  color: var(--settings-text-primary);
+  padding: 24px 24px 12px;
+  font-size: 17px;
+  font-weight: inherit;
+  letter-spacing: normal;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-content.page-content-settings
+  .settings-overview-page
+  > .dialog-backdrop
+  > .dialog
+  > .dialog-message {
+  margin: 0;
+  color: var(--settings-text-secondary);
+  padding: 16px 24px;
+  font-size: 14px;
+  line-height: calc(1em + 4px);
+}
+
+.page-content.page-content-settings .settings-input-dialog-error {
+  margin: 0;
+  color: var(--app-danger);
+  padding: 0 24px 16px;
+  font-size: 13px;
+  line-height: 1.3;
+}
+
+.page-content.page-content-settings .settings-input-dialog-error.is-empty {
+  display: none;
+}
+
+.page-content.page-content-settings .settings-native-radio {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-content.page-content-settings .settings-empty-message {
+  margin: 0;
+  color: var(--settings-text-secondary);
+  padding: 16px 0;
+  font-size: 14px;
+  line-height: calc(1em + 4px);
+}
+
+.page-content.page-content-settings .settings-selection-dialog-open-app {
+  display: block;
+  width: calc(100% - 40px);
+  min-height: 36px;
+  margin: 0 20px 16px;
+  border: 0;
+  border-radius: 18px;
+  background: var(--settings-row-pressed);
+  color: var(--settings-accent-text);
+  padding: 4px 8px;
+  font-size: 15px;
+  transform: scale(1);
+  transition: transform 350ms var(--settings-release-easing);
+}
+
+.page-content.page-content-settings .settings-selection-dialog-open-app:active {
+  transform: scale(0.96);
+  transition-duration: 100ms;
+  transition-timing-function: linear;
+}
+
+@media (min-width: 600px) {
+  .page-content.page-content-settings .settings-overview-page > .dialog-backdrop > .dialog {
+    max-height: calc(100dvh - 32px);
+    animation:
+      settings-dialog-scale-in 350ms linear both,
+      settings-dialog-alpha-in 150ms linear both;
+  }
+
+  .page-content.page-content-settings
+    .settings-overview-page
+    > .dialog-backdrop
+    > .dialog.dialog-closing {
+    animation:
+      settings-dialog-scale-out 350ms linear both,
+      settings-dialog-alpha-out 100ms ease-in-out both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-content.page-content-settings *,
+  .page-content.page-content-settings *::before,
+  .page-content.page-content-settings *::after {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+  }
+}
+
+@keyframes page-forward-enter {
+  from {
+    transform: translateX(var(--page-forward-enter-from));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes page-forward-exit {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(var(--page-forward-background-to));
+  }
+}
+
+@keyframes page-back-enter {
+  from {
+    transform: translateX(var(--page-back-underlying-from));
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes page-back-exit {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(var(--page-back-exit-to));
+  }
+}
+
+@keyframes settings-dialog-dim-in {
+  from {
+    background: rgb(0 0 0 / 0%);
+  }
+}
+
+@keyframes settings-dialog-dim-out {
+  to {
+    background: rgb(0 0 0 / 0%);
+  }
+}
+
+@keyframes settings-dialog-translate-in {
+  from {
+    transform: translateY(38.1px);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes settings-dialog-translate-out {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(38.1px);
+  }
+}
+
+@keyframes settings-dialog-alpha-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes settings-dialog-alpha-out {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes settings-dialog-scale-in {
+  from {
+    transform: scale(0.95);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes settings-dialog-scale-out {
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(0.95);
+  }
+}
+
+.wizard-step-header {
+  margin: 8px 28px 24px;
+}
+
+.wizard-step-header-label {
+  margin: 0;
+  color: var(--preferences-text-primary);
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.wizard-step-header-description {
+  margin: 7px 0 14px;
+  color: var(--preferences-text-secondary);
+  font-size: var(--preferences-summary-size);
+  line-height: 1.5;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.preferences-option-row-error {
+  margin-top: 6px;
+  color: var(--app-danger);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.onboarding-dialog .preferences-dialog-title-area h2 {
+  white-space: normal;
+  line-height: 1.4;
+}
+
+.onboarding-dialog-copy,
+.preferences-dialog-confirm-copy {
+  padding: 8px var(--preferences-dialog-content-inset) 24px;
+  color: var(--preferences-text-secondary);
+  font-size: var(--preferences-summary-size);
+  line-height: 1.6;
+  word-break: keep-all;
+  overflow-wrap: anywhere;
+}
+
+.onboarding-dialog-copy > p,
+.preferences-dialog-confirm-copy > p {
+  margin: 0;
+}
+
+.onboarding-dialog .preferences-dialog-actions,
+.preferences-dialog-confirm .preferences-dialog-actions {
+  padding-top: 4px;
+}
+
+.onboarding-dialog .preferences-dialog-action,
+.preferences-dialog-confirm .preferences-dialog-action {
+  min-height: 44px;
+  padding-inline: 8px;
+  overflow-wrap: anywhere;
+  word-break: keep-all;
+}
+
+@keyframes onboarding-flow-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes onboarding-flow-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes onboarding-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}

@@ -263,11 +263,32 @@ export interface PcControlPlugin {
   /** Finds Windows Setup utilities while their pairing screens are open. */
   discoverSetupDevices(): Promise<{ devices: SetupDevice[] }>;
   getSetupBootstrap(options: { endpoint: string }): Promise<{ bootstrap: PairingBootstrap }>;
-  startSetupPairing(options: { endpoint: string; oneTimeToken: string; deviceName: string }): Promise<{ started: PairingStarted; requestSecret: string }>;
-  getSetupPairingStatus(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ status: PairingStatus }>;
-  completeSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string; challenge: string }): Promise<{ result: { verified: boolean } }>;
-  finalizeSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ result: { completed: boolean } }>;
-  cancelSetupPairing(options: { endpoint: string; requestId: string; requestSecret: string }): Promise<{ result: { cancelled: boolean } }>;
+  startSetupPairing(options: {
+    endpoint: string;
+    oneTimeToken: string;
+    deviceName: string;
+  }): Promise<{ started: PairingStarted; requestSecret: string }>;
+  getSetupPairingStatus(options: {
+    endpoint: string;
+    requestId: string;
+    requestSecret: string;
+  }): Promise<{ status: PairingStatus }>;
+  completeSetupPairing(options: {
+    endpoint: string;
+    requestId: string;
+    requestSecret: string;
+    challenge: string;
+  }): Promise<{ result: { verified: boolean } }>;
+  finalizeSetupPairing(options: {
+    endpoint: string;
+    requestId: string;
+    requestSecret: string;
+  }): Promise<{ result: { completed: boolean } }>;
+  cancelSetupPairing(options: {
+    endpoint: string;
+    requestId: string;
+    requestSecret: string;
+  }): Promise<{ result: { cancelled: boolean } }>;
 
   /** Checks the Windows SSH endpoint without automatically connecting a VPN. */
   getPcStatus(options: PcStatusOptions): Promise<PcStatusResult>;
