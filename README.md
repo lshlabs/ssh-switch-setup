@@ -2,7 +2,7 @@
 
 > **Part 1 신규 구현:** 기존 Windows 도구와 독립적인 .NET 10/WPF Setup Wizard는 [`windows-setup`](windows-setup)에 있습니다. [새 사용·빌드 가이드](docs/part1/user-guide.md), [프로토콜](docs/part1/pairing-protocol.md), [실행한 테스트와 미검증 항목](docs/part1/test-results.md)을 먼저 확인하세요. 아래 기존 Tauri/스크립트 설명은 이전 구현의 기록이며 신규 도구의 실행 방법이 아닙니다.
 
-PC Control은 Android 휴대폰에서 개인 Windows PC를 안전하게 켜고, 종료하고, 재부팅하는 앱입니다. 집 안에서는 LAN을 사용하고, 집 밖에서는 [OpenVPN for Android](https://play.google.com/store/apps/details?id=de.blinkt.openvpn)의 기존 프로필을 사용합니다.
+PC Control은 Android 휴대폰에서 개인 Windows PC를 안전하게 켜고, 종료하고, 재부팅하는 앱입니다. 같은 LAN에서 연결하거나 집 밖에서 [OpenVPN for Android](https://play.google.com/store/apps/details?id=de.blinkt.openvpn)의 기존 프로필을 통해 PC의 사설 주소에 접근할 수 있습니다.
 
 ## 빠른 시작
 
@@ -68,7 +68,7 @@ ASUS가 아닌 공유기도 SSH와 LAN-side WOL 유틸리티를 제공하면 호
 
 ## 집 밖에서 사용하기
 
-휴대폰이 집 네트워크에 안전하게 들어와야 PC의 사설 주소에 접근할 수 있습니다. PC Control은 VPN 엔진이나 인증서를 직접 관리하지 않고 OpenVPN for Android의 External API와 사용자가 선택한 프로필만 사용합니다. 프로필 이름만 앱에 저장하며 VPN 자격 증명과 프로필 내용은 저장하지 않습니다.
+휴대폰에서 PC의 사설 주소로 경로가 있으면 됩니다. 같은 LAN에서 연결하거나 기존 OpenVPN 프로필로 외부에서 접근할 수 있습니다. PC Control은 VPN 엔진이나 인증서를 직접 관리하지 않고 OpenVPN for Android의 External API와 사용자가 선택한 프로필만 사용합니다. 프로필 이름만 앱에 저장하며 VPN 자격 증명과 프로필 내용은 저장하지 않습니다.
 
 ## 문제 해결
 

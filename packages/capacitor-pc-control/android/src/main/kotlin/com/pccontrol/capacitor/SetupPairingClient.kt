@@ -110,7 +110,7 @@ class SetupPairingClient(private val context: Context) {
         val base = URL(endpoint)
         val address = InetAddress.getByName(base.host)
         require(base.protocol == "https" && address is Inet4Address && address.isSiteLocalAddress && base.host == address.hostAddress) {
-            "페어링 서버는 같은 네트워크의 사설 주소여야 합니다."
+            "페어링 서버는 현재 네트워크 또는 연결된 VPN에서 접근할 수 있는 사설 주소여야 합니다."
         }
         require(base.port in 1..65535 && base.path.isNullOrEmpty() && base.query == null && base.ref == null && base.userInfo == null) { "페어링 주소가 올바르지 않습니다." }
         val pin = pins[endpoint] ?: throw IllegalStateException("QR 인증서 지문이 없습니다. 다시 페어링하세요.")
