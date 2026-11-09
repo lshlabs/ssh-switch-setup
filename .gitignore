@@ -49,3 +49,7 @@ AGENTS.md
 
 # Rust / Tauri build output
 **/src-tauri/target/
+.tools/
+**/bin/
+**/obj/
+!docs/part1/
