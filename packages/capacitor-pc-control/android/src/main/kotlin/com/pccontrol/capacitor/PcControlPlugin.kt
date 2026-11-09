@@ -251,10 +251,11 @@ class PcControlPlugin : Plugin() {
     fun startSetupPairing(call: PluginCall) {
         val endpoint = requireString(call, "endpoint") ?: return
         val token = requireString(call, "oneTimeToken") ?: return
+        val pin = requireString(call, "tlsCertificateFingerprint") ?: return
         val deviceName = requireString(call, "deviceName") ?: return
         runAsync(call) {
             val publicKey = identityManager.ensureIdentity().publicKey
-            val result = setupPairingClient.start(endpoint, token, deviceName, publicKey)
+            val result = setupPairingClient.start(endpoint, token, deviceName, publicKey, pin)
             JSObject().apply {
                 put("started", result.getJSONObject("started"))
                 put("requestSecret", result.getString("requestSecret"))

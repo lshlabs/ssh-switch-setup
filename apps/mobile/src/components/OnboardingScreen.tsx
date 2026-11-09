@@ -9,6 +9,7 @@ import { useAppCopy } from '../i18n';
 import { onboardingPreviewEnabled } from '../lib/onboardingPreview';
 import { createOnboardingSession } from './onboardingSession';
 import { PreferenceDialog } from './ui/preference-dialog';
+import { SetupPairing } from './SetupPairing';
 
 type Screen =
   | 'welcome' | 'prepare' | 'pc-host' | 'pc-username' | 'pc-port-choice' | 'pc-port-custom'
@@ -58,6 +59,7 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, onToast
   const [identityPublicKey, setIdentityPublicKey] = useState<string>();
   const [identityBusy, setIdentityBusy] = useState(false);
   const [pcVerified, setPcVerified] = useState(false);
+  const [pairingBusy, setPairingBusy] = useState(false);
   const [wakeConfigured, setWakeConfigured] = useState(false);
   const [vpnIntent, setVpnIntent] = useState(false);
   const [vpnInstalled, setVpnInstalled] = useState<boolean>();
@@ -508,7 +510,16 @@ export function OnboardingScreen({ settings, onSave, onComplete, onSkip, onToast
           </Flow>}
           {screen === 'prepare' && <Flow title={m('prepare.title')} description={m('prepare.description')} visual="pc">
             <p className="onboarding-supporting">{m('prepare.note')}</p>
-            {fullFooter(m('prepare.action'), () => go('pc-host'))}
+            {!onboardingPreviewEnabled && <SetupPairing onBusy={setPairingBusy} onComplete={() => setPcVerified(true)} onPaired={async (info) => {
+              const connection = {
+                pcName: info.displayName, pcHostId: info.hostId, pcHostname: info.hostname,
+                pcHost: info.currentLanIp, pcPort: info.sshPort, pcUsername: info.sshUsername,
+                pcHostFingerprint: info.sshHostKeyFingerprint, pcLanPrefix: info.lanPrefix,
+              };
+              await onSave({ ...settings, ...connection });
+              setDraft((current) => ({ ...current, ...connection }));
+            }} />}
+            {fullFooter(pcVerified ? m('continue') : m('prepare.action'), () => go(pcVerified ? 'pc-ready' : 'pc-host'), pairingBusy)}
           </Flow>}
           {screen === 'pc-host' && input({ title: m('pcHost.title'), description: m('pcHost.description'), field: 'pcHost', label: m('pcHost.label'), placeholder: m('pcHost.example'), helpSummary: m('pcHost.helpSummary'), help: m('pcHost.help'), next: 'pc-username' })}
           {screen === 'pc-username' && input({ title: m('pcUsername.title'), description: m('pcUsername.description'), field: 'pcUsername', label: m('pcUsername.label'), placeholder: m('pcUsername.example'), helpSummary: m('pcUsername.helpSummary'), help: m('pcUsername.help'), next: 'pc-port-choice' })}

@@ -14,11 +14,16 @@ import java.security.SecureRandom
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import java.util.concurrent.ConcurrentHashMap
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
 
 data class SetupDevice(val name: String, val endpoint: String)
 
 /** Pairing-only LAN transport. Normal power operations continue to use SSH. */
 class SetupPairingClient(private val context: Context) {
+    private val pins = ConcurrentHashMap<String, String>()
     private val nsd = context.getSystemService(Context.NSD_SERVICE) as NsdManager
 
     fun discover(timeoutMs: Long = 4_000): List<SetupDevice> {
@@ -60,9 +65,13 @@ class SetupPairingClient(private val context: Context) {
         return found.distinctBy { it.endpoint }
     }
 
-    fun bootstrap(endpoint: String): JSONObject = request(endpoint, "/v1/bootstrap")
+    fun bootstrap(endpoint: String): JSONObject = throw IllegalStateException("PC 화면의 QR 또는 전체 페어링 JSON으로 서버 인증서를 확인하세요.")
 
-    fun start(endpoint: String, token: String, deviceName: String, publicKey: String): JSONObject {
+    fun start(endpoint: String, token: String, deviceName: String, publicKey: String, pin: String): JSONObject {
+        require(pin.matches(Regex("^[0-9a-f]{64}$"))) { "TLS 인증서 지문이 올바르지 않습니다." }
+        require(token.matches(Regex("^[0-9a-f]{64}$"))) { "페어링 토큰이 올바르지 않습니다." }
+        pins.clear()
+        pins[endpoint] = pin
         val secret = ByteArray(32).also(SecureRandom()::nextBytes)
             .joinToString("") { "%02x".format(it.toInt() and 0xff) }
         val started = request(endpoint, "/v1/requests", JSONObject().apply {
@@ -100,12 +109,17 @@ class SetupPairingClient(private val context: Context) {
                         requestSecret: String? = null): JSONObject {
         val base = URL(endpoint)
         val address = InetAddress.getByName(base.host)
-        require(base.protocol == "http" &&
-            (address.isSiteLocalAddress || address.isLinkLocalAddress)) {
+        require(base.protocol == "https" && address is Inet4Address && address.isSiteLocalAddress && base.host == address.hostAddress) {
             "페어링 서버는 같은 네트워크의 사설 주소여야 합니다."
         }
-        require(base.port in 1..65535 && base.path.isNullOrEmpty()) { "페어링 주소가 올바르지 않습니다." }
-        val connection = URL("$endpoint$path").openConnection() as HttpURLConnection
+        require(base.port in 1..65535 && base.path.isNullOrEmpty() && base.query == null && base.ref == null && base.userInfo == null) { "페어링 주소가 올바르지 않습니다." }
+        val pin = pins[endpoint] ?: throw IllegalStateException("QR 인증서 지문이 없습니다. 다시 페어링하세요.")
+        val tls = SSLContext.getInstance("TLS").apply {
+            init(null, arrayOf<TrustManager>(PairingCertificateTrust(pin)), SecureRandom())
+        }
+        val connection = URL("$endpoint$path").openConnection() as HttpsURLConnection
+        connection.sslSocketFactory = tls.socketFactory
+        // Keep the platform hostname verifier: IP SAN must match the QR endpoint.
         connection.connectTimeout = 4_000
         connection.readTimeout = 4_000
         connection.setRequestProperty("Accept", "application/json")
@@ -121,7 +135,18 @@ class SetupPairingClient(private val context: Context) {
             if (connection.responseCode !in 200..299) {
                 throw IllegalStateException("PC 페어링 응답 오류: ${connection.responseCode}")
             }
-            return JSONObject(connection.inputStream.bufferedReader().use { it.readText() })
+            val bytes = connection.inputStream.use { stream ->
+                val output = java.io.ByteArrayOutputStream()
+                val buffer = ByteArray(2048)
+                while (true) {
+                    val count = stream.read(buffer)
+                    if (count < 0) break
+                    require(output.size() + count <= 32768) { "페어링 응답이 너무 큽니다." }
+                    output.write(buffer, 0, count)
+                }
+                output.toByteArray()
+            }
+            return JSONObject(String(bytes, Charsets.UTF_8))
         } finally {
             connection.disconnect()
         }

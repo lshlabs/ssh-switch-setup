@@ -266,6 +266,7 @@ export interface PcControlPlugin {
   startSetupPairing(options: {
     endpoint: string;
     oneTimeToken: string;
+    tlsCertificateFingerprint: string;
     deviceName: string;
   }): Promise<{ started: PairingStarted; requestSecret: string }>;
   getSetupPairingStatus(options: {

@@ -9,6 +9,7 @@ export interface PairingBootstrap {
   pairingEndpoint: string;
   oneTimeToken: string;
   pairingIdentityFingerprint: string;
+  tlsCertificateFingerprint: string;
   expiresAt: number;
 }
 
@@ -74,13 +75,21 @@ export function parsePairingBootstrap(value: unknown, now = Date.now()): Pairing
     !nonempty(value.pairingEndpoint) ||
     !nonempty(value.oneTimeToken) ||
     !nonempty(value.pairingIdentityFingerprint) ||
+    typeof value.tlsCertificateFingerprint !== 'string' ||
+    !/^[0-9a-f]{64}$/.test(value.tlsCertificateFingerprint) ||
+    !/^[0-9a-f]{64}$/.test(value.oneTimeToken) ||
     typeof value.expiresAt !== 'number' ||
     value.expiresAt <= now
   ) {
     throw new Error('페어링 QR이 만료되었거나 형식이 올바르지 않습니다.');
   }
   const endpoint = new URL(value.pairingEndpoint);
-  if (endpoint.protocol !== 'http:' && endpoint.protocol !== 'https:') {
+  const octets = endpoint.hostname.split('.').map(Number);
+  const privateIp = octets.length === 4 && octets.every((x) => Number.isInteger(x) && x >= 0 && x <= 255) &&
+    (octets[0] === 10 || (octets[0] === 192 && octets[1] === 168) ||
+      (octets[0] === 172 && octets[1]! >= 16 && octets[1]! <= 31));
+  if (endpoint.protocol !== 'https:' || !privateIp || !endpoint.port ||
+      endpoint.username || endpoint.password || endpoint.search || endpoint.hash || endpoint.pathname !== '/') {
     throw new Error('페어링 주소 형식이 올바르지 않습니다.');
   }
   return value as unknown as PairingBootstrap;

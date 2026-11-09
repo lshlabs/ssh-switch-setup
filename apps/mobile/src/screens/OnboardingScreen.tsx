@@ -339,6 +339,7 @@ export function OnboardingScreen({
       const { started, requestSecret } = await PcControl.startSetupPairing({
         endpoint: bootstrap.pairingEndpoint,
         oneTimeToken: bootstrap.oneTimeToken,
+        tlsCertificateFingerprint: bootstrap.tlsCertificateFingerprint,
         deviceName: copy('Android 휴대폰'),
       });
       activePairing.current = {
