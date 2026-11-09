@@ -7,7 +7,7 @@
 1. Windows 11 x64, 동일한 신뢰할 수 있는 Private LAN, Windows에 한 번 로그인한 로컬 계정을 준비합니다. 가능하면 일반 계정을 사용하세요. 관리자 공유 키 파일은 다른 관리자 계정에도 접근을 허용할 수 있습니다.
 2. `output/windows/PCControlSetup.exe` 실행 → UAC 승인 → **환경 진단**. 사용할 SSH 계정과 휴대폰이 접근할 네트워크를 명시적으로 선택합니다. UAC에서 입력한 관리자 계정이 목표 SSH 계정이라고 가정하지 않습니다.
 3. **OpenSSH 설치·서비스·LAN 방화벽 구성**을 누릅니다. Windows 기능 설치는 시간이 걸릴 수 있습니다. 진행 중에는 창 닫기를 막아 DISM 작업을 중간에 죽이지 않습니다. 재부팅 필요 메시지가 나오면 작업을 저장하고 직접 재부팅한 뒤 다시 실행합니다.
-4. **새 HTTPS 페어링 QR**을 누릅니다. Android 앱의 초기 설정 → 준비 화면에서 **Windows QR 스캔** 또는 **JSON으로 페어링**을 선택합니다. Android APK는 `apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk`입니다. 개발용 서명 APK이므로 기존 설치본과 서명이 다르면 업데이트가 거절될 수 있습니다. 앱을 삭제하면 Keystore 키가 손실되므로 기존 앱을 무조건 삭제하지 마세요.
+4. **새 HTTPS 페어링 QR**을 누릅니다. Android 앱의 초기 설정 → 준비 화면에서 **Windows QR 스캔** 또는 **JSON으로 페어링**을 선택합니다. Android APK는 `apps/mobile/android/app/build/outputs/apk/debug/app-debug.apk`입니다. Debug 앱 이름은 **PC Control Setup**, 패키지는 `com.pccontrol.app.setup`으로 설정되어 기존 `com.pccontrol.app` 앱과 나란히 설치할 수 있습니다. Debug 앱은 기존 앱 데이터와 Android Keystore 키를 공유하지 않으므로 새 휴대폰으로 PC와 다시 페어링해야 합니다. 기존 앱은 삭제하지 않아도 됩니다. Release 패키지 ID와 앱 이름은 유지됩니다.
 5. 두 화면의 6자리 코드, 계정, 기기명, 공개키 지문을 비교한 뒤 PC에서 등록을 승인합니다. Android는 SSH 호스트 키를 검증하고 `hostname`만 실행합니다. 완료 메시지 후 앱에서 **계속**을 눌러 기존 설정 흐름을 마칩니다.
 6. 기존 WOL 설정은 필요에 따라 기존 UI에서 유지합니다. 이번 개발은 WOL/BIOS/공유기 기능을 추가하지 않습니다. 외부 접속은 기존 OpenVPN 프로필 및 기존 권한 승인 흐름을 사용합니다.
 7. PC 창을 닫습니다. 자체 상주 서비스는 남지 않으며 OpenSSH와 승인된 키만 유지됩니다. 종료·재부팅 테스트는 작업을 저장한 뒤 사용자가 직접 실행해야 합니다.
